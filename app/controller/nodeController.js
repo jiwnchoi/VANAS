@@ -28,10 +28,10 @@ export function dragNodeEnd() {
 
 export function clickedNode(){
     const node = d3.select(this);
+    const sourceNode = isNodeClicked;
+    const targetNode = node.attr('id');
 
-    if(isNodeClicked){
-        const sourceNode = isNodeClicked;
-        const targetNode = node._groups[0][0].id;
+    if(isNodeClicked){    
         if (checkResult(sourceNode, targetNode)){
             setResult(sourceNode, targetNode);
             makeEdge(sourceNode, targetNode);
@@ -41,7 +41,7 @@ export function clickedNode(){
     }
     else{
         node.select("circle").style("filter", "url(#drop-shadow-start)");
-        isNodeClicked = node._groups[0][0].id;
+        isNodeClicked = targetNode;
     }
     d3.selectAll(".node").raise();
 }
