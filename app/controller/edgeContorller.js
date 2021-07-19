@@ -1,19 +1,17 @@
-import * as d3 from "d3";
-
 import { metaData } from "../data/metadata";
 import { unSetResult } from "../data/result";
 
-export function deleteEdgeMouseOver(){
+function deleteEdgeMouseOver(){
     d3.select(this).attr("stroke","tomato").style("marker-end","url(#endDelete)")
     d3.selectAll(".node").raise();
 }
 
-export function deleteEdgeMouseOut(){
+function deleteEdgeMouseOut(){
     d3.select(this).attr("stroke","gray").style("marker-end","url(#end)")
     d3.selectAll(".node").raise();
 }
 
-export function deleteEdgeClicked(){
+function deleteEdgeClicked(){
     const edge = d3.select(this);
     const className = edge.attr('class');
     const n1 = className[10];

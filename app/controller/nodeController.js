@@ -1,15 +1,14 @@
-import * as d3 from "d3";
 import { makeEdge } from "./edgeContorller.js"
 import { setResult, checkResult } from "../data/result.js";
 import { metaData } from "../data/metadata.js";
 
 let isNodeClicked = null;
 
-export function dragNodeStart() {
+function dragNodeStart() {
     d3.select(this).select("circle").attr("stroke", "black");
   }
 
-export function dragNode(event, d) {
+function dragNode(event, d) {
     d.x = event.x;
     d.y = event.y;
     const sourceNodeClass = ".sourcenode"+d.id;
@@ -22,11 +21,11 @@ export function dragNode(event, d) {
     d3.select(this).raise().attr("transform", d => "translate("+d.x+","+d.y+")" );
 }
 
-export function dragNodeEnd() {
+function dragNodeEnd() {
     d3.select(this).select("circle").attr("stroke", null);
 }
 
-export function clickedNode(){
+function clickedNode(){
     const node = d3.select(this);
     const sourceNode = isNodeClicked;
     const targetNode = node.attr('id');
