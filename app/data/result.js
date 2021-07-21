@@ -22,16 +22,6 @@ export function checkResult(n1, n2){
     n1 > n2 ? bool = !result[n2][n1] : bool = !result[n1][n2];
     return bool
 }
-function printMatix(matrix){
-    let resultMatrix = "";
-    for (let i=0; i<7; i++){
-        for(let j=0; j<7; j++){
-            resultMatrix += matrix[i][j] +" ";
-        }
-        resultMatrix += "\n";
-    }
-    alert(resultMatrix);
-}
 
 export function printResult(){
     let resultMatrix = "";
@@ -42,52 +32,30 @@ export function printResult(){
         resultMatrix += "\n";
     }  
     const cellChecker = isCell(result);
+    alert(resultMatrix);
     alert(cellChecker);
-
-
 }
-[[0, 0, 0, 0, 0, 0, 0], 
-[0, 0, 1, 1, 0, 0, 0], 
-[0, 0, 0, 1, 0, 0, 0], 
-[0, 0, 0, 0, 0, 0, 0],  
-[0, 0, 0, 0, 0, 0, 0], 
-[0, 0, 0, 0, 0, 0, 0], 
-[0, 0, 0, 0, 0, 0, 0]] 
-
-// 1의 개수가 9개 이하인지 체크
-// 9번  Matrix Multiplication 하면서 Diagonal에 1이 있는지 확인
-
 
 
 function isCell(result){
     
-    const cellCheck = [0, 0, 1]; //Edge가 9개 이상, Cycle존재, INPUT OUTPUT미연결
+    const cellCheck = [0, 1]; //Edge가 9개 이상, INPUT OUTPUT미연결 
+    //Cell은 Directed Acyclic Graph인데
+    //1. Upper Trangluar Matrix로 Direct가 표현이 되는건가?
+    //2. Acyclic이 아니어도 NASBench에서 결과를 뱉는데 왜그런거지?
+    //=> Cycle Checker는 일단 패스..
     
     if (countEdge(result) > 9){
         cellCheck[0] = 1;
     }
-    let newMatrix = result; //DAG인데 Upper Traingular Matirx로 표현되어서 DFS도, Power도 쓸 수가 없음... 어떡하지?
+    let newMatrix = result;
     for (let i=0; i<9; i++){
         newMatrix = matmul(newMatrix, result);
-        for (let j=0; j<7; j++){
-            if(newMatrix[j][j]){
-                cellCheck[1] = 1;
-                continue;
-            }
-        }
-        
-    }
-    let newMatrix2 = result;
-    for (let i=0; i<9; i++){
-        newMatrix2 = matmul(newMatrix2, result);
-        if(newMatrix2[0][6]){
-            cellCheck[2] = 0;
+        if(newMatrix[0][6]){
+            cellCheck[1] = 0;
             continue;
         }
     }
-    
-    
-
     return cellCheck;
 }   
 

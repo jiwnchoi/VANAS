@@ -1,8 +1,8 @@
 import * as d3 from "d3";
+import bootstrap from 'bootstrap';
 import { makeSVGDefs } from "./svgdefs";
 import { makeNode } from "./controller/nodeController";
 import { printResult } from "./data/result.js";
-
 
 const width = 1000;
 const height = 600;
