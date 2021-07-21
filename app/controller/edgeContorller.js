@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import { metaData } from "../data/metadata";
 import { unSetResult } from "../data/result";
 

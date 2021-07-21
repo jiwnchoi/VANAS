@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 import { makeEdge } from "./edgeContorller.js"
 import { setResult, checkResult } from "../data/result.js";
 import { metaData } from "../data/metadata.js";
