@@ -76,4 +76,12 @@ export function makeNode(svg, radius){
         .attr("text-anchor", "middle")
         .attr("font-size", 10)
         .attr("font-family", "Roboto");
+
+    svg.append("line")
+        .attr("x1", 50)
+        .attr("y1", 150)
+        .attr("x2", 750)
+        .attr("y2", 150)
+        .attr("stroke-width", 1)
+        .attr("stroke", "#DEE2E6")
 }

@@ -1,3 +1,6 @@
+
+import * as d3 from "d3";
+
 const result = [[0, 0, 0, 0, 0, 0, 0], //INPUT
                 [0, 0, 0, 0, 0, 0, 0], //1X1 CONV
                 [0, 0, 0, 0, 0, 0, 0],  //3X3 CONV
@@ -23,6 +26,39 @@ export function checkResult(n1, n2){
     return bool
 }
 
+
+
+
+export function getAccuracy(){
+    let analytics = null;
+    d3.json('http://127.0.0.1:5000/nasbench', {
+        method : "POST",
+        body : JSON.stringify({
+            matrix : result,
+        }),
+        headers : {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    .then(json => {
+        d3.select("#analytics")
+            .attr("class", "alert bg-light alert-secondary")
+        d3.select("#trainable_parameters")
+            .text(json.trainable_parameters)
+        d3.select("#training_time")
+            .text(json.training_time)
+        d3.select("#train_accuracy")
+            .text(json.train_accuracy)
+        d3.select("#validation_accuracy")
+            .text(json.validation_accuracy)
+        d3.select("#test_accuracy")
+            .text(json.test_accuracy)
+    })
+}
+
+
+
+
 export function printResult(){
     let resultMatrix = "";
     for (let i=0; i<7; i++){
@@ -37,12 +73,13 @@ export function printResult(){
 }
 
 
-function isCell(result){
+export function isCell(){
     
     const cellCheck = [0, 1]; //Edge가 9개 이상, INPUT OUTPUT미연결 
     //Cell은 Directed Acyclic Graph인데
     //1. Upper Trangluar Matrix로 Direct가 표현이 되는건가?
     //2. Acyclic이 아니어도 NASBench에서 결과를 뱉는데 왜그런거지?
+    //3. 유의미한 Graph만 결과를 뱉는 것이 아니네...
     //=> Cycle Checker는 일단 패스..
     
     if (countEdge(result) > 9){
@@ -50,11 +87,11 @@ function isCell(result){
     }
     let newMatrix = result;
     for (let i=0; i<9; i++){
-        newMatrix = matmul(newMatrix, result);
         if(newMatrix[0][6]){
             cellCheck[1] = 0;
             continue;
         }
+        newMatrix = matmul(newMatrix, result);
     }
     return cellCheck;
 }   

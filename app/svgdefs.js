@@ -15,7 +15,7 @@ export function makeSVGDefs(svg){
         .attr("dx", 0)
         .attr("dy", 0)
         .attr("stdDeviation",4)
-        .attr("flood-color", "green")
+        .attr("flood-color", "#0D6EFD")
         .attr("flood-opacity", "0.5");
 
     const marker = defs.append("marker")

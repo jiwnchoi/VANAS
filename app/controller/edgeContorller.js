@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { metaData } from "../data/metadata";
 import { unSetResult } from "../data/result";
+import { getAccuracy, isCell } from "../data/result";
 
 function deleteEdgeMouseOver(){
     d3.select(this).attr("stroke","tomato").style("marker-end","url(#endDelete)")
@@ -18,7 +19,29 @@ function deleteEdgeClicked(){
     const n1 = className[10];
     const n2 = className[22];
     unSetResult(n1, n2);
+    printResult();
     edge.remove()
+}
+
+function printResult(){
+    const cellCheck = isCell();
+    if(cellCheck[0]){
+        d3.select("#analytics").attr("class", "visually-hidden")
+        d3.select("#edgeNumberAlert")
+            .attr("class", "notcell alert alert-danger")
+    }
+    if(cellCheck[1]){
+        d3.select("#analytics").attr("class", "visually-hidden")
+        d3.select("#connectAlert")
+            .attr("class", "notcell alert alert-warning")
+    }
+    if(!cellCheck[0] && !cellCheck[1]){
+        d3.selectAll(".notcell")
+            .attr("class", "visually-hidden")
+        
+        getAccuracy();
+    }
+
 }
 
 export function makeEdge(sourceNode, targetNode){
@@ -58,4 +81,7 @@ export function makeEdge(sourceNode, targetNode){
         .on("mouseover", deleteEdgeMouseOver)
         .on("mouseout", deleteEdgeMouseOut)
         .on("click", deleteEdgeClicked);
+
+    printResult();
+
 }
