@@ -31,7 +31,7 @@ export function checkResult(n1, n2){
 
 export function getAccuracy(){
     let analytics = null;
-    d3.json('//https://8d11125fda1a.ngrok.io/nasbench', {
+    d3.json('https://8d11125fda1a.ngrok.io/nasbench', {
         method : "POST",
         body : JSON.stringify({
             matrix : result,
