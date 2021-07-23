@@ -26,12 +26,12 @@ export function checkResult(n1, n2){
     return bool
 }
 
-
-
+//http://192.168.0.54:5000/nasbench
+//https://8d11125fda1a.ngrok.io/nasbench
 
 export function getAccuracy(){
     let analytics = null;
-    d3.json('http://127.0.0.1:5000/nasbench', {
+    d3.json('//https://8d11125fda1a.ngrok.io/nasbench', {
         method : "POST",
         body : JSON.stringify({
             matrix : result,
