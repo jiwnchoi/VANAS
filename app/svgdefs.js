@@ -41,4 +41,29 @@ export function makeSVGDefs(svg){
     markerDelete.append("polygon")
         .attr("points","0 0, 6 2, 0 4")
         .attr("fill","tomato");
+
+    const rectMargin = 30;
+    const rectHeight = 80;
+    const deleteBox = svg.append("g")
+        .attr("transform", "translate("+[rectMargin, 600-rectMargin-rectHeight]+")" )
+        .attr("id", "deleteBox").attr("visibility","hidden")
+        .attr("width",800-rectMargin*2).attr("height",rectHeight)
+        .attr("rx","5").attr("ry","5");
+
+    deleteBox.append("rect")
+        .attr("width",800-rectMargin*2).attr("height",rectHeight)
+        .attr("rx","5").attr("ry","5")
+        .attr("fill", "#dc3545");
+
+    deleteBox.append("text")
+        .text("Drag here to delete node")
+        .attr("fill", "white")
+        .attr("x", 400-rectMargin).attr("y",rectHeight/2)
+        .attr("dominant-baseline", "middle").attr("text-anchor", "middle")
+        .attr("font-weight", "bold")
+        .attr("font-size", 24)
+        .attr("font-family", "Roboto");
+    
+
+
 }
