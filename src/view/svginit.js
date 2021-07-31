@@ -1,4 +1,4 @@
-export function makeSVGDefs(svg){
+export function svgInit(svg){
     const defs = svg.append("defs");
     const filter = defs.append("filter")
         .attr("id", "drop-shadow")

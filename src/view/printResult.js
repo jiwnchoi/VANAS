@@ -1,7 +1,6 @@
 import * as d3 from "d3";
-import { cellSainityCheck, addEdge, getAccuracy } from "../data/result";
-import {drawObject} from "./nodeController.js";
-
+import { cellSainityCheck } from "../data/dataProcessing";
+import getAccuracy from "../service/getAccuracy";
 
 
 
@@ -35,8 +34,3 @@ export function printResult(){
 
 }
 
-export function makeEdge(sourceNode, targetNode){
-    addEdge(sourceNode, targetNode);
-    drawObject();
-    printResult();
-}
