@@ -1,4 +1,4 @@
-import { getNodeData } from "../data/data";
+import { getEdgeData, getNodeData } from "../data/data";
 import { reorderData } from "../data/dataProcessing";
 
 function addNode(nodeType){
@@ -23,11 +23,22 @@ function addNode(nodeType){
 }
 
 function deleteNode(nodeIndex){
+    const nodeData = getNodeData();
+    const edgeData = getEdgeData();
+    
     for (let i=0; i<nodeData.length; i++){
         if(nodeData[i].id == nodeIndex){
             nodeData.splice(i, 1);
         }
     }
+
+    for (let i=0; i<edgeData.length; i++){
+        if(edgeData[i].sourceNode == nodeIndex || edgeData[i].targetNode == nodeIndex){
+            edgeData.splice(i,1);
+            i--;
+        }
+    }
+
     reorderData();
 }
 

@@ -16,12 +16,9 @@ function edgeMouseOut(){
 }
 
 function edgeClicked(){
-    const edge = d3.select(this);
-    const edgeClassName = edge.attr('class');
+    const edgeClassName = d3.select(this).attr('class');
     deleteEdge(edgeClassName);
     drawObject();
-    edge.remove();
-    printResult();
 }
 
 export {edgeMouseOver, edgeMouseOut, edgeClicked}

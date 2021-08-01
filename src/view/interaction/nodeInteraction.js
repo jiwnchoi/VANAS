@@ -4,11 +4,11 @@ import { updateEdge, isEdgeExists } from "../../controller/edgeController";
 import { deleteNode } from "../../controller/nodeController";
 import { makeEdge } from "../makeObject";
 import drawObject from "../drawObject";
+import { getNodeData } from "../../data/data";
 
 function dragNodeStart() {
     d3.select("#deleteBox").attr("visibility","visible");
-    d3.select(this).select("circle").attr("stroke", "black");
-  }
+ }
 
 function dragNode(event, d) {
     d.x = event.x;
@@ -27,16 +27,15 @@ function dragNode(event, d) {
 function dragNodeEnd(event, d) {
     const selectedNode = d3.select(this);
     d3.select("#deleteBox").attr("visibility","hidden");
-    selectedNode.select("circle").attr("stroke", null);
-    const nodeIndex = selectedNode.attr('id');
+    const nodeIndex = Number(selectedNode.attr('id')[4]);
     if (deleteBoxCheck(event.x, event.y, nodeIndex)){
         deleteNode(nodeIndex);
-        selectedNode.remove();
         drawObject();
     }
 }
 
 function deleteBoxCheck(x, y, id){
+    const nodeData = getNodeData();
     const rectMargin = 30;
     const rectHeight = 80;
 
@@ -44,8 +43,8 @@ function deleteBoxCheck(x, y, id){
          x < 800-rectMargin &&
          600-rectMargin-rectHeight < y && 
          y < 600-rectMargin &&
-         id != 5 &&
-         id != 6){
+         id != 0 &&
+         id != nodeData.length-1){
         return true;
     }
     return false;
@@ -54,14 +53,15 @@ function deleteBoxCheck(x, y, id){
 function clickedNode(){
     const node = d3.select(this);
     const sourceNode = isNodeClicked;
-    const targetNode = node.attr('id');
+    const targetNode = Number(node.attr('id')[4]);
+    console.log(sourceNode, targetNode);
 
-    if(isNodeClicked){    
+    if(isNodeClicked != null){    
         if (!isEdgeExists(sourceNode, targetNode)){
             makeEdge(sourceNode, targetNode);
         }       
         isNodeClicked = null;
-        d3.selectAll("circle").style("filter", "url(#drop-shadow)");
+        // d3.selectAll("circle").style("filter", "url(#drop-shadow)");
     }
     else{
         node.select("circle").style("filter", "url(#drop-shadow-start)");

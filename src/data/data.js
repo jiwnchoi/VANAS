@@ -3,14 +3,14 @@ const nodeData = [{
                     type : "input",
                     name : "INPUT",
                     x : 100,
-                    y : 200,
+                    y : 250,
                 },
                 {
                     id : 1,
                     type : "output",
                     name : "OUTPUT",
                     x : 700,
-                    y : 200,
+                    y : 250,
                 }];
 
 const edgeData = [

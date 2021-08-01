@@ -127,11 +127,11 @@ function cellSainityCheck(){
 
     // path상의 노드가 2개 미만이면 연결되어있지 않음
     cellStatus.extraneous = Array.from(extraneous);
-    if (numNodes -  cellStatus.extraneous.length > numNodes -2){
-        cellStatus.isConnected = true;
+    if (numNodes -  cellStatus.extraneous.length < 2){
+        cellStatus.isConnected = false;
     }
     else{
-        cellStatus.isConnected = false;
+        cellStatus.isConnected = true;
     }
     
 

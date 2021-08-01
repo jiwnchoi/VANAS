@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { svgInit } from "./view/svginit";
+import { svgInit } from "./view/svgInit";
 import drawObject from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
 

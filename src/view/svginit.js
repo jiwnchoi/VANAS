@@ -9,6 +9,15 @@ export function svgInit(svg){
         .attr("flood-color", "black")
         .attr("flood-opacity", "0.5");
 
+    const filterExt = defs.append("filter")
+        .attr("id", "drop-shadow-ext")
+    filterExt.append("feDropShadow")
+        .attr("dx", 0)
+        .attr("dy", 0)
+        .attr("stdDeviation",4)
+        .attr("flood-color", "red")
+        .attr("flood-opacity", "0.5");
+
     const filterStart = defs.append("filter")
         .attr("id", "drop-shadow-start")
     filterStart.append("feDropShadow")

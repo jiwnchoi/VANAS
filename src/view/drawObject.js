@@ -6,6 +6,7 @@ import * as nodeInteraction from "./interaction/nodeInteraction.js"
 import * as edgeInteraction from "./interaction/edgeInteraction.js"
 import { printResult } from "./printResult.js";
 
+
 export default function drawObject(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
@@ -13,14 +14,21 @@ export default function drawObject(){
 
     const radius = 40;
 
-    d3.select("svg").selectAll(".node")
-        .data(nodeData)
-        .attr("id", d=>d.id)
-        .attr("transform", d => "translate("+[d.x, d.y]+")" )
 
-        .enter()
-        .append("g")
-        .attr("id", d=>d.id)
+    //INIT
+    const nodeGroups = d3.select("svg").selectAll(".node").data(nodeData)
+    
+    //UPDATE
+    nodeGroups
+        .attr("id", d=>"node"+d.id)
+        .attr("transform", d => "translate("+[d.x, d.y]+")" );
+
+    nodeGroups.select("text")
+        .text(d => d.name);
+
+    //ENTER
+    const nodeGroupsEnter = nodeGroups.enter().append("g")
+        .attr("id", d=>"node"+d.id)
         .attr("transform", d => "translate("+[d.x, d.y]+")" )
         .attr("class", "node")
         .call(
@@ -29,37 +37,38 @@ export default function drawObject(){
             .on("drag", nodeInteraction.dragNode)
             .on("end", nodeInteraction.dragNodeEnd)
         )
-        .on("click", nodeInteraction.clickedNode)
-        .append("circle") 
+        .on("click", nodeInteraction.clickedNode);
+    
+    nodeGroupsEnter.append("circle")
         .attr("r", radius)
         .attr("fill", "white")
-        .style("filter", "url(#drop-shadow)")
+        .style("filter", "url(#drop-shadow)");
 
-     d3.select("svg").selectAll(".node")
-        .data(nodeData)
-        .select("text")
-        .text(d => {console.log(d.name); return d.name;})
-        
-        .enter()
-        .append("text")
+    nodeGroupsEnter.append("text")
         .text(d => d.name)
         .attr("fill", "black")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("font-size", 10)
-        .attr("font-family", "Roboto")
-        
-        .exit()
-        .remove();
+        .attr("font-family", "Roboto");
     
-    d3.select("svg").selectAll("line")
-        .data(edgeData)
+    //EXIT
+    nodeGroups.exit().remove();
+
+    
+
+    const edge = d3.select("svg").selectAll("line").data(edgeData);
+    
+    //UPDATE
+    edge        
         .attr("class", d => d.edgeClassName)
         .attr("x1", d => d.x1)
         .attr("y1", d => d.y1)
         .attr("x2", d => d.x2)
         .attr("y2", d => d.y2)
-
+    
+    //ENTER
+    edge
         .enter()
         .append("line")
         .attr("class", d => d.edgeClassName)
@@ -73,6 +82,10 @@ export default function drawObject(){
         .on("mouseover", edgeInteraction.edgeMouseOver)
         .on("mouseout", edgeInteraction.edgeMouseOut)
         .on("click", edgeInteraction.edgeClicked);
+
+    //EXIT
+    edge.exit().remove()
+
 
     printResult();
 }
