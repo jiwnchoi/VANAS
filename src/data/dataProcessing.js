@@ -1,39 +1,5 @@
 import { getEdgeData, getNodeData } from "./data";
-
-
-function reorderData(){
-    const nodeData = getNodeData();
-    const edgeData = getEdgeData();
-    
-    for (let i=1; i<nodeData.length; i++){
-        if (i!=nodeData.length-1 && nodeData[i].type == "output"){
-            const outputNode = nodeData[i];
-            nodeData.splice(i,1);
-            nodeData.push(outputNode);
-            i--;
-            continue;
-        }
-        for (let j=0; j<edgeData.length; j++){
-            if (edgeData[j].sourceNode == nodeData[i].id){
-                edgeData[j].sourceNode = i;
-                const edgeClassName = "sourcenode"+i+" targetnode"+edgeData[j].targetNode;
-                edgeData[j].edgeClassName = edgeClassName;
-            }
-            if (edgeData[j].targetNode == nodeData[i].id){
-                edgeData[j].targetNode = i;
-                const edgeClassName = "sourcenode"+edgeData[j].sourceNode+" targetnode"+i;
-                edgeData[j].edgeClassName = edgeClassName;
-            }
-        }
-        nodeData[i].id = i;
-    }
-
-}
-
-function convertEdgeDataToMatrix(){
-    const nodeData = getNodeData();
-    const edgeData = getEdgeData();
-    Set.prototype.intersection = function(setB) {
+Set.prototype.intersection = function(setB) {
         var intersection = new Set();
         for (var elem of setB) {
             if (this.has(elem)) {
@@ -51,7 +17,60 @@ function convertEdgeDataToMatrix(){
         return difference;
     }
 
-    console.log("convertEdgeDataToMatrix")
+function reorderData(){
+    const nodeData = getNodeData();
+    const edgeData = getEdgeData();
+    
+    //Topological Sort by DFS
+    const visitedFromInput = [0]
+    const frontier = [0];
+    const topologicalSort = [];
+
+    while (frontier.length > 0){
+        const top = frontier[-1];
+        let isIndegree = true;
+        for (let edge of edgeData){
+            if (edge.sourceNode == top && !visitedFromInput.has(edge.targetNode)){
+                visitedFromInput.push(edge.targetNode);
+                frontier.push(edge.targetNode);
+                isIndegree = false;
+            }
+        }
+
+        if (isIndegree){
+            topologicalSort.push(top);
+            const idx = frontier.indexOf(top);
+            frontier.splice(idx, 1);
+        }
+    }
+    topologicalSort.reverse();
+
+    //reorder edge sourcenode
+    for (let i=0;i<nodeData.length;i++){
+        for (let edge of edgeData){
+            if(edge.sourceNode == i) edge.sourceNode = topologicalSort[i];
+        }
+    }
+
+    //reorder edge targetnode
+    for (let i=0;i<nodeData.length;i++){
+        for (let edge of edgeData){
+            if(edge.targetNode == i) edge.targetNode = topologicalSort[i];
+        }
+    }
+    
+    //reorder node
+    for (let node of nodeData){
+        node.id = topologicalSort[node.id];
+    }
+
+}
+
+
+function convertEdgeDataToMatrix(){
+    const nodeData = getNodeData();
+    const edgeData = getEdgeData();
+
     const matrix = [];
 
     for (let i=0; i<nodeData.length; i++){
@@ -72,7 +91,7 @@ function convertEdgeDataToMatrix(){
             matrix[edge.targetNode][edge.sourceNode] = 1;
         }
     }
-    console.log(edgeData);
+
     for (let row of matrix){
         console.log(row);
     }
@@ -81,6 +100,7 @@ function convertEdgeDataToMatrix(){
 }
 
 function cellSainityCheck(){
+
     const edgeData = getEdgeData();
 
     const matrix = convertEdgeDataToMatrix();
