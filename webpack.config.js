@@ -2,9 +2,13 @@ const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    index : './src/index.js',
+    overview : './src/overview.js'
+  },
+
   output: {
-    filename: "nasbench.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname + "/build")
   },
   mode: "none",
@@ -23,8 +27,16 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
+      hash : true,
+      chunks : ['index'],
 			template: './public/index.html', 
       filename: 'index.html'
+    }),
+    new HtmlWebPackPlugin({
+      hash : true,
+      chunks: ['overview'],
+			template: './public/overview.html', 
+      filename: 'overview.html'
     })
   ]
 };

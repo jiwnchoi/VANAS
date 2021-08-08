@@ -3,7 +3,7 @@
 import * as d3 from "d3";
 import { getNodeData } from "../data/data";
 
-export default function getAccuracy(matrix){
+export function getAccuracy(matrix){
     const nodeData = getNodeData();
     const ops = nodeData.map(x => x.type);
 

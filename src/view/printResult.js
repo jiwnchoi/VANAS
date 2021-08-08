@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { cellSainityCheck } from "../data/dataProcessing";
-import getAccuracy from "../service/getAccuracy";
+import { getAccuracy } from "../service/getAccuracy";
 
 let init = 1;
 
