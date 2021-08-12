@@ -1,13 +1,21 @@
 import * as d3 from "d3";
-import { svgInit } from "./view/svgInit";
+import { drawDeleteBox, svgInit } from "./view/svgInit";
 import drawObject from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
+import { getSharpleyValue } from "./service/getSharpleyValue";
+import { drawBarChartFromData } from "./view/drawBarChart";
 
 
-const svg = d3.select("svg");
+const architecture = d3.select("#architecture");
+const sharpleyvalue = d3.select("#sharpleyvalue");
 
-svgInit(svg);
+svgInit(architecture);
+drawDeleteBox(architecture);
+svgInit(sharpleyvalue);
 drawObject();
 
-d3.selectAll(".append-button")
-    .on("click", makeNode);
+d3.selectAll(".append-button").on("click", makeNode);
+
+
+const data = getSharpleyValue();
+data.then(json => drawBarChartFromData(json.children));

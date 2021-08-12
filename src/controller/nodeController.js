@@ -20,6 +20,7 @@ function addNode(nodeType){
     }
     nodeData.push(newData);
     reorderData();
+    return 1;
 }
 
 function deleteNode(nodeIndex){

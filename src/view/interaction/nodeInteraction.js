@@ -6,14 +6,17 @@ import { makeEdge } from "../makeObject";
 import drawObject from "../drawObject";
 import { getNodeData } from "../../data/data";
 
-function dragNodeStart() {
+function dragNodeStart(event, d) {
+    if (d.type == "input" || d.type == "output") return null;
     d3.select("#deleteBox").attr("visibility","visible");
  }
 
 function dragNode(event, d) {
+    if (d.type == "input" || d.type == "output") return null;
     d.x = event.x;
     d.y = event.y;
     const nodeNum = d.id;
+    
     const sourceNodeClass = ".sourcenode"+nodeNum;
     const targetNodeClass = ".targetnode" + nodeNum;
     const sourceNode = d3.selectAll(sourceNodeClass);
@@ -25,6 +28,7 @@ function dragNode(event, d) {
 }
 
 function dragNodeEnd(event, d) {
+    if (d.type == "input" || d.type == "output") return null;
     const selectedNode = d3.select(this);
     d3.select("#deleteBox").attr("visibility","hidden");
     const nodeIndex = Number(selectedNode.attr('id')[4]);

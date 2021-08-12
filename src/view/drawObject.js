@@ -16,7 +16,7 @@ export default function drawObject(){
 
 
     //INIT
-    const nodeGroups = d3.select("svg").selectAll(".node").data(nodeData)
+    const nodeGroups = d3.select("#architecture").selectAll(".node").data(nodeData)
     
     //UPDATE
     nodeGroups
@@ -57,7 +57,7 @@ export default function drawObject(){
 
     
 
-    const edge = d3.select("svg").selectAll("line").data(edgeData);
+    const edge = d3.select("#architecture").selectAll("line").data(edgeData);
     
     //UPDATE
     edge        
