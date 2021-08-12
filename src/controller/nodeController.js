@@ -12,14 +12,13 @@ function addNode(nodeType){
     if(nodeType == 'maxpool3x3') nodeName = '3X3 MAXPOOL';
 
     const newData = {
-        id : nodeData.length,
+        id : nodeData[nodeData.length-1].id+1,
         type : nodeType,
         name : nodeName,
         x : Math.random() * 400 + 200,
         y : Math.random() * 350 + 100,
     }
     nodeData.push(newData);
-    reorderData();
     return 1;
 }
 
@@ -39,8 +38,6 @@ function deleteNode(nodeIndex){
             i--;
         }
     }
-
-    reorderData();
 }
 
 export {addNode, deleteNode};

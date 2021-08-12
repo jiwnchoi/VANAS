@@ -52,17 +52,23 @@ function isEdgeExists(sourceNode, targetNode){
     return false;
 }
 
-function updateEdge(node){
+function updateEdge(nodeNum){
     const edgeData = getEdgeData();
     const nodeData = getNodeData();
-    for (let edge of edgeData){
-        if (edge.sourceNode == node){
-            edge.x1 = nodeData[node].x;
-            edge.y1 = nodeData[node].y;
+    let node = null;
+    for (let n of nodeData){
+        if (n.id == nodeNum){
+            node = n;
         }
-        if (edge.targetNode == node){
-            edge.x2 = nodeData[node].x;
-            edge.y2 = nodeData[node].y;
+    }
+    for (let edge of edgeData){
+        if (edge.sourceNode == node.id){
+            edge.x1 = node.x;
+            edge.y1 = node.y;
+        }
+        if (edge.targetNode == node.id){
+            edge.x2 = node.x;
+            edge.y2 = node.y;
         }
     }
     return 0;

@@ -10,7 +10,6 @@ import { printResult } from "./printResult.js";
 export default function drawObject(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
-    console.log(nodeData, edgeData);
 
     const radius = 40;
 
@@ -49,7 +48,7 @@ export default function drawObject(){
         .attr("fill", "black")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
-        .attr("font-size", 10)
+        .attr("font-size", 11)
         .attr("font-family", "Roboto");
     
     //EXIT

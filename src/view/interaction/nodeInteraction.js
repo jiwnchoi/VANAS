@@ -31,14 +31,14 @@ function dragNodeEnd(event, d) {
     if (d.type == "input" || d.type == "output") return null;
     const selectedNode = d3.select(this);
     d3.select("#deleteBox").attr("visibility","hidden");
-    const nodeIndex = Number(selectedNode.attr('id')[4]);
-    if (deleteBoxCheck(event.x, event.y, nodeIndex)){
+    const nodeIndex = Number(selectedNode.attr('id').replace('node',''));
+    if (deleteBoxCheck(event.x, event.y)){
         deleteNode(nodeIndex);
         drawObject();
     }
 }
 
-function deleteBoxCheck(x, y, id){
+function deleteBoxCheck(x, y){
     const nodeData = getNodeData();
     const rectMargin = 30;
     const rectHeight = 80;
@@ -46,9 +46,7 @@ function deleteBoxCheck(x, y, id){
     if ( rectMargin < x &&
          x < 800-rectMargin &&
          600-rectMargin-rectHeight < y && 
-         y < 600-rectMargin &&
-         id != 0 &&
-         id != nodeData.length-1){
+         y < 600-rectMargin){
         return true;
     }
     return false;
@@ -58,7 +56,6 @@ function clickedNode(){
     const node = d3.select(this);
     const sourceNode = isNodeClicked;
     const targetNode = Number(node.attr('id')[4]);
-    console.log(sourceNode, targetNode);
 
     if(isNodeClicked != null){    
         if (!isEdgeExists(sourceNode, targetNode)){
