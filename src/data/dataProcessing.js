@@ -19,38 +19,6 @@ Set.prototype.intersection = function(setB) {
     }
 
 
-function convertEdgeDataToMatrix(){
-    const nodeData = getNodeData();
-    const edgeData = getEdgeData();
-    
-    console.log("convertEdgeDataToMatrix")
-    const matrix = [];
-
-    for (let i=0; i<nodeData.length; i++){
-        const row = [];
-        for (let j=0; j<nodeData.length; j++){
-            row.push(0);
-        }
-        matrix.push(row);
-    }
-
-    for (let edge of edgeData){
-        if (edge.sourceNode < edge.targetNode){
-            matrix[edge.sourceNode][edge.targetNode] = 1;
-        }
-        else{
-
-            
-            matrix[edge.targetNode][edge.sourceNode] = 1;
-        }
-    }
-    console.log(edgeData);
-    for (let row of matrix){
-        console.log(row);
-    }
-
-    return matrix;
-}
 
 function createMatrix(cellStatus){
     const originalNodeData = getNodeData();
@@ -94,7 +62,6 @@ function createMatrix(cellStatus){
         if (!hasChildren){
             topologicalSort.push(frontier.pop());
         }
-
     }
     topologicalSort.reverse();
     console.log(topologicalSort);
@@ -130,6 +97,9 @@ function createMatrix(cellStatus){
     console.log(ops)
     return [matrix, ops];
 }
+
+
+
 function cellSainityCheck(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
@@ -140,24 +110,42 @@ function cellSainityCheck(){
     
     const cellStatus = {
         isConnected : null,
+        isAcyclic : true,
         numEdges,
         numNodes,
         extraneous : [],
     }
 
     //input부터 DFS
-    const visitedFromInput = new Set([0]);
+    const visitedFromInput = [0];
     const frontierInput = [0];
     while (frontierInput.length > 0){
-        const top = frontierInput.pop();
+        let hasChildren = 0;
+        const top = frontierInput[frontierInput.length-1];
 
         for (let edge of edgeData){
-            if(edge.sourceNode == top && !visitedFromInput.has(edge.targetNode)){
-                visitedFromInput.add(edge.targetNode);
-                frontierInput.push(edge.targetNode);
+            if(edge.sourceNode == top){
+                if (frontierInput.indexOf(edge.targetNode) != -1){
+                    cellStatus.isConnected = false;
+                    cellStatus.isAcyclic = false;
+                    console.log(frontierInput);
+                    console.log(edge.targetNode, top);
+                    console.log(frontierInput.indexOf(edgeData.targetNode));
+                    cellStatus.extraneous = frontierInput.slice(frontierInput.indexOf(edge.targetNode));
+                    cellStatus.extraneous.push(top);
+                    return cellStatus;
+                }
+                if (visitedFromInput.indexOf(edge.targetNode) == -1){
+                    visitedFromInput.push(edge.targetNode);
+                    frontierInput.push(edge.targetNode);
+                    hasChildren = 1;
+                }
             }
         }
+        if (!hasChildren) frontierInput.pop();
     }
+
+
     //output부터 DFS
     const visitedFromOutput = new Set([1]);
     const frontierOutput = [1];
@@ -177,7 +165,7 @@ function cellSainityCheck(){
         allNodeId.push(node.id);
     }
     const extraneous = new Set(allNodeId).difference(
-        visitedFromInput.intersection(visitedFromOutput)
+        visitedFromOutput.intersection(new Set(visitedFromInput))
     );
 
     // path상의 노드가 2개 미만이면 연결되어있지 않음
@@ -194,6 +182,6 @@ function cellSainityCheck(){
 }
 
 
-export {createMatrix, cellSainityCheck, convertEdgeDataToMatrix};
+export {createMatrix, cellSainityCheck};
 
 

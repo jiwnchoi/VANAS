@@ -26,6 +26,12 @@ export function printResult(){
             .attr("class", "notcell alert alert-warning");
         checker++;
     }
+    if(!cellStatus.isAcyclic){
+        d3.select("#analytics").attr("class", "visually-hidden");
+        d3.select("#cycleAlert")
+            .attr("class", "notcell alert alert-danger");
+        checker++;
+    }
     
     d3.selectAll(".node").select("circle").style("filter", "url(#drop-shadow)");
 
