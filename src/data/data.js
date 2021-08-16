@@ -4,6 +4,7 @@ const nodeData = [{
                     name : "INPUT",
                     x : 100,
                     y : 300,
+                    status : null,
                 },
                 {
                     id : 1,
@@ -11,6 +12,7 @@ const nodeData = [{
                     name : "OUTPUT",
                     x : 700,
                     y : 300,
+                    status : null,
                 }];
 
 const edgeData = [

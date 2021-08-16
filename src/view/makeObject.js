@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { addNode } from "../controller/nodeController";
 import { addEdge } from "../controller/edgeController";
 import drawObject from "./drawObject";
+import { printResult } from "./printResult";
 
 
 async function makeNode(){
@@ -14,12 +15,12 @@ async function makeNode(){
         d3.select("#nodeNumberAlert").attr("class", "notcell alert alert-danger visually-hidden");
 
     }
-    drawObject();
+    printResult();
 }
 
 function makeEdge(sourceNode, targetNode){
     addEdge(sourceNode, targetNode);
-    drawObject();
+    printResult();
 }
 
 export {makeNode, makeEdge}

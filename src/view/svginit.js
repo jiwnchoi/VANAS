@@ -62,7 +62,7 @@ export function svgInit(svg){
 
     marker.append("polygon")
         .attr("points","0 0, 6 2, 0 4")
-        .attr("fill","gray");
+        .attr("fill","black");
     
     const markerDelete = defs.append("marker")
         .attr("id", "endDelete")
@@ -75,4 +75,16 @@ export function svgInit(svg){
     markerDelete.append("polygon")
         .attr("points","0 0, 6 2, 0 4")
         .attr("fill","tomato");
+
+    const markerRecommend = defs.append("marker")
+        .attr("id", "endRecommend")
+        .attr("orient", "auto")
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 4)
+        .attr("refX", 18.1)
+        .attr("refY", 2)
+
+    markerRecommend.append("polygon")
+        .attr("points","0 0, 6 2, 0 4")
+        .attr("fill","gray");
 }

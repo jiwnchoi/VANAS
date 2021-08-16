@@ -11,7 +11,7 @@ function edgeMouseOver(){
 }
 
 function edgeMouseOut(){
-    d3.select(this).attr("stroke","gray").style("marker-end","url(#end)")
+    d3.select(this).attr("stroke","black").style("marker-end","url(#end)")
     d3.selectAll(".node").raise();
 }
 

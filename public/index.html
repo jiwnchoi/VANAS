@@ -34,13 +34,11 @@
         <main class="bd-main">
             <div class="row g-3">
                 <div class="col-lg-6">
-                    <h4>Heatmap</h4>
                     <div class="border bg-light svg-container mb-3">
                         PLACEHOLDER
                         <svg id="heatmap" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet" class="svg-content-responsive"></svg>
                         
                     </div> 
-                    <h4>Sharpley Value by Edges</h4>
                     <div class="border bg-light svg-container">
                         <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet" class="svg-content-responsive"></svg>
                         
@@ -48,18 +46,18 @@
 
                 </div>
                 <div class="col-lg-6">
-                    <h4>Cell Builder</h4>
                     
                     
                     <div class="border bg-light svg-container mb-3">
                         <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet" class="svg-content-responsive"></svg>
                     </div>
 
-                    <div class="d-grid mb-3">
+                    <div class="d-grid mb-3" >
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button id="conv1x1-bn-relu" type="button" class="btn btn-primary append-button">Append 1X1 CONV</button>
                             <button id="conv3x3-bn-relu" type="button" class="btn btn-primary append-button">Append 3X3 CONV</button>
                             <button id="maxpool3x3" type="button" class="btn btn-primary append-button">Append 3X3 POOL</button>
+                            <button id="init-cell" type="button" class="btn btn-outline-primary append-button">Init Cell</button>
                         </div>
                     </div>
 
@@ -82,8 +80,8 @@
                     <div id="cycleAlert" class="notcell alert alert-danger visually-hidden" role="alert">
                         Cell is not acyclic. (with red shadow)
                     </div>
-
-                    <div id="analytics" class="alert alert-secondary visually-hidden" role="alert">
+                    
+                    <div id="analytics" class="visually-hidden" role="alert">
                         <h4>NAS Benchmark Result</h4>
                         <hr>
                         <h5>Trainable Parameters</h5>

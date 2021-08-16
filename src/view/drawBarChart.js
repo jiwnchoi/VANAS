@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-
+import * as barInteraction from "./interaction/barInteraction";
 
 
 export function drawBarChartFromData(data){
@@ -25,6 +25,7 @@ export function drawBarChartFromData(data){
         .enter()
         .append("rect")
         .attr("class","bar")
+        
         .attr("width", d => Math.abs(x(d.value) - x(0)))
         .attr("height", y.bandwidth())
         .attr("fill", d => {
@@ -37,6 +38,12 @@ export function drawBarChartFromData(data){
         })
         .attr("x", d => x(Math.min(0, d.value)))
         .attr("y", d => y(d.name))
+        .on("click", (d) => {
+            barInteraction.barClicked(d.target.__data__.source, d.target.__data__.target);
+        })
+        .on("mouseover", barInteraction.barMouseOver)
+        .on("mouseout", barInteraction.barMouseOut);
+    
 
     const xAxisGroup = sharpleyvalue
                         .append("g")

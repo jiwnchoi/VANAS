@@ -16,15 +16,8 @@ function dragNode(event, d) {
     d.x = event.x;
     d.y = event.y;
     const nodeNum = d.id;
-    
-    const sourceNodeClass = ".sourcenode"+nodeNum;
-    const targetNodeClass = ".targetnode" + nodeNum;
-    const sourceNode = d3.selectAll(sourceNodeClass);
-    const targetNode = d3.selectAll(targetNodeClass);
-    sourceNode.attr("x1", d.x).attr("y1", d.y);
-    targetNode.attr("x2", d.x).attr("y2", d.y);
-    d3.select(this).raise().attr("transform", d => "translate("+d.x+","+d.y+")" );
     updateEdge(nodeNum);
+    drawObject();
 }
 
 function dragNodeEnd(event, d) {
@@ -39,7 +32,6 @@ function dragNodeEnd(event, d) {
 }
 
 function deleteBoxCheck(x, y){
-    const nodeData = getNodeData();
     const rectMargin = 30;
     const rectHeight = 80;
 
@@ -56,19 +48,24 @@ function clickedNode(){
     const node = d3.select(this);
     const sourceNode = isNodeClicked;
     const targetNode = Number(node.attr('id')[4]);
+    const nodeData = getNodeData();
 
     if(isNodeClicked != null){    
         if (!isEdgeExists(sourceNode, targetNode)){
             makeEdge(sourceNode, targetNode);
         }       
         isNodeClicked = null;
-        // d3.selectAll("circle").style("filter", "url(#drop-shadow)");
+        for (let node of nodeData){
+            if(node.status == 'clicked') node.status = null;
+        }
     }
     else{
-        node.select("circle").style("filter", "url(#drop-shadow-start)");
         isNodeClicked = targetNode;
+        for (let node of nodeData){
+            if(node.id == targetNode) node.status = 'clicked';
+        }
     }
-    d3.selectAll(".node").raise();
+    drawObject(isNodeClicked);
     
 }
 

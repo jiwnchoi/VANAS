@@ -20,14 +20,12 @@ Set.prototype.intersection = function(setB) {
 
 
 
-function createMatrix(cellStatus){
-    const originalNodeData = getNodeData();
-    const originalEdgeData = getEdgeData();
+function createMatrix(extraneous, originalNodeData, originalEdgeData){
     const ops = [];
     
     const nodeData = originalNodeData.slice();
     const edgeData = originalEdgeData.slice();
-    for (let ext of cellStatus.extraneous){
+    for (let ext of extraneous){
         for (let i=0; i<nodeData.length; i++){
             if (nodeData[i].id == ext){
                 nodeData.splice(i,1);
@@ -64,7 +62,6 @@ function createMatrix(cellStatus){
         }
     }
     topologicalSort.reverse();
-    console.log(topologicalSort);
 
     const matrix = [];
     for (let i=0; i<nodeData.length; i++){
@@ -93,18 +90,18 @@ function createMatrix(cellStatus){
         }
 
     }
-    console.log(matrix)
-    console.log(ops)
+
     return [matrix, ops];
 }
 
 
 
-function cellSainityCheck(){
-    const nodeData = getNodeData();
-    const edgeData = getEdgeData();
-    console.log(nodeData);
-    console.log(edgeData);
+function cellSainityCheck(nodeData, edgeData){
+    if (nodeData == null) nodeData = getNodeData();
+    if (edgeData == null) edgeData = getEdgeData();
+
+    
+
     const numNodes = nodeData.length;
     const numEdges = edgeData.length;
     
@@ -122,23 +119,21 @@ function cellSainityCheck(){
     while (frontierInput.length > 0){
         let hasChildren = 0;
         const top = frontierInput[frontierInput.length-1];
-
+        visitedFromInput.push(top);
         for (let edge of edgeData){
             if(edge.sourceNode == top){
                 if (frontierInput.indexOf(edge.targetNode) != -1){
                     cellStatus.isConnected = false;
                     cellStatus.isAcyclic = false;
-                    console.log(frontierInput);
-                    console.log(edge.targetNode, top);
-                    console.log(frontierInput.indexOf(edgeData.targetNode));
                     cellStatus.extraneous = frontierInput.slice(frontierInput.indexOf(edge.targetNode));
                     cellStatus.extraneous.push(top);
                     return cellStatus;
                 }
                 if (visitedFromInput.indexOf(edge.targetNode) == -1){
-                    visitedFromInput.push(edge.targetNode);
+                    
                     frontierInput.push(edge.targetNode);
                     hasChildren = 1;
+                    break;
                 }
             }
         }

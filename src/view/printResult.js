@@ -1,14 +1,13 @@
 import * as d3 from "d3";
+import { getEdgeData, getNodeData } from "../data/data";
 import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
 import { getAccuracy } from "../service/getAccuracy";
+import drawObject from "./drawObject";
 
-let init = 1;
 
 export function printResult(){
-    if (init){
-        init = 0;
-        return 0;
-    }
+    const nodeData = getNodeData();
+
     d3.select("#initAlert").attr("class","visually-hidden");
     const cellStatus = cellSainityCheck();
     console.log(cellStatus);
@@ -33,17 +32,23 @@ export function printResult(){
         checker++;
     }
     
-    d3.selectAll(".node").select("circle").style("filter", "url(#drop-shadow)");
+    // d3.selectAll(".node").select("circle").style("filter", "url(#drop-shadow)");
 
     if(cellStatus.extraneous.length > 0){
         d3.select("#analytics").attr("class", "visually-hidden");
+
         for (let ext of cellStatus.extraneous){
             
             if(ext ==0 || ext ==1){
                 continue;
             }
-            d3.select("#node" + ext).select("circle")
-                .style("filter", "url(#drop-shadow-ext)");
+
+            for (let node of nodeData){
+                if(node.id == ext) node.status = 'ext';
+                if(node.status == 'ext' && cellStatus.extraneous.indexOf(node.id) == -1){
+                    node.status = null;
+                }
+            }
         }
         d3.select("#extraneousAlert")
             .attr("class", "alert alert-warning");
@@ -56,7 +61,7 @@ export function printResult(){
         d3.selectAll(".notcell")
             .attr("class", "visually-hidden");
 
-        const data = getAccuracy(createMatrix(cellStatus));
+        const data = getAccuracy(createMatrix(cellStatus.extraneous, nodeData, getEdgeData()));
         data.then(json => {
                 d3.select("#analytics")
                     .attr("class", "alert bg-light alert-secondary");
@@ -73,6 +78,6 @@ export function printResult(){
             }  
         )
     }
-
+    drawObject();
 }
 

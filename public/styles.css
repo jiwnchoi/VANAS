@@ -33,3 +33,6 @@ body {
   grid-template-rows: auto 1fr auto;
 }
 
+button {
+  font-size: 12;
+}
