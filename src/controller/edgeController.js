@@ -1,4 +1,5 @@
 import { getEdgeData, getNodeData } from "../data/data";
+import { printResult } from "../view/printResult";
 
 
 function addEdge(sourceNode, targetNode){ 
@@ -27,7 +28,7 @@ function addEdge(sourceNode, targetNode){
             })[0].y,
     }
     edgeData.push(newEdge);
-    return 1;
+    printResult();
 }
 
 function deleteEdge(edgeClassName){
@@ -38,6 +39,7 @@ function deleteEdge(edgeClassName){
             break;
         }
     }
+    printResult();
 }
 
 function isEdgeExists(sourceNode, targetNode){

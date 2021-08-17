@@ -41,7 +41,7 @@ async function drawRecommend(clickedNode){
         .attr("fill", "gray")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
-        .attr("font-size", 20)
+        .attr("font-size", 14)
         .attr("font-family", "Roboto")
         .attr("transform", d => "translate("+[(d.x1 + d.x2)/2, (d.y1 + d.y2)/2]+")" );
     
