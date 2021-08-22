@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>NASBench Visualizer</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Quicksand|Open+Sans:wght@300|Rajdhani:wght@400" rel="stylesheet">
-    <link href="./styles.css"  rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand|Open+Sans:wght@300|Rajdhani:wght@400"
+        rel="stylesheet">
+    <link href="./styles.css" rel="stylesheet">
 </head>
+
 <body>
     <header class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
         <nav class="container-xxl flex-wrap flex-md-nowrap">
             <a class="navbar-brand p-0" href="#">NASBench Visualizer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="bdNavbar">
@@ -25,39 +32,67 @@
                         <a class="nav-link" href="https://github.com/skku-idclab">Github</a>
                     </li>
                 </ul>
-            </div> 
+            </div>
         </nav>
     </header>
-    
+
 
     <main class="container-xxl bd-layout overflow-hidden">
         <main class="bd-main">
             <div class="row g-3">
                 <div class="col-lg-6">
                     <div class="border bg-light svg-container mb-3">
-                        PLACEHOLDER
-                        <svg id="heatmap" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet" class="svg-content-responsive"></svg>
-                        
-                    </div> 
+                        <div id="options">
+                            <label for="optionX">X축</label>
+                            <select id="optionX">
+                                <option value=trainable_parameters selected="selected"># of trainable parameters
+                                </option>
+                                <option value=training_time>training time</option>
+                                <option value=test_accuracy>accuracy</option>
+                            </select>
+                            <label for="optionY">Y축</label>
+                            <select id="optionY">
+                                <option value=trainable_parameters># of trainable parameters</option>
+                                <option value=training_time selected="selected">training time</option>
+                                <option value=test_accuracy>accuracy</option>
+                            </select>
+                            <label for="optionZ">Z축</label>
+                            <select id="optionZ">
+                                <option value=trainable_parameters># of trainable parameters</option>
+                                <option value=training_time>training time</option>
+                                <option value=test_accuracy selected="selected">accuracy</option>
+                            </select><br>
+                        </div>
+                        <svg id="heatmap" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
+                            class="svg-content-responsive"></svg>
+                        <div id="tooltip"></div>
+
+                    </div>
                     <div class="border bg-light svg-container">
-                        <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet" class="svg-content-responsive"></svg>
-                        
-                    </div> 
+                        <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
+                            class="svg-content-responsive"></svg>
+
+                    </div>
 
                 </div>
                 <div class="col-lg-6">
-                    
-                    
+
+
                     <div class="border bg-light svg-container mb-3">
-                        <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet" class="svg-content-responsive"></svg>
+                        <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
+                            class="svg-content-responsive"></svg>
                     </div>
 
-                    <div class="d-grid mb-3" >
+                    <div class="d-grid mb-3">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="conv1x1-bn-relu" type="button" class="btn btn-primary append-button">Append 1X1 CONV</button>
-                            <button id="conv3x3-bn-relu" type="button" class="btn btn-primary append-button">Append 3X3 CONV</button>
-                            <button id="maxpool3x3" type="button" class="btn btn-primary append-button">Append 3X3 POOL</button>
-                            <button id="init-cell" type="button" class="btn btn-outline-primary append-button">Init Cell</button>
+                            <button id="conv1x1-bn-relu" type="button" class="btn btn-primary append-button">Append 1X1
+                                CONV</button>
+                            <button id="conv3x3-bn-relu" type="button" class="btn btn-primary append-button">Append 3X3
+                                CONV</button>
+                            <button id="maxpool3x3" type="button" class="btn btn-primary append-button">Append 3X3
+                                POOL</button>
+                            <button id="init-cell" type="button" class="btn btn-outline-primary append-button">Init
+                                Cell</button>
                         </div>
                     </div>
 
@@ -80,7 +115,7 @@
                     <div id="cycleAlert" class="notcell alert alert-danger visually-hidden" role="alert">
                         Cell is not acyclic. (with red shadow)
                     </div>
-                    
+
                     <div id="analytics" class="visually-hidden" role="alert">
                         <h4>NAS Benchmark Result</h4>
                         <hr>
@@ -105,42 +140,43 @@
 
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
-    
-                
+
+
             </div>
         </main>
-        
-        
+
+
     </main>
 
     <footer class="border-top bd-footer p-2 mt-5 bg-light">
         <div class="container p-3">
             <div class="row ">
-                    <div>
-                        <a class="text-muted" href="https://skku.edu" target='_blank'>
-                            Sungkyunkwan University
-                        </a>
-                    </div>
-                    <div>
-                        <a class="text-muted" href="https://cs.skku.edu" target='_blank'>
-                            College of Computing and Informatics
-                        </a>
-                    </div>
-                    <div>
-                        <a class="text-muted" href="https://idclab.skku.edu" target='_blank'>
-                            Interactive Data Computing Laboratory
-                            <span class="idc">(IDC</span>
-                            <span class="lab">Lab)</span>
-                            
-                        </a>
-                    </div>
-                    
+                <div>
+                    <a class="text-muted" href="https://skku.edu" target='_blank'>
+                        Sungkyunkwan University
+                    </a>
+                </div>
+                <div>
+                    <a class="text-muted" href="https://cs.skku.edu" target='_blank'>
+                        College of Computing and Informatics
+                    </a>
+                </div>
+                <div>
+                    <a class="text-muted" href="https://idclab.skku.edu" target='_blank'>
+                        Interactive Data Computing Laboratory
+                        <span class="idc">(IDC</span>
+                        <span class="lab">Lab)</span>
+
+                    </a>
+                </div>
+
             </div>
         </div>
     </footer>
 
 </body>
+
 </html>

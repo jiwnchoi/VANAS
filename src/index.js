@@ -5,6 +5,7 @@ import { makeNode } from "./view/makeObject.js"
 import { getSharpleyValue } from "./service/getSharpleyValue";
 import { drawBarChartFromData } from "./view/drawBarChart";
 import { initCell, setCell } from "./controller/cellController";
+import { drawHeatmap } from "./view/drawHeatmap";
 
 
 const architecture = d3.select("#architecture");
@@ -16,7 +17,7 @@ svgInit(sharpleyvalue);
 drawObject();
 
 d3.selectAll(".append-button").on("click", makeNode);
-d3.select("#init-cell").on("click", ()=>{
+d3.select("#init-cell").on("click", () => {
     initCell();
     drawObject();
 });
@@ -42,3 +43,38 @@ data.then(json => drawBarChartFromData(json.children));
 //     [0, 0, 0, 0, 0, 0, 1],
 //     [0, 0, 0, 0, 0, 0, 0]]
 // )
+
+const heatmap = d3.select("#heatmap");
+const tooltip = d3.select("#tooltip");
+
+// read local json file
+let heatmapData;
+let httpRequest = new XMLHttpRequest(); // asynchronous request
+httpRequest.open("GET", "./result.json", true);
+httpRequest.send();
+httpRequest.addEventListener("readystatechange", function () {
+    if (this.readyState === this.DONE) { // when the request has completed
+        heatmapData = JSON.parse(this.response);
+
+        let options = document.getElementById("options");
+
+        let heatmapButton = document.createElement("button");
+        heatmapButton.innerHTML = "Generate Heatmap";
+        heatmapButton.addEventListener("click", () => {
+            let optionX = document.getElementById("optionX"),
+                optionY = document.getElementById("optionY"),
+                optionZ = document.getElementById("optionZ");
+
+            let heatmapResult = drawHeatmap()
+                .x(d => d[optionX.value])
+                .y(d => d[optionY.value])
+                .z(d => d[optionZ.value])
+                .splitX(50)
+                .splitY(30)
+                (heatmapData);
+            heatmap.append(() => heatmapResult[0]);
+            tooltip.append(() => heatmapResult[1]);
+        });
+        options.appendChild(heatmapButton);
+    }
+});
