@@ -1,8 +1,17 @@
 import { getEdgeData, getNodeData } from "../data/data";
 import { reorderData } from "../data/dataProcessing";
+import { getRecommendNodeData } from "../data/recommendCellData";
 
-function addNode(nodeType){
-    const nodeData = getNodeData();
+function addNode(nodeType, target=0){
+    let nodeData;
+    if (target==0){
+        nodeData = getNodeData();
+    }
+    else{
+        nodeData = getRecommendNodeData(target);
+    }
+
+    
     if (nodeData.length > 6){
         return 0;
     }

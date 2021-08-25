@@ -1,7 +1,9 @@
 import * as d3 from "d3";
+import { setCell } from "../controller/cellController";
 import { getEdgeData, getNodeData } from "../data/data";
 import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
 import { getAccuracy } from "../service/getAccuracy";
+import { getRecommendation } from "../service/getRecommendation";
 import drawObject from "./drawObject";
 
 
@@ -78,6 +80,36 @@ export function printResult(){
             }  
         )
     }
+    cellRecommendation();
     drawObject();
+
 }
 
+async function cellRecommendation(){
+    const nodeData = getNodeData();
+    const edgeData = getEdgeData();
+
+    const data = await getRecommendation(edgeData, nodeData);
+    console.log(data);
+
+    d3.select("#recommend-col").selectAll(".recommend-cell").data(data)
+        .enter()
+        .append("div")
+        .attr("class", "border bg-light svg-container mb-3 recommend-cell")
+        .append("svg")
+        .attr("id", (d, i) => "recommend" + (i+1))
+        .attr("viewBox", "0 0 800 600")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("class", "svg-content-responsive")
+        .exit()
+        .remove()
+
+    for (let i=0; i<data.length; i++){
+        console.log(data[i]);
+        setCell(data[i][1], data[i][2], i+1);
+        drawObject(null, i+1);
+    }
+
+
+
+}

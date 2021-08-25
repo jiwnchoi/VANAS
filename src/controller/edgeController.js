@@ -1,10 +1,19 @@
 import { getEdgeData, getNodeData } from "../data/data";
-import { printResult } from "../view/printResult";
+import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
 
 
-function addEdge(sourceNode, targetNode){ 
-    const nodeData = getNodeData();
-    const edgeData = getEdgeData();
+function addEdge(sourceNode, targetNode, target=0){
+    let nodeData, edgeData;
+    if (target == 0){
+        nodeData = getNodeData();
+        edgeData = getEdgeData();
+    } 
+    else{
+        nodeData = getRecommendNodeData(target);
+        edgeData = getRecommendEdgeData(target);
+    }
+    
+    console.log(nodeData, edgeData);
 
     if (sourceNode == targetNode){
         return 0;
@@ -28,7 +37,6 @@ function addEdge(sourceNode, targetNode){
             })[0].y,
     }
     edgeData.push(newEdge);
-    printResult();
 }
 
 function deleteEdge(edgeClassName){
@@ -39,7 +47,6 @@ function deleteEdge(edgeClassName){
             break;
         }
     }
-    printResult();
 }
 
 function isEdgeExists(sourceNode, targetNode){

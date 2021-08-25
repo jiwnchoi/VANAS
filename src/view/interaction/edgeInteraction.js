@@ -2,7 +2,6 @@ import * as d3 from "d3";
 
 import { deleteEdge } from "../../controller/edgeController";
 import drawObject from "../drawObject";
-import { printResult } from "../printResult";
 
 
 function edgeMouseOver(){

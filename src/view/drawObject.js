@@ -4,8 +4,8 @@ import { getNodeData, getEdgeData } from "../data/data.js"
 
 import * as nodeInteraction from "./interaction/nodeInteraction.js"
 import * as edgeInteraction from "./interaction/edgeInteraction.js"
-import { printResult } from "./printResult.js";
 import { getNextNodeAccuracy } from "../data/recommendNextNode.js";
+import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData.js";
 
 async function drawRecommend(clickedNode){
     let recommendEdgeData = null;
@@ -50,10 +50,17 @@ async function drawRecommend(clickedNode){
     recommendEdgeGroup.exit().remove()
 }
 
-function drawEdge(){
-    const edgeData = getEdgeData();
-    const edge = d3.select("#architecture").selectAll("line").data(edgeData);
-    
+function drawEdge(target){
+    let edgeData, edge;
+    if (target == 0){
+        edgeData = getEdgeData();
+        edge = d3.select("#architecture").selectAll("line").data(edgeData);
+    }
+    else{
+        edgeData = getRecommendEdgeData(target);
+        edge = d3.select("#recommend" + target).selectAll("line").data(edgeData);
+    }
+     
     //UPDATE
     edge        
         .attr("class", d => d.edgeClassName)
@@ -82,11 +89,19 @@ function drawEdge(){
     edge.exit().remove()
 }
 
-function drawNode(){
-    const nodeData = getNodeData();
+function drawNode(target){
+    let nodeData, nodeGroups;
+    if (target == 0){
+        nodeData = getNodeData();
+        nodeGroups = d3.select("#architecture").selectAll(".node").data(nodeData);
+    }
+    else{
+        nodeData = getRecommendNodeData(target);
+        nodeGroups = d3.select("#recommend" + target).selectAll(".node").data(nodeData);
+    }
     const radius = 40;
     //INIT
-    const nodeGroups = d3.select("#architecture").selectAll(".node").data(nodeData)
+    
     //UPDATE
     nodeGroups
         .attr("id", d=>"node"+d.id)
@@ -150,9 +165,9 @@ function drawNode(){
 }
 
 
-export default async function drawObject(clickedNode){
-    drawNode();
-    drawEdge();
+export default async function drawObject(clickedNode, target=0){
+    drawNode(target);
+    drawEdge(target);
     await drawRecommend(clickedNode);
     d3.selectAll(".node").raise();
 }

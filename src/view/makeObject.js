@@ -2,7 +2,6 @@ import * as d3 from "d3";
 
 import { addNode } from "../controller/nodeController";
 import { addEdge } from "../controller/edgeController";
-import drawObject from "./drawObject";
 import { printResult } from "./printResult";
 
 
@@ -18,8 +17,8 @@ async function makeNode(){
     printResult();
 }
 
-function makeEdge(sourceNode, targetNode){
-    addEdge(sourceNode, targetNode);
+function makeEdge(sourceNode, targetNode, target=0){
+    addEdge(sourceNode, targetNode, target);
     printResult();
 }
 
