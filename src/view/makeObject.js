@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 import { addNode } from "../controller/nodeController";
-import { addEdge } from "../controller/edgeController";
+import { addEdge, deleteEdge } from "../controller/edgeController";
 import { printResult } from "./printResult";
 
 
@@ -22,4 +22,9 @@ function makeEdge(sourceNode, targetNode, target=0){
     printResult();
 }
 
-export {makeNode, makeEdge}
+function removeEdge(edgeClassName){
+    deleteEdge(edgeClassName);
+    printResult();
+}
+
+export {makeNode, makeEdge, removeEdge}

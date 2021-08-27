@@ -1,23 +1,34 @@
 import * as d3 from "d3";
-
-import { deleteEdge } from "../../controller/edgeController";
+import { getEdgeData } from "../../data/data";
 import drawObject from "../drawObject";
+import { removeEdge } from "../makeObject";
 
 
 function edgeMouseOver(){
-    d3.select(this).attr("stroke","tomato").style("marker-end","url(#endDelete)")
-    d3.selectAll(".node").raise();
+    const edgeClassName = d3.select(this).attr('class');
+    const edgeData = getEdgeData();
+    for (let edge of edgeData){
+        if (edge.edgeClassName == edgeClassName){
+            edge.isDelete = 'delete';
+        }
+    }
+    drawObject();
 }
 
 function edgeMouseOut(){
-    d3.select(this).attr("stroke","black").style("marker-end","url(#end)")
-    d3.selectAll(".node").raise();
+    const edgeClassName = d3.select(this).attr('class');
+    const edgeData = getEdgeData();
+    for (let edge of edgeData){
+        if (edge.edgeClassName == edgeClassName){
+            edge.isDelete = null;
+        }
+    }
+    drawObject();
 }
 
 function edgeClicked(){
     const edgeClassName = d3.select(this).attr('class');
-    deleteEdge(edgeClassName);
-    drawObject();
+    removeEdge(edgeClassName);
 }
 
 export {edgeMouseOver, edgeMouseOut, edgeClicked}

@@ -5,6 +5,7 @@ import { makeNode } from "./view/makeObject.js"
 import { getSharpleyValue } from "./service/getSharpleyValue";
 import { drawBarChartFromData } from "./view/drawBarChart";
 import { initCell, setCell } from "./controller/cellController";
+import { cellRecommendation, printResult } from "./view/printResult";
 
 
 const architecture = d3.select("#architecture");
@@ -14,11 +15,12 @@ svgInit(architecture);
 drawDeleteBox(architecture);
 svgInit(sharpleyvalue);
 drawObject();
+cellRecommendation();
 
 d3.selectAll(".append-button").on("click", makeNode);
 d3.select("#init-cell").on("click", ()=>{
     initCell();
-    drawObject();
+    printResult();
 });
 
 

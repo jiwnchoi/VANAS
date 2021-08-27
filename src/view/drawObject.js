@@ -7,7 +7,7 @@ import * as edgeInteraction from "./interaction/edgeInteraction.js"
 import { getNextNodeAccuracy } from "../data/recommendNextNode.js";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData.js";
 
-async function drawRecommend(clickedNode){
+async function drawNextEdge(clickedNode){
     let recommendEdgeData = null;
     if (clickedNode == null){
         recommendEdgeData = [];
@@ -15,7 +15,7 @@ async function drawRecommend(clickedNode){
     else{
         recommendEdgeData = await getNextNodeAccuracy(clickedNode);
     }
-    
+    console.log(recommendEdgeData);
     const recommendEdgeGroup = d3.select("#architecture").selectAll(".recommendLine").data(recommendEdgeData);
     
     //ENTER
@@ -33,11 +33,20 @@ async function drawRecommend(clickedNode){
         .attr("stroke-dasharray", "10,10")
         .attr("d", "M5 40 l215 0")
         .attr("stroke", "gray")
-        .style("marker-end", "url(#endRecommend)")
+        .style("marker-end", d =>{
+            if (d.label == 0) return "url(#endRecommend)";
+            else return null;
+        })
 
     recommendEdgeGroupEnter
         .append("text")
-        .text(d => new String(d.candidateMatrixAccuracy).slice(0,5))
+        .text(d => {
+            if (d.label == 0){
+                return "";
+            }
+            else return new String(d.candidateMatrixAccuracy).slice(0,5);
+
+        })
         .attr("fill", "gray")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
@@ -68,6 +77,28 @@ function drawEdge(target){
         .attr("y1", d => d.y1)
         .attr("x2", d => d.x2)
         .attr("y2", d => d.y2)
+        .attr("stroke", (d) => {
+            if (d.isDelete == 'delete'){
+                return "tomato";
+            }
+            else if (d.isExt == 'ext'){
+                return 'orange';
+            }
+            else{
+                return 'black';
+            }
+        })
+        .style("marker-end", (d) => {
+            if (d.isDelete == 'delete'){
+                return 'url(#endDelete)'
+            }
+            else if (d.isExt == 'ext'){
+                return 'url(#endExt)';
+            }
+            else{
+                return "url(#end)";
+            }
+        })
     
     //ENTER
     edge
@@ -79,8 +110,28 @@ function drawEdge(target){
         .attr("x2", d => d.x2)
         .attr("y2", d => d.y2)
         .attr("stroke-width", 3)
-        .attr("stroke", "black")
-        .style("marker-end", "url(#end)")
+        .attr("stroke", (d) => {
+            if (d.isDelete == 'delete'){
+                return "tomato";
+            }
+            else if (d.isExt == 'ext'){
+                return 'orange';
+            }
+            else{
+                return 'black';
+            }
+        })
+        .style("marker-end", (d) => {
+            if (d.isDelete == 'delete'){
+                return 'url(#endDelete)'
+            }
+            else if (d.isExt == 'ext'){
+                return 'url(#endExt)';
+            }
+            else{
+                return "url(#end)";
+            }
+        })
         .on("mouseover", edgeInteraction.edgeMouseOver)
         .on("mouseout", edgeInteraction.edgeMouseOut)
         .on("click", edgeInteraction.edgeClicked);
@@ -164,11 +215,10 @@ function drawNode(target){
     nodeGroups.exit().remove();
 }
 
-
 export default async function drawObject(clickedNode, target=0){
     drawNode(target);
     drawEdge(target);
-    await drawRecommend(clickedNode);
+    await drawNextEdge(clickedNode);
     d3.selectAll(".node").raise();
 }
 

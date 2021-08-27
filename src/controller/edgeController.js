@@ -12,8 +12,6 @@ function addEdge(sourceNode, targetNode, target=0){
         nodeData = getRecommendNodeData(target);
         edgeData = getRecommendEdgeData(target);
     }
-    
-    console.log(nodeData, edgeData);
 
     if (sourceNode == targetNode){
         return 0;
@@ -23,6 +21,8 @@ function addEdge(sourceNode, targetNode, target=0){
         sourceNode,
         targetNode,
         edgeClassName,
+        isExt : null,
+        isDelete : null,
         x1 : nodeData.filter((d, i) => {
                 return d.id == sourceNode;
             })[0].x,

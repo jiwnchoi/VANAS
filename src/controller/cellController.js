@@ -25,18 +25,13 @@ function setCell(ops, matrix, target=0){
         addNode(op, target);
     }
 
-    for (let i=0; i<matrix.length; i++){
+    for (let i=0; i<matrix.length-1; i++){
         for(let j=i+1; j<matrix.length; j++){
             if (matrix[i][j] == 1){
-                if (i == 0){
-                    addEdge(0, j, target);
-                }
-                else if(j == matrix.length-1){
-                    addEdge(i+1, 1, target);
-                }
-                else{
-                    addEdge(i+1, j+1, target);
-                }
+                if (i == 0 && j == matrix.length-1) addEdge(0,1, target);
+                else if (i == 0) addEdge(0, j+1, target);
+                else if(j == matrix.length-1) addEdge(i+1, 1, target);
+                else addEdge(i+1, j+1, target);
             }
         }
     }
