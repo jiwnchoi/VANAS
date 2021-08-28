@@ -40,44 +40,50 @@
     <main class="container-xxl bd-layout overflow-hidden">
         <main class="bd-main">
             <div class="row g-3">
+
                 <div class="col-lg-6">
-                    <div class="border bg-light svg-container mb-3">
-                        <div id="options">
+                    <ul class="list-group list-group-horizontal" id="options">
+                        <li class="list-group-item flex-fill">
                             <label for="optionX">X축</label>
-                            <select id="optionX">
+                            <select class="form-select form-select-sm" id="optionX">
                                 <option value=trainable_parameters selected="selected"># of trainable parameters
                                 </option>
                                 <option value=training_time>training time</option>
                                 <option value=test_accuracy>accuracy</option>
                             </select>
+                        </li>
+                        <li class="list-group-item flex-fill">
                             <label for="optionY">Y축</label>
-                            <select id="optionY">
+                            <select class="form-select form-select-sm" id="optionY">
                                 <option value=trainable_parameters># of trainable parameters</option>
                                 <option value=training_time selected="selected">training time</option>
                                 <option value=test_accuracy>accuracy</option>
                             </select>
+                        </li>
+                        <li class="list-group-item flex-fill">
                             <label for="optionZ">Z축</label>
-                            <select id="optionZ">
+                            <select class="form-select form-select-sm" id="optionZ">
                                 <option value=trainable_parameters># of trainable parameters</option>
                                 <option value=training_time>training time</option>
                                 <option value=test_accuracy selected="selected">accuracy</option>
-                            </select><br>
-                        </div>
+                            </select>
+                        </li>
+                    </ul>
+                    <div class="border bg-light svg-container mb-3">
                         <svg id="heatmap" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
                             class="svg-content-responsive"></svg>
                         <div id="tooltip"></div>
-
                     </div>
+
+
                     <div class="border bg-light svg-container">
                         <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
                             class="svg-content-responsive"></svg>
-
                     </div>
 
                 </div>
+
                 <div class="col-lg-6">
-
-
                     <div class="border bg-light svg-container mb-3">
                         <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
                             class="svg-content-responsive"></svg>

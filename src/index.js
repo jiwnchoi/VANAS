@@ -55,26 +55,33 @@ httpRequest.send();
 httpRequest.addEventListener("readystatechange", function () {
     if (this.readyState === this.DONE) { // when the request has completed
         heatmapData = JSON.parse(this.response);
+        generateHeatmap();
 
         let options = document.getElementById("options");
-
         let heatmapButton = document.createElement("button");
-        heatmapButton.innerHTML = "Generate Heatmap";
+        heatmapButton.innerText = "Generate Heatmap";
+        heatmapButton.classList.add("btn");
+        heatmapButton.classList.add("btn-primary");
         heatmapButton.addEventListener("click", () => {
-            let optionX = document.getElementById("optionX"),
-                optionY = document.getElementById("optionY"),
-                optionZ = document.getElementById("optionZ");
-
-            let heatmapResult = drawHeatmap()
-                .x(d => d[optionX.value])
-                .y(d => d[optionY.value])
-                .z(d => d[optionZ.value])
-                .splitX(50)
-                .splitY(30)
-                (heatmapData);
-            heatmap.append(() => heatmapResult[0]);
-            tooltip.append(() => heatmapResult[1]);
+            heatmap.select("svg").remove();
+            generateHeatmap();
         });
         options.appendChild(heatmapButton);
     }
 });
+
+function generateHeatmap() {
+    let optionX = document.getElementById("optionX"),
+        optionY = document.getElementById("optionY"),
+        optionZ = document.getElementById("optionZ");
+
+    let heatmapResult = drawHeatmap()
+        .x(d => d[optionX.value])
+        .y(d => d[optionY.value])
+        .z(d => d[optionZ.value])
+        .splitX(50)
+        .splitY(30)
+        (heatmapData);
+    heatmap.append(() => heatmapResult[0]);
+    tooltip.append(() => heatmapResult[1]);
+};
