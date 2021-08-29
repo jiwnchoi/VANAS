@@ -40,7 +40,7 @@ export function svgInit(svg){
         .attr("dx", 0)
         .attr("dy", 0)
         .attr("stdDeviation",4)
-        .attr("flood-color", "red")
+        .attr("flood-color", "orange")
         .attr("flood-opacity", "0.5");
 
     const filterStart = defs.append("filter")
@@ -75,6 +75,18 @@ export function svgInit(svg){
     markerDelete.append("polygon")
         .attr("points","0 0, 6 2, 0 4")
         .attr("fill","tomato");
+
+    const markerExt = defs.append("marker")
+        .attr("id", "endExt")
+        .attr("orient", "auto")
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 4)
+        .attr("refX", 18.1)
+        .attr("refY", 2)
+
+    markerExt.append("polygon")
+        .attr("points","0 0, 6 2, 0 4")
+        .attr("fill","orange");
 
     const markerRecommend = defs.append("marker")
         .attr("id", "endRecommend")

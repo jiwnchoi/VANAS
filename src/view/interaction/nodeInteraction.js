@@ -5,6 +5,7 @@ import { deleteNode } from "../../controller/nodeController";
 import { makeEdge } from "../makeObject";
 import drawObject from "../drawObject";
 import { getNodeData } from "../../data/data";
+import { printResult } from "../printResult";
 
 function dragNodeStart(event, d) {
     if (d.type == "input" || d.type == "output") return null;
@@ -27,7 +28,7 @@ function dragNodeEnd(event, d) {
     const nodeIndex = Number(selectedNode.attr('id').replace('node',''));
     if (deleteBoxCheck(event.x, event.y)){
         deleteNode(nodeIndex);
-        drawObject();
+        printResult();
     }
 }
 

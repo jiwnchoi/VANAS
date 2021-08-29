@@ -36,3 +36,8 @@ body {
 button {
   font-size: 12;
 }
+
+#recommend-accuracy{
+  text-align: center;
+  font-size: 7;
+}

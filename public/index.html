@@ -17,7 +17,7 @@
 
 <body>
     <header class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
-        <nav class="container-xxl flex-wrap flex-md-nowrap">
+        <nav class="container-fluid flex-wrap flex-md-nowrap">
             <a class="navbar-brand p-0" href="#">NASBench Visualizer</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
                 aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
         <main class="bd-main">
             <div class="row g-3">
 
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <ul class="list-group list-group-horizontal" id="options">
                         <li class="list-group-item flex-fill">
                             <label for="optionX">X축</label>
@@ -82,8 +82,9 @@
                     </div>
 
                 </div>
+                <div class="col-lg-5">
 
-                <div class="col-lg-6">
+
                     <div class="border bg-light svg-container mb-3">
                         <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
                             class="svg-content-responsive"></svg>
@@ -116,10 +117,10 @@
                         The number of nodes must be less than 8.
                     </div>
                     <div id="extraneousAlert" class="notcell alert alert-warning visually-hidden" role="alert">
-                        There is extraneous edge. (with red shadow)
+                        There is extraneous edge. (with orange shadow)
                     </div>
                     <div id="cycleAlert" class="notcell alert alert-danger visually-hidden" role="alert">
-                        Cell is not acyclic. (with red shadow)
+                        Cell is not acyclic. (with orange shadow)
                     </div>
 
                     <div id="analytics" class="visually-hidden" role="alert">
@@ -149,7 +150,9 @@
 
 
                 </div>
+                <div id="recommend-col" class="col-lg-2">
 
+                </div>
 
             </div>
         </main>

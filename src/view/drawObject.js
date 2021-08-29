@@ -4,10 +4,10 @@ import { getNodeData, getEdgeData } from "../data/data.js"
 
 import * as nodeInteraction from "./interaction/nodeInteraction.js"
 import * as edgeInteraction from "./interaction/edgeInteraction.js"
-import { printResult } from "./printResult.js";
 import { getNextNodeAccuracy } from "../data/recommendNextNode.js";
+import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData.js";
 
-async function drawRecommend(clickedNode){
+async function drawNextEdge(clickedNode){
     let recommendEdgeData = null;
     if (clickedNode == null){
         recommendEdgeData = [];
@@ -15,7 +15,7 @@ async function drawRecommend(clickedNode){
     else{
         recommendEdgeData = await getNextNodeAccuracy(clickedNode);
     }
-    
+    console.log(recommendEdgeData);
     const recommendEdgeGroup = d3.select("#architecture").selectAll(".recommendLine").data(recommendEdgeData);
     
     //ENTER
@@ -33,11 +33,20 @@ async function drawRecommend(clickedNode){
         .attr("stroke-dasharray", "10,10")
         .attr("d", "M5 40 l215 0")
         .attr("stroke", "gray")
-        .style("marker-end", "url(#endRecommend)")
+        .style("marker-end", d =>{
+            if (d.label == 0) return "url(#endRecommend)";
+            else return null;
+        })
 
     recommendEdgeGroupEnter
         .append("text")
-        .text(d => new String(d.candidateMatrixAccuracy).slice(0,5))
+        .text(d => {
+            if (d.label == 0){
+                return "";
+            }
+            else return new String(d.candidateMatrixAccuracy).slice(0,5);
+
+        })
         .attr("fill", "gray")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
@@ -50,10 +59,17 @@ async function drawRecommend(clickedNode){
     recommendEdgeGroup.exit().remove()
 }
 
-function drawEdge(){
-    const edgeData = getEdgeData();
-    const edge = d3.select("#architecture").selectAll("line").data(edgeData);
-    
+function drawEdge(target){
+    let edgeData, edge;
+    if (target == 0){
+        edgeData = getEdgeData();
+        edge = d3.select("#architecture").selectAll("line").data(edgeData);
+    }
+    else{
+        edgeData = getRecommendEdgeData(target);
+        edge = d3.select("#recommend" + target).selectAll("line").data(edgeData);
+    }
+     
     //UPDATE
     edge        
         .attr("class", d => d.edgeClassName)
@@ -61,6 +77,28 @@ function drawEdge(){
         .attr("y1", d => d.y1)
         .attr("x2", d => d.x2)
         .attr("y2", d => d.y2)
+        .attr("stroke", (d) => {
+            if (d.isDelete == 'delete'){
+                return "tomato";
+            }
+            else if (d.isExt == 'ext'){
+                return 'orange';
+            }
+            else{
+                return 'black';
+            }
+        })
+        .style("marker-end", (d) => {
+            if (d.isDelete == 'delete'){
+                return 'url(#endDelete)'
+            }
+            else if (d.isExt == 'ext'){
+                return 'url(#endExt)';
+            }
+            else{
+                return "url(#end)";
+            }
+        })
     
     //ENTER
     edge
@@ -72,8 +110,28 @@ function drawEdge(){
         .attr("x2", d => d.x2)
         .attr("y2", d => d.y2)
         .attr("stroke-width", 3)
-        .attr("stroke", "black")
-        .style("marker-end", "url(#end)")
+        .attr("stroke", (d) => {
+            if (d.isDelete == 'delete'){
+                return "tomato";
+            }
+            else if (d.isExt == 'ext'){
+                return 'orange';
+            }
+            else{
+                return 'black';
+            }
+        })
+        .style("marker-end", (d) => {
+            if (d.isDelete == 'delete'){
+                return 'url(#endDelete)'
+            }
+            else if (d.isExt == 'ext'){
+                return 'url(#endExt)';
+            }
+            else{
+                return "url(#end)";
+            }
+        })
         .on("mouseover", edgeInteraction.edgeMouseOver)
         .on("mouseout", edgeInteraction.edgeMouseOut)
         .on("click", edgeInteraction.edgeClicked);
@@ -82,11 +140,19 @@ function drawEdge(){
     edge.exit().remove()
 }
 
-function drawNode(){
-    const nodeData = getNodeData();
+function drawNode(target){
+    let nodeData, nodeGroups;
+    if (target == 0){
+        nodeData = getNodeData();
+        nodeGroups = d3.select("#architecture").selectAll(".node").data(nodeData);
+    }
+    else{
+        nodeData = getRecommendNodeData(target);
+        nodeGroups = d3.select("#recommend" + target).selectAll(".node").data(nodeData);
+    }
     const radius = 40;
     //INIT
-    const nodeGroups = d3.select("#architecture").selectAll(".node").data(nodeData)
+    
     //UPDATE
     nodeGroups
         .attr("id", d=>"node"+d.id)
@@ -149,11 +215,10 @@ function drawNode(){
     nodeGroups.exit().remove();
 }
 
-
-export default async function drawObject(clickedNode){
-    drawNode();
-    drawEdge();
-    await drawRecommend(clickedNode);
+export default async function drawObject(clickedNode, target=0){
+    drawNode(target);
+    drawEdge(target);
+    await drawNextEdge(clickedNode);
     d3.selectAll(".node").raise();
 }
 
