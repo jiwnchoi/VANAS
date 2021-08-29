@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { setCell } from "../controller/cellController";
 
 const margin = { top: 30, right: 60, bottom: 30, left: 60 },
     width = 700,
@@ -78,7 +79,8 @@ let drawHeatmap = function () {
             binsById[id].push(point);
             if (zCur > binsById[id].zMax) {
                 binsById[id].zMax = zCur;
-                binsById[id].hash = point.unique_hash; //hash of max point for each bins
+                binsById[id].module_operations = point.module_operations;
+                binsById[id].module_adjacency = point.module_adjacency;
             }
         });
 
@@ -110,7 +112,7 @@ let drawHeatmap = function () {
         };
         const mousemove = function (event, d) {
             tooltip
-                .html("bin.i: " + d.i + " bin.x: " + d.x + "<br>bin.j: " + d.j + " bin.y: " + d.y)
+                .html("accuracy: " + d.zMax)
                 .style("top", (event.y) + "px")
                 .style("left", (event.x + 10) + "px");
         };
@@ -118,7 +120,8 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            console.log("unique hash: " + d.hash);
+            console.log(d.module_operations + '////' + d.module_adjacency);
+            setCell(d.module_operations, d.module_adjacency);
         }
 
         graph.append("g")

@@ -56,7 +56,6 @@ httpRequest.addEventListener("readystatechange", function () {
     if (this.readyState === this.DONE) { // when the request has completed
         heatmapData = JSON.parse(this.response);
         generateHeatmap();
-
         let options = document.getElementById("options");
         let heatmapButton = document.createElement("button");
         heatmapButton.innerText = "Generate Heatmap";
