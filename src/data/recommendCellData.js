@@ -1,6 +1,6 @@
 const recommendNodeData ={
     1 : [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
@@ -8,7 +8,7 @@ const recommendNodeData ={
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
@@ -17,7 +17,7 @@ const recommendNodeData ={
             }
         ],
     2 : [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
@@ -25,7 +25,7 @@ const recommendNodeData ={
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
@@ -34,7 +34,7 @@ const recommendNodeData ={
             }
         ],
     3: [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
@@ -42,7 +42,7 @@ const recommendNodeData ={
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
@@ -51,7 +51,7 @@ const recommendNodeData ={
             }
         ],
     4: [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
@@ -59,7 +59,7 @@ const recommendNodeData ={
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
@@ -68,7 +68,7 @@ const recommendNodeData ={
             }
         ],
     5 : [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
@@ -76,7 +76,7 @@ const recommendNodeData ={
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
@@ -96,12 +96,12 @@ const recommendEdgeData ={
 
 
 
-function getRecommendNodeData(id){
-    return recommendNodeData[id];
+function getRecommendNodeData(index){
+    return recommendNodeData[index];
 }
 
-function getRecommendEdgeData(id){
-    return recommendEdgeData[id];
+function getRecommendEdgeData(index){
+    return recommendEdgeData[index];
 }
 
 export {getRecommendNodeData, getRecommendEdgeData};

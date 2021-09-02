@@ -2,39 +2,36 @@ import { getEdgeData, getNodeData } from "../data/data";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
 
 
-function addEdge(sourceNode, targetNode, target=0){
+function addEdge(sourceNode, targetNode, targetCell=0){
     let nodeData, edgeData;
-    if (target == 0){
+    if (targetCell == 0){
         nodeData = getNodeData();
         edgeData = getEdgeData();
     } 
     else{
-        nodeData = getRecommendNodeData(target);
-        edgeData = getRecommendEdgeData(target);
+        nodeData = getRecommendNodeData(targetCell);
+        edgeData = getRecommendEdgeData(targetCell);
     }
 
     if (sourceNode == targetNode){
         return 0;
     }
+    let source, target;
+    for (let node of nodeData){
+        if (node.index == sourceNode){
+            source = node;
+        }
+        if(node.index == targetNode){
+            target = node;
+        }
+    }
     const edgeClassName = "sourcenode"+sourceNode+" targetnode"+targetNode
     const newEdge = {
-        sourceNode,
-        targetNode,
+        source,
+        target,
         edgeClassName,
         isExt : null,
         isDelete : null,
-        x1 : nodeData.filter((d, i) => {
-                return d.id == sourceNode;
-            })[0].x,
-        y1 : nodeData.filter((d, i) => { 
-                return d.id == sourceNode;
-            })[0].y,
-        x2 : nodeData.filter((d, i) => {
-                return d.id == targetNode;
-            })[0].x,
-        y2 : nodeData.filter((d, i) => {
-                return d.id == targetNode;
-            })[0].y,
     }
     edgeData.push(newEdge);
 }
@@ -52,35 +49,35 @@ function deleteEdge(edgeClassName){
 function isEdgeExists(sourceNode, targetNode){
     const edgeData = getEdgeData();
     for (let edge of edgeData){
-        if ((edge.sourceNode == sourceNode && edge.targetNode == targetNode)
+        if ((edge.source.index == sourceNode && edge.target.index == targetNode)
             ||
-            (edge.sourceNode == targetNode && edge.targetNode == sourceNode)){
+            (edge.source.index == targetNode && edge.target.index == sourceNode)){
                 return true;
             }
     }
     return false;
 }
 
-function updateEdge(nodeNum){
-    const edgeData = getEdgeData();
-    const nodeData = getNodeData();
-    let node = null;
-    for (let n of nodeData){
-        if (n.id == nodeNum){
-            node = n;
-        }
-    }
-    for (let edge of edgeData){
-        if (edge.sourceNode == node.id){
-            edge.x1 = node.x;
-            edge.y1 = node.y;
-        }
-        if (edge.targetNode == node.id){
-            edge.x2 = node.x;
-            edge.y2 = node.y;
-        }
-    }
-    return 0;
-}
+// function updateEdge(nodeNum){
+//     const edgeData = getEdgeData();
+//     const nodeData = getNodeData();
+//     let node = null;
+//     for (let n of nodeData){
+//         if (n.index == nodeNum){
+//             node = n;
+//         }
+//     }
+//     for (let edge of edgeData){
+//         if (edge.source == node.index){
+//             edge.x1 = node.x;
+//             edge.y1 = node.y;
+//         }
+//         if (edge.target == node.index){
+//             edge.x2 = node.x;
+//             edge.y2 = node.y;
+//         }
+//     }
+//     return 0;
+// }
 
-export { addEdge, deleteEdge, isEdgeExists, updateEdge };
+export { addEdge, deleteEdge, isEdgeExists };

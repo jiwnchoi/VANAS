@@ -73,10 +73,10 @@ function drawEdge(target){
     //UPDATE
     edge        
         .attr("class", d => d.edgeClassName)
-        .attr("x1", d => d.x1)
-        .attr("y1", d => d.y1)
-        .attr("x2", d => d.x2)
-        .attr("y2", d => d.y2)
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
         .attr("stroke", (d) => {
             if (d.isDelete == 'delete'){
                 return "tomato";
@@ -105,10 +105,10 @@ function drawEdge(target){
         .enter()
         .append("line")
         .attr("class", d => d.edgeClassName)
-        .attr("x1", d => d.x1)
-        .attr("y1", d => d.y1)
-        .attr("x2", d => d.x2)
-        .attr("y2", d => d.y2)
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
         .attr("stroke-width", 3)
         .attr("stroke", (d) => {
             if (d.isDelete == 'delete'){
@@ -155,7 +155,7 @@ function drawNode(target){
     
     //UPDATE
     nodeGroups
-        .attr("id", d=>"node"+d.id)
+        .attr("id", d=>"node"+d.index)
         .attr("transform", d => "translate("+[d.x, d.y]+")" )
         
 
@@ -177,7 +177,7 @@ function drawNode(target){
 
     //ENTER
     const nodeGroupsEnter = nodeGroups.enter().append("g")
-        .attr("id", d=>"node"+d.id)
+        .attr("id", d=>"node"+d.index)
         .attr("transform", d => "translate("+[d.x, d.y]+")" )
         .attr("class", "node")
         .call(

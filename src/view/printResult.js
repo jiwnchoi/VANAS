@@ -51,10 +51,10 @@ export function printResult(){
             }
 
             for (let node of nodeData){
-                if(node.id == ext){
+                if(node.index == ext){
                     node.status = 'ext';
                     for (let edge of edgeData){
-                        if(edge.sourceNode == node.id || edge.targetNode == node.id){
+                        if(edge.source.index == node.index || edge.target.index == node.index){
                             edge.isExt = 'ext';
                         }
                     }
@@ -91,13 +91,13 @@ export function printResult(){
         )
     }
     for (let node of nodeData){
-        if(cellStatus.extraneous.indexOf(node.id) == -1){
+        if(cellStatus.extraneous.indexOf(node.index) == -1){
             node.status = null;
         }
     }
     for (let edge of edgeData){
-        if (cellStatus.extraneous.indexOf(edge.sourceNode) == -1 &&
-        cellStatus.extraneous.indexOf(edge.targetNode) == -1){
+        if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
+        cellStatus.extraneous.indexOf(edge.target) == -1){
             edge.isExt = null;
         }
     }

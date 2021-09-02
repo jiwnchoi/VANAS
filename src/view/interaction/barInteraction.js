@@ -10,16 +10,16 @@ function barClicked(source, target){
     }
     else if (source == "input"){
         addNode(target);
-        makeEdge(0, nodeData[nodeData.length-1].id);
+        makeEdge(0, nodeData[nodeData.length-1].index);
     }
     else if (target == "output"){
         addNode(source);
-        makeEdge(nodeData[nodeData.length-1].id, 1);
+        makeEdge(nodeData[nodeData.length-1].index, 1);
     }
     else if (nodeData.length < 6){
         addNode(source);
         addNode(target);
-        makeEdge(nodeData[nodeData.length-2].id, nodeData[nodeData.length-1].id);
+        makeEdge(nodeData[nodeData.length-2].index, nodeData[nodeData.length-1].index);
     }
 }
 

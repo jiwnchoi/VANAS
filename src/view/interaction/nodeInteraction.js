@@ -16,8 +16,6 @@ function dragNode(event, d) {
     if (d.type == "input" || d.type == "output") return null;
     d.x = event.x;
     d.y = event.y;
-    const nodeNum = d.id;
-    updateEdge(nodeNum);
     drawObject();
 }
 
@@ -63,7 +61,7 @@ function clickedNode(){
     else{
         isNodeClicked = targetNode;
         for (let node of nodeData){
-            if(node.id == targetNode) node.status = 'clicked';
+            if(node.index == targetNode) node.status = 'clicked';
         }
     }
     drawObject(isNodeClicked);
