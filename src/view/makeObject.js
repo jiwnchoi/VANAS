@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { addNode } from "../controller/nodeController";
 import { addEdge, deleteEdge } from "../controller/edgeController";
 import { printResult } from "./printResult";
+import { calaulateForce, drawObjectwithForce } from "./drawObject";
 
 
 async function makeNode(){

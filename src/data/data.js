@@ -15,7 +15,7 @@ const nodeData = [{
                     x : 700,
                     y : 300,
                     fx : 700,
-                    fx : 300,
+                    fy : 300,
                     status : null,
                 }];
 
@@ -32,4 +32,13 @@ function getEdgeData(){
     return edgeData;
 }
 
-export {getNodeData, getEdgeData};
+function initNodeData(){
+    nodeData.splice(2);
+    return nodeData;
+}
+
+function initEdgeData(){
+    edgeData.splice(0);
+    return edgeData;
+}
+export {getNodeData, getEdgeData, initNodeData, initEdgeData};

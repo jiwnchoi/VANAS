@@ -116,8 +116,9 @@ function cellSainityCheck(nodeData, edgeData){
     //input부터 DFS
     const visitedFromInput = [0];
     const frontierInput = [0];
+    let hasChildren = null;
     while (frontierInput.length > 0){
-        let hasChildren = 0;
+        hasChildren = 0;
         const top = frontierInput[frontierInput.length-1];
         visitedFromInput.push(top);
         for (let edge of edgeData){

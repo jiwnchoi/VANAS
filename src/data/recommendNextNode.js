@@ -9,7 +9,7 @@ function getPathFromInput(curruntNode){
     while (frontier.length > 0){
         const top = frontier.pop();
         for (let edge of edgeData){
-            if(edge.target == top && !visited.has(edge.source.index)){
+            if(edge.target.index == top && !visited.has(edge.source.index)){
                 visited.add(edge.source.index);
                 frontier.push(edge.source.index);
             }
@@ -63,10 +63,9 @@ async function getNextNodeAccuracy(curruntNode){
         if (path.has(targetNode.index)){
             continue;
         }
-        const edgeClassName = "sourcenode"+curruntNode+" targetnode"+targetNode.index
         let pass = 0;
         for (let edge of edgeData){
-            if(edge.edgeClassName == edgeClassName){
+            if(edge.source.index == curruntNode && edge.target.index == targetNode.index){
                 pass = 1;
             }
         }
@@ -80,42 +79,16 @@ async function getNextNodeAccuracy(curruntNode){
         const isDirect = targetNode.index == 1 ? 1 : 0;
 
         result.push({
-                sourceNode : curruntNode,
-                targetNode : targetNode.index,
-                edgeClassName,
-                x1 : nodeData.filter((d, i) => {
-                        return d.index == curruntNode;
-                    })[0].x,
-                y1 : nodeData.filter((d, i) => { 
-                        return d.index == curruntNode;
-                    })[0].y,
-                x2 : nodeData.filter((d, i) => {
-                        return d.index == targetNode.index;
-                    })[0].x,
-                y2 : nodeData.filter((d, i) => {
-                        return d.index == targetNode.index;
-                    })[0].y,
+                source : nodeData.filter((d, i) => d.index == curruntNode)[0],
+                target : targetNode,
                 label : 1,
                 candidateMatrixAccuracy
             });
 
         if (isDirect != 1){
             result.push({
-                sourceNode : targetNode.index,
-                targetNode : 1,
-                edgeClassName : "sourcenode"+targetNode.index+" targetnode1",
-                x1 : nodeData.filter((d, i) => {
-                        return d.index == targetNode.index;
-                    })[0].x,
-                y1 : nodeData.filter((d, i) => { 
-                        return d.index == targetNode.index;
-                    })[0].y,
-                x2 : nodeData.filter((d, i) => {
-                        return d.index == 1;
-                    })[0].x,
-                y2 : nodeData.filter((d, i) => {
-                        return d.index == 1;
-                    })[0].y,
+                source : targetNode,
+                target : nodeData[1],
                 label : 0,
                 candidateMatrixAccuracy
             });
