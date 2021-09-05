@@ -8,7 +8,6 @@ import { initCell, setCell } from "./controller/cellController";
 import { drawHeatmap } from "./view/drawHeatmap";
 import { cellRecommendation, printResult } from "./view/printResult";
 
-
 const architecture = d3.select("#architecture");
 const sharpleyvalue = d3.select("#sharpleyvalue");
 
@@ -77,12 +76,12 @@ function generateHeatmap() {
         optionZ = document.getElementById("optionZ");
 
     let heatmapResult = drawHeatmap()
-        .x(d => d[optionX.value])
-        .y(d => d[optionY.value])
-        .z(d => d[optionZ.value])
+        .x(optionX.value)
+        .y(optionY.value)
+        .z(optionZ.value)
         .splitX(50)
         .splitY(30)
         (heatmapData);
-    heatmap.append(() => heatmapResult[0]);
-    tooltip.append(() => heatmapResult[1]);
+    heatmap.append(() => heatmapResult.graph);
+    tooltip.append(() => heatmapResult.tooltip);
 };

@@ -1,27 +1,26 @@
 import * as d3 from "d3";
 import { setCell } from "../controller/cellController";
 
-const margin = { top: 30, right: 60, bottom: 30, left: 60 },
-    width = 700,
+const margin = { top: 30, right: 30, bottom: 30, left: 60 },
+    width = 600,
     height = 400;
-
-let funcX = d => d[0],
-    funcY = d => d[1],
-    funcZ = d => d[2];
 
 let drawHeatmap = function () {
     let splitX = 100,
         splitY = 100,
-        x = funcX,
-        y = funcY,
-        z = funcZ;
+        x = "x",
+        y = "y",
+        z = "z",
+        funcX = d => d[x],
+        funcY = d => d[y],
+        funcZ = d => d[z];
 
     function heatmap(data) {
         const graph = d3.create("svg")
             .attr("viewBox", [0, 0, width, height]);
 
-        let xExtent = [0, d3.max(data, x)],
-            yExtent = [0, d3.max(data, y)];
+        let xExtent = [0, d3.max(data, funcX)],
+            yExtent = [0, d3.max(data, funcY)];
 
         let xScale = d3.scaleLinear()
             .domain(xExtent)
@@ -42,16 +41,31 @@ let drawHeatmap = function () {
 
         let xAxis = g => g
             .attr("transform", `translate(0, ${height - margin.bottom})`)
-            .call(d3.axisBottom(xScale));
+            .call(d3.axisBottom(xScale))
+            .call(g => g
+                .append("text")
+                .attr("text-anchor", "end")
+                .attr("x", width - margin.right)
+                .attr("y", margin.bottom - 5)
+                .attr("fill", "currentColor")
+                .text(x));
 
         let yAxis = g => g
             .attr("transform", `translate(${margin.left}, 0)`)
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale))
+            .call(g => g
+                .append("text")
+                .attr("text-anchor", "start")
+                .attr("x", -margin.left)
+                .attr("y", margin.top - 10)
+                .attr("fill", "currentColor")
+                .text(y));
 
         // generate rectbin
         let binsById = {};
         let xRange = d3.range(xExtent[0], xExtent[1] + dx, dx),
             yRange = d3.range(yExtent[0], yExtent[1] + dy, dy);
+
         yRange.forEach(Y => {
             xRange.forEach(X => {
                 let pi = Math.floor(X / dx);
@@ -71,9 +85,9 @@ let drawHeatmap = function () {
 
         //push each points to the bins
         data.forEach(point => {
-            let pi = Math.floor(x(point) / dx);
-            let pj = Math.floor(y(point) / dy);
-            let zCur = z(point);
+            let pi = Math.floor(funcX(point) / dx);
+            let pj = Math.floor(funcY(point) / dy);
+            let zCur = funcZ(point);
 
             let id = pi + '-' + pj;
             binsById[id].push(point);
@@ -157,7 +171,7 @@ let drawHeatmap = function () {
             .on("mouseleave", mouseleave)
             .on("click", click);
 
-        return [graph.node(), tooltip.node()];
+        return { graph: graph.node(), tooltip: tooltip.node() };
     };
 
     heatmap.splitX = function (_) {
