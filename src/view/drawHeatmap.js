@@ -171,6 +171,36 @@ let drawHeatmap = function () {
             .on("mouseleave", mouseleave)
             .on("click", click);
 
+        //Append a defs (for definition) element to your SVG
+        graph.append("defs").append("linearGradient")
+            .attr("id", "linear-gradient")
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "0%")
+            .attr("y2", "100%")
+            .selectAll("stop")
+            .data(color.range())
+            .enter().append("stop")
+            .attr("offset", (d, i) => i / (color.range().length - 1))
+            .attr("stop-color", d => d);
+
+        let legendWidth = width * 0.5;
+
+        //Color Legend container
+        let legendsvg = graph.append("g")
+            .attr("class", "legendWrapper")
+            .attr("transform", `translate(${width / 2},${height - margin.bottom})`);
+
+        //Draw the Rectangle
+        legendsvg.append("rect")
+            .attr("class", "legendRect")
+            .attr("x", -legendWidth / 2)
+            .attr("y", 0)
+            //.attr("rx", hexRadius*1.25/2)
+            .attr("width", legendWidth)
+            .attr("height", 10)
+            .style("fill", "url(#linear-gradient)");
+
         return { graph: graph.node(), tooltip: tooltip.node() };
     };
 
