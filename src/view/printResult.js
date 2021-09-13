@@ -5,6 +5,7 @@ import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
 import { getAccuracy } from "../service/getAccuracy";
 import { getRecommendation } from "../service/getRecommendation";
+import { getRecommendationLocal } from "../service/localQuerying";
 import drawObject, { calaulateForce, drawEdge, drawNode, drawObjectwithForce } from "./drawObject";
 
 
@@ -122,8 +123,8 @@ export async function cellRecommendation(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
 
-    const data = await getRecommendation(edgeData, nodeData);
-
+    const data = await getRecommendationLocal(nodeData, edgeData);
+    console.log(data);
     const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data)
 
     //update
