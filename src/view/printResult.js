@@ -70,22 +70,42 @@ export function printResult(){
         d3.selectAll(".notcell")
             .attr("class", "visually-hidden");
 
-        const data = getAccuracy(createMatrix(cellStatus.extraneous, nodeData, getEdgeData()));
-        data.then(json => {
-                d3.select("#analytics")
-                    .attr("class", "alert bg-light alert-secondary");
-                d3.select("#trainable_parameters")
-                    .text(json.trainable_parameters);
-                d3.select("#training_time")
-                    .text(json.training_time);
-                d3.select("#train_accuracy")
-                    .text(json.train_accuracy);
-                d3.select("#validation_accuracy")
-                    .text(json.validation_accuracy);
-                d3.select("#test_accuracy")
-                    .text(json.test_accuracy);
-            }  
-        )
+        const tmpNodeData = nodeData.slice();
+        const tmpEdgeData = edgeData.slice();
+        for (let i=0; i<tmpNodeData.length; i++){
+            if (cellStatus.extraneous.indexOf(tmpNodeData[i].index) != -1){
+                tmpNodeData.splice(i,1);
+                i--;
+            }
+        }
+        for (let i=0; i<tmpEdgeData.length; i++){
+            if (cellStatus.extraneous.indexOf(tmpEdgeData[i].source.index) != -1){
+                tmpEdgeData.splice(i,1);
+                i--;
+            }
+            if (cellStatus.extraneous.indexOf(tmpEdgeData[i].target.index) != -1){
+                tmpEdgeData.splice(i,1);
+                i--;
+            }
+        }
+        const json = getRecommendationLocal(tmpNodeData, edgeData).query;
+        console.log(json);
+        if (json){
+            
+            d3.select("#analytics")
+                .attr("class", "alert bg-light alert-secondary");
+            d3.select("#trainable_parameters")
+                .text(json.trainable_parameters);
+            d3.select("#training_time")
+                .text(json.training_time);
+            d3.select("#train_accuracy")
+                .text(json.train_accuracy);
+            d3.select("#validation_accuracy")
+                .text(json.validation_accuracy);
+            d3.select("#test_accuracy")
+                .text(json.test_accuracy);
+        }
+        
     }
     for (let node of nodeData){
         if(cellStatus.extraneous.indexOf(node.index) == -1){
@@ -119,11 +139,12 @@ function copyCelltoMain(i){
     printResult();
 }
 
-export async function cellRecommendation(){
+export function cellRecommendation(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
 
-    const data = await getRecommendationLocal(nodeData, edgeData);
+    const data2 = getRecommendationLocal(nodeData, edgeData);
+    const data = data2.recommend;
     console.log(data);
     const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data)
 

@@ -24,12 +24,17 @@ svgInit(architecture);
 drawDeleteBox(architecture);
 svgInit(sharpleyvalue);
 drawObject();
-
 export let fullDataset = null;
+
+d3.select("#main")
+    .attr("class", "bd-main visually-hidden");
 const fullDatasetPromise = d3.json('/build/nasbench_minified.json');
 fullDatasetPromise.then((json) => {
     fullDataset = json.dataset;
     cellRecommendation();
+    d3.select("#loading").attr("class", "visually-hidden");
+    d3.select("#main")
+        .attr("class", "bd-main");
 });
 
 
@@ -61,8 +66,8 @@ data.then(json => drawBarChartFromData(json.children));
 //     [0, 0, 0, 0, 0, 0, 0]]
 // )
 
-const heatmap = d3.select("#heatmap");
-const tooltip = d3.select("#tooltip");
+// const heatmap = d3.select("#heatmap");
+// const tooltip = d3.select("#tooltip");
 
 // // read local json file
 // let heatmapData;

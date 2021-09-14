@@ -161,6 +161,20 @@ function drawNode(target = 0){
         .text(d => d.name);
     
     nodeGroups.select("circle")
+        .attr("fill", (d) => {
+            if(d.type == "input" || d.type == "output"){
+                return "white";
+            }
+            else if (d.type == "conv1x1-bn-relu"){
+                return "#F8D7DA";
+            }
+            else if (d.type == "conv3x3-bn-relu"){
+                return "#A3CFBB";
+            }
+            else if (d.type == "maxpool3x3"){
+                return "#9EC5FE";
+            }
+        })
         .style("filter", (d)=>{
             if(d.status == null){
                 return "url(#drop-shadow)";
@@ -188,7 +202,20 @@ function drawNode(target = 0){
     
     nodeGroupsEnter.append("circle")
         .attr("r", radius)
-        .attr("fill", "white")
+        .attr("fill", (d) => {
+            if(d.type == "input" || d.type == "output"){
+                return "white";
+            }
+            else if (d.type == "conv1x1-bn-relu"){
+                return "#F8D7DA";
+            }
+            else if (d.type == "conv3x3-bn-relu"){
+                return "#A3CFBB";
+            }
+            else if (d.type == "maxpool3x3"){
+                return "#9EC5FE";
+            }
+        })
         .style("filter", (d)=>{
             if(d.status == null){
                 return "url(#drop-shadow)";

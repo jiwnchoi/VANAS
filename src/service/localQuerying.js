@@ -37,10 +37,11 @@ function extractMatrix(matnum){
 }
 
 
-async function getRecommendationLocal(nodeData, edgeData){
+function getRecommendationLocal(nodeData, edgeData){
     const opsType = nodeData.map(node => node.type);
     const opsIndex = nodeData.map(node => node.index);
-    const result = [];
+    const result = {query : null, recommend : null};
+    const recommend = [];
     for (let data of fullDataset){
         
         let cnt = 0;
@@ -48,6 +49,7 @@ async function getRecommendationLocal(nodeData, edgeData){
 
         const moduleOperations = extractOperations(data[0]);
         const moduleAdjacency = extractMatrix(data[1]);
+        const moduleAdjacencyOrg = JSON.parse(JSON.stringify(moduleAdjacency));
         const sortedOpsType = JSON.stringify(opsType.slice().sort());
         const sortedModuleOperations = JSON.stringify(moduleOperations.slice().sort());
         if(sortedOpsType != sortedModuleOperations) continue;
@@ -116,21 +118,46 @@ async function getRecommendationLocal(nodeData, edgeData){
                 skip = true;
                 break;
             }
-        }
-            
-            if(skip == false){
-                result.push(
-                    [
-                        data[6], //final_test_accuracy
-                        moduleOperations,
-                        moduleAdjacency
-                    ]
-                )
+            else{
+                moduleAdjacency[mappedSourceIndex][mappedTargetIndex] = 0;
             }
         }
-        result.sort((a, b) => a[0] - b[0]);
-        return result.slice(0,5);
+        
+        let check = 1;
+        for (let row of moduleAdjacency){
+            for (let col of row){
+                if (col == 1){
+                    check = 0;
+                }
+            }
+        }
+        
+        if (check){
+            result.query = {
+                trainable_parameters : data[3],
+                training_time : data[2],
+                train_accuracy : data[4],
+                validation_accuracy : data[5],
+                test_accuracy : data[6]
+            }
+        }
+        
+        if(skip == false){
+            recommend.push(
+                [
+                    data[6], //final_test_accuracy
+                    moduleOperations,
+                    moduleAdjacencyOrg,
+                ]
+            )
+        }
+
+
     }
+    recommend.sort((a, b) => b[0] - a[0]);
+    result.recommend = recommend.slice(0,5);
+    return result;
+}
     
 
 
