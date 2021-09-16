@@ -3,13 +3,11 @@ import { setCell } from "../controller/cellController";
 import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
 import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
-import { getAccuracy } from "../service/getAccuracy";
-import { getRecommendation } from "../service/getRecommendation";
 import { getRecommendationLocal } from "../service/localQuerying";
 import drawObject, { calaulateForce, drawEdge, drawNode, drawObjectwithForce } from "./drawObject";
 
 
-export function printResult(){
+export async function printResult(){
 
     d3.select("#initAlert").attr("class","visually-hidden");
 
@@ -27,36 +25,35 @@ export function printResult(){
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
+
     if(!cellStatus.isConnected){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#connectAlert")
             .attr("class", "notcell alert alert-warning");
         checker++;
     }
+
     if(!cellStatus.isAcyclic){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#cycleAlert")
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
+
     if(cellStatus.extraneous.length > 0){
         d3.select("#analytics").attr("class", "visually-hidden");
 
         for (let ext of cellStatus.extraneous){
-            if(ext ==0 || ext ==1){
-                continue;
-            }
-
             for (let node of nodeData){
-                if(node.index == ext){
+                if(node.index == ext && node.index != 0 && node.index != 1){
                     node.status = 'ext';
-                    for (let edge of edgeData){
-                        if(edge.source.index == node.index || edge.target.index == node.index){
-                            edge.isExt = 'ext';
-                        }
-                    }
                 } 
                 
+            }
+            for (let edge of edgeData){
+                if(edge.source.index == ext || edge.target.index == ext){
+                    edge.isExt = true;
+                }
             }
         }
         d3.select("#extraneousAlert")
@@ -88,8 +85,7 @@ export function printResult(){
                 i--;
             }
         }
-        const json = getRecommendationLocal(tmpNodeData, edgeData).query;
-        console.log(json);
+        const json = getRecommendationLocal(tmpNodeData, tmpEdgeData).query;
         if (json){
             
             d3.select("#analytics")
@@ -115,13 +111,21 @@ export function printResult(){
     for (let edge of edgeData){
         if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
         cellStatus.extraneous.indexOf(edge.target) == -1){
-            edge.isExt = null;
+            edge.isExt = false;
         }
     }
-    cellRecommendation();
+    
     drawObject();
+    cellRecommendation();
 
 }
+
+function querying(){
+    return new Promise((resolve, reject) => {
+        
+    })
+}
+
 
 function copyCelltoMain(i){
     const recommendNodeData = getRecommendNodeData(i+1);

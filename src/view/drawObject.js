@@ -79,7 +79,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return "tomato";
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'orange';
             }
             else{
@@ -90,7 +90,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return 'url(#endDelete)'
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'url(#endExt)';
             }
             else{
@@ -112,7 +112,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return "tomato";
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'orange';
             }
             else{
@@ -123,7 +123,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return 'url(#endDelete)'
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'url(#endExt)';
             }
             else{
@@ -179,7 +179,7 @@ function drawNode(target = 0){
             if(d.status == null){
                 return "url(#drop-shadow)";
             } 
-            else if (d.status == 'ext'){
+            else if (d.status){
                 return "url(#drop-shadow-ext)"
             }
             else if (d.status == 'clicked'){
@@ -220,7 +220,7 @@ function drawNode(target = 0){
             if(d.status == null){
                 return "url(#drop-shadow)";
             } 
-            else if (d.status == 'ext'){
+            else if (d.status){
                 return "url(#drop-shadow-ext)"
             }
             else if (d.status == 'clicked'){

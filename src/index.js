@@ -26,15 +26,10 @@ svgInit(sharpleyvalue);
 drawObject();
 export let fullDataset = null;
 
-d3.select("#main")
-    .attr("class", "bd-main visually-hidden");
-const fullDatasetPromise = d3.json('/build/nasbench_minified.json');
+const fullDatasetPromise = d3.json('/build/nasbench_structured.json');
 fullDatasetPromise.then((json) => {
-    fullDataset = json.dataset;
+    fullDataset = json;
     cellRecommendation();
-    d3.select("#loading").attr("class", "visually-hidden");
-    d3.select("#main")
-        .attr("class", "bd-main");
 });
 
 

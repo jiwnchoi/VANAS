@@ -25,6 +25,22 @@ function extractOperations(opsnum){
     return ops;
 }
 
+function encodeOperations(ops){
+    let res = 0;
+    for (let op of ops){
+        if (op == 'conv1x1-bn-relu'){
+            res += 100;
+        }
+        else if (op == 'conv3x3-bn-relu'){
+            res += 10;
+        }
+        else if (op == 'maxpool3x3'){
+            res += 1;
+        }
+    }
+    return res.toString().padStart(3,'0');
+}
+
 function extractMatrix(matnum){
     const numberofNode = parseInt(matnum.length / 3);
     const matrix = [];
@@ -40,15 +56,18 @@ function extractMatrix(matnum){
 function getRecommendationLocal(nodeData, edgeData){
     const opsType = nodeData.map(node => node.type);
     const opsIndex = nodeData.map(node => node.index);
+    const encodedOperations = encodeOperations(opsType);
     const result = {query : null, recommend : null};
     const recommend = [];
-    for (let data of fullDataset){
+
+    const dataset = fullDataset[encodedOperations];
+    for (let data of dataset){
         
         let cnt = 0;
         let skip = false;
 
-        const moduleOperations = extractOperations(data[0]);
-        const moduleAdjacency = extractMatrix(data[1]);
+        const moduleOperations = extractOperations(data[1]);
+        const moduleAdjacency = extractMatrix(data[0]);
         const moduleAdjacencyOrg = JSON.parse(JSON.stringify(moduleAdjacency));
         const sortedOpsType = JSON.stringify(opsType.slice().sort());
         const sortedModuleOperations = JSON.stringify(moduleOperations.slice().sort());
