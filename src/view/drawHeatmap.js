@@ -1,7 +1,8 @@
 import * as d3 from "d3";
+import * as d3legend from "d3-svg-legend"
 import { setCell } from "../controller/cellController";
 
-const margin = { top: 30, right: 30, bottom: 30, left: 60 },
+const margin = { top: 30, right: 30, bottom: 80, left: 60 },
     width = 600,
     height = 400;
 
@@ -101,7 +102,7 @@ let drawHeatmap = function () {
         let rectbinData = Object.values(binsById);
 
         let zExtent = d3.extent(rectbinData.map(d => d.zMax).filter(d => d !== 0));
-        let color = d3.scaleSequential(d3.interpolateViridis)
+        let colorScale = d3.scaleSequential(d3.interpolateViridis)
             .domain(zExtent);
 
         // size of squares
@@ -163,7 +164,7 @@ let drawHeatmap = function () {
             .attr("y", d => yScale(d.y))
             .attr("width", widthInPx)
             .attr("height", heightInPx)
-            .attr("fill", d => { return d.length === 0 ? "transparent" : color(d.zMax) }) //make visible only when there is an element
+            .attr("fill", d => { return d.length === 0 ? "transparent" : colorScale(d.zMax) }) //make visible only when there is an element
             .attr("stroke", "grey")
             .attr("stroke-width", "0.2")
             .on("mouseover", mouseover)
@@ -171,35 +172,19 @@ let drawHeatmap = function () {
             .on("mouseleave", mouseleave)
             .on("click", click);
 
-        //Append a defs (for definition) element to your SVG
-        graph.append("defs").append("linearGradient")
-            .attr("id", "linear-gradient")
-            .attr("x1", "0%")
-            .attr("y1", "0%")
-            .attr("x2", "0%")
-            .attr("y2", "100%")
-            .selectAll("stop")
-            .data(color.range())
-            .enter().append("stop")
-            .attr("offset", (d, i) => i / (color.range().length - 1))
-            .attr("stop-color", d => d);
+        let legendWidth = 400, legendCells = 10;
+        graph.append("g")
+            .attr("class", "accuracyLegend")
+            .attr("transform", `translate(${width / 2 - legendWidth / 2},${height - margin.bottom + 50})`);
 
-        let legendWidth = width * 0.5;
+        let accuracyLegend = d3legend.legendColor()
+            .shapeWidth(legendWidth / legendCells)
+            .cells(legendCells)
+            .orient("horizontal")
+            .scale(colorScale);
 
-        //Color Legend container
-        let legendsvg = graph.append("g")
-            .attr("class", "legendWrapper")
-            .attr("transform", `translate(${width / 2},${height - margin.bottom})`);
-
-        //Draw the Rectangle
-        legendsvg.append("rect")
-            .attr("class", "legendRect")
-            .attr("x", -legendWidth / 2)
-            .attr("y", 0)
-            //.attr("rx", hexRadius*1.25/2)
-            .attr("width", legendWidth)
-            .attr("height", 10)
-            .style("fill", "url(#linear-gradient)");
+        graph.select(".accuracyLegend")
+            .call(accuracyLegend);
 
         return { graph: graph.node(), tooltip: tooltip.node() };
     };
