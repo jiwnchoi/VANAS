@@ -1,8 +1,9 @@
 import * as d3 from "d3";
-import * as d3legend from "d3-svg-legend"
+import { legendColor } from "d3-svg-legend"
 import { setCell } from "../controller/cellController";
 
-const margin = { top: 30, right: 30, bottom: 80, left: 60 },
+let accuracyLegendMargin = 70;
+const margin = { top: 30, right: 30, bottom: 30 + accuracyLegendMargin, left: 60 },
     width = 600,
     height = 400;
 
@@ -47,7 +48,7 @@ let drawHeatmap = function () {
                 .append("text")
                 .attr("text-anchor", "end")
                 .attr("x", width - margin.right)
-                .attr("y", margin.bottom - 5)
+                .attr("y", margin.bottom - 5 - accuracyLegendMargin)
                 .attr("fill", "currentColor")
                 .text(x));
 
@@ -172,19 +173,44 @@ let drawHeatmap = function () {
             .on("mouseleave", mouseleave)
             .on("click", click);
 
-        let legendWidth = 400, legendCells = 10;
+
+        // accuracy color legend
+        let legendWidth = 300, legendCells = 10;
         graph.append("g")
             .attr("class", "accuracyLegend")
-            .attr("transform", `translate(${width / 2 - legendWidth / 2},${height - margin.bottom + 50})`);
+            .attr("transform", `translate(${width / 2 - legendWidth / 2},${height - margin.bottom + accuracyLegendMargin})`);
 
-        let accuracyLegend = d3legend.legendColor()
+        let accuracyLegend = legendColor()
+            .title("Accuracy")
             .shapeWidth(legendWidth / legendCells)
+            .shapePadding(legendWidth / legendCells)
+            .labelFormat(d3.format(".3f"))
+            .labels(function ({
+                i,
+                genLength,
+                generatedLabels,
+                labelDelimiter
+            }) {
+                return (Math.round(generatedLabels[i] * 1000) / 10 + '%');
+            })
             .cells(legendCells)
             .orient("horizontal")
             .scale(colorScale);
 
         graph.select(".accuracyLegend")
-            .call(accuracyLegend);
+            .call(accuracyLegend)
+        graph.select(".accuracyLegend")
+            .select(".legendTitle")
+            .style("font-size", "15px")
+            .style("text-anchor", "middle")
+            .attr("transform", `translate(${legendWidth / 2},-10)`);
+        graph.select(".accuracyLegend")
+            .select(".legendCells")
+            .style("font-size", "10px")
+            .selectAll(".cell")
+            .select(".label")
+            .style("text-anchor", "middle")
+            .attr("transform", `translate(${legendWidth / legendCells / 2},25)`);;
 
         return { graph: graph.node(), tooltip: tooltip.node() };
     };
