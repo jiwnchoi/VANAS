@@ -1,86 +1,106 @@
 const recommendNodeData ={
     1 : [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
                 y : 300,
+                fx : 100,
+                fy : 300,
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
                 y : 300,
+                fx : 700,
+                fy : 300,
                 status : null,
             }
         ],
     2 : [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
                 y : 300,
+                fx : 100,
+                fy : 300,
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
                 y : 300,
+                fx : 700,
+                fy : 300,
                 status : null,
             }
         ],
     3: [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
                 y : 300,
+                fx : 100,
+                fy : 300,
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
                 y : 300,
+                fx : 700,
+                fy : 300,
                 status : null,
             }
         ],
     4: [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
                 y : 300,
+                fx : 100,
+                fy : 300,
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
                 y : 300,
+                fx : 700,
+                fy : 300,
                 status : null,
             }
         ],
     5 : [{
-                id : 0,
+                index : 0,
                 type : "input",
                 name : "INPUT",
                 x : 100,
                 y : 300,
+                fx : 100,
+                fy : 300,
                 status : null,
             },
             {
-                id : 1,
+                index : 1,
                 type : "output",
                 name : "OUTPUT",
                 x : 700,
                 y : 300,
+                fx : 700,
+                fy : 300,
                 status : null,
             }
         ],
@@ -96,12 +116,12 @@ const recommendEdgeData ={
 
 
 
-function getRecommendNodeData(id){
-    return recommendNodeData[id];
+function getRecommendNodeData(index){
+    return recommendNodeData[index];
 }
 
-function getRecommendEdgeData(id){
-    return recommendEdgeData[id];
+function getRecommendEdgeData(index){
+    return recommendEdgeData[index];
 }
 
 export {getRecommendNodeData, getRecommendEdgeData};

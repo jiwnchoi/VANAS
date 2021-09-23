@@ -15,7 +15,6 @@ async function drawNextEdge(clickedNode){
     else{
         recommendEdgeData = await getNextNodeAccuracy(clickedNode);
     }
-    console.log(recommendEdgeData);
     const recommendEdgeGroup = d3.select("#architecture").selectAll(".recommendLine").data(recommendEdgeData);
     
     //ENTER
@@ -24,17 +23,16 @@ async function drawNextEdge(clickedNode){
     
     recommendEdgeGroupEnter
         .append("line")
-        .attr("class", d => d.edgeClassName)
-        .attr("x1", d => d.x1)
-        .attr("y1", d => d.y1)
-        .attr("x2", d => d.x2)
-        .attr("y2", d => d.y2)
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
         .attr("stroke-width", 3)
         .attr("stroke-dasharray", "10,10")
         .attr("d", "M5 40 l215 0")
         .attr("stroke", "gray")
         .style("marker-end", d =>{
-            if (d.label == 0) return "url(#endRecommend)";
+            if (d.label == 0 || d.source.index==0 && d.target.index ==1) return "url(#endRecommend)";
             else return null;
         })
 
@@ -52,14 +50,14 @@ async function drawNextEdge(clickedNode){
         .attr("text-anchor", "middle")
         .attr("font-size", 14)
         .attr("font-family", "Roboto")
-        .attr("transform", d => "translate("+[(d.x1 + d.x2)/2, (d.y1 + d.y2)/2]+")" );
+        .attr("transform", d => "translate("+[(d.source.x + d.target.x)/2, (d.source.y + d.target.y)/2]+")" );
     
 
     //EXIT
     recommendEdgeGroup.exit().remove()
 }
 
-function drawEdge(target){
+function drawEdge(target = 0){
     let edgeData, edge;
     if (target == 0){
         edgeData = getEdgeData();
@@ -73,10 +71,10 @@ function drawEdge(target){
     //UPDATE
     edge        
         .attr("class", d => d.edgeClassName)
-        .attr("x1", d => d.x1)
-        .attr("y1", d => d.y1)
-        .attr("x2", d => d.x2)
-        .attr("y2", d => d.y2)
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
         .attr("stroke", (d) => {
             if (d.isDelete == 'delete'){
                 return "tomato";
@@ -105,10 +103,10 @@ function drawEdge(target){
         .enter()
         .append("line")
         .attr("class", d => d.edgeClassName)
-        .attr("x1", d => d.x1)
-        .attr("y1", d => d.y1)
-        .attr("x2", d => d.x2)
-        .attr("y2", d => d.y2)
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
         .attr("stroke-width", 3)
         .attr("stroke", (d) => {
             if (d.isDelete == 'delete'){
@@ -140,7 +138,7 @@ function drawEdge(target){
     edge.exit().remove()
 }
 
-function drawNode(target){
+function drawNode(target = 0){
     let nodeData, nodeGroups;
     if (target == 0){
         nodeData = getNodeData();
@@ -155,7 +153,7 @@ function drawNode(target){
     
     //UPDATE
     nodeGroups
-        .attr("id", d=>"node"+d.id)
+        .attr("id", d=>"node"+d.index)
         .attr("transform", d => "translate("+[d.x, d.y]+")" )
         
 
@@ -177,7 +175,7 @@ function drawNode(target){
 
     //ENTER
     const nodeGroupsEnter = nodeGroups.enter().append("g")
-        .attr("id", d=>"node"+d.id)
+        .attr("id", d=>"node"+d.index)
         .attr("transform", d => "translate("+[d.x, d.y]+")" )
         .attr("class", "node")
         .call(
@@ -215,10 +213,40 @@ function drawNode(target){
     nodeGroups.exit().remove();
 }
 
-export default async function drawObject(clickedNode, target=0){
+export default async function drawObject(clickedNode, target=0){  
     drawNode(target);
     drawEdge(target);
+    d3.selectAll(".node").raise();
     await drawNextEdge(clickedNode);
     d3.selectAll(".node").raise();
+}
+
+export function drawObjectwithForce(clickedNode, target = 0){
+    calaulateForce(target);
+    drawNode(target);
+    drawEdge(target);
+    d3.selectAll(".node").raise();
+}
+
+export function calaulateForce(target){
+    let nodeData, edgeData;
+    
+    if (target){
+        nodeData = getRecommendNodeData(target);
+        edgeData = getRecommendEdgeData(target);
+    }
+    else{
+        nodeData = getNodeData();
+        edgeData = getEdgeData();
+    }
+    
+    const simulation = d3.forceSimulation(nodeData)
+        .force('charge', d3.forceManyBody())
+        .force('collison', d3.forceCollide(120))
+        .force('link', d3.forceLink(edgeData))
+        .force('center', d3.forceCenter(400, 300))
+        .stop()
+        .tick(10000)
+    
 }
 

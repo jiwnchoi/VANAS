@@ -27,14 +27,14 @@ function createMatrix(extraneous, originalNodeData, originalEdgeData){
     const edgeData = originalEdgeData.slice();
     for (let ext of extraneous){
         for (let i=0; i<nodeData.length; i++){
-            if (nodeData[i].id == ext){
+            if (nodeData[i].index == ext){
                 nodeData.splice(i,1);
                 i--;
             }
         }
         for (let i=0; i<edgeData.length; i++){
-            if (edgeData[i].sourceNode == ext || 
-                edgeData[i].targetNode == ext){
+            if (edgeData[i].source.index == ext || 
+                edgeData[i].target.index == ext){
                 edgeData.splice(i,1);
                 i--;
             }
@@ -50,9 +50,9 @@ function createMatrix(extraneous, originalNodeData, originalEdgeData){
         let hasChildren = 0;
         const top = frontier[frontier.length-1];
         for (let edge of edgeData){
-            if (edge.sourceNode == top && (visitedFromInput.indexOf(edge.targetNode) == -1)){
-                visitedFromInput.push(edge.targetNode);
-                frontier.push(edge.targetNode);
+            if (edge.source.index == top && (visitedFromInput.indexOf(edge.target.index) == -1)){
+                visitedFromInput.push(edge.target.index);
+                frontier.push(edge.target.index);
                 hasChildren = 1;
                 break;
             }
@@ -78,13 +78,13 @@ function createMatrix(extraneous, originalNodeData, originalEdgeData){
         const sortedSourceNodeId = i;
         const objectNodeId = topologicalSort[i];
         for (let node of originalNodeData){
-            if(node.id == objectNodeId){ 
+            if(node.index == objectNodeId){ 
                 ops[sortedSourceNodeId] = node.type;
             }
         }
         for (let edge of edgeData){
-            if (edge.sourceNode == objectNodeId){
-                const sortedTargetNodeId = topologicalSort.indexOf(edge.targetNode);
+            if (edge.source.index == objectNodeId){
+                const sortedTargetNodeId = topologicalSort.indexOf(edge.target.index);
                 matrix[sortedSourceNodeId][sortedTargetNodeId] = 1;
             }
         }
@@ -116,22 +116,23 @@ function cellSainityCheck(nodeData, edgeData){
     //input부터 DFS
     const visitedFromInput = [0];
     const frontierInput = [0];
+    let hasChildren = null;
     while (frontierInput.length > 0){
-        let hasChildren = 0;
+        hasChildren = 0;
         const top = frontierInput[frontierInput.length-1];
         visitedFromInput.push(top);
         for (let edge of edgeData){
-            if(edge.sourceNode == top){
-                if (frontierInput.indexOf(edge.targetNode) != -1){
+            if(edge.source.index == top){
+                if (frontierInput.indexOf(edge.target.index) != -1){
                     cellStatus.isConnected = false;
                     cellStatus.isAcyclic = false;
-                    cellStatus.extraneous = frontierInput.slice(frontierInput.indexOf(edge.targetNode));
+                    cellStatus.extraneous = frontierInput.slice(frontierInput.indexOf(edge.target.index));
                     cellStatus.extraneous.push(top);
                     return cellStatus;
                 }
-                if (visitedFromInput.indexOf(edge.targetNode) == -1){
+                if (visitedFromInput.indexOf(edge.target.index) == -1){
                     
-                    frontierInput.push(edge.targetNode);
+                    frontierInput.push(edge.target.index);
                     hasChildren = 1;
                     break;
                 }
@@ -148,16 +149,16 @@ function cellSainityCheck(nodeData, edgeData){
         const top = frontierOutput.pop();
         
         for (let edge of edgeData){
-            if(edge.targetNode == top && !visitedFromOutput.has(edge.sourceNode)){
-                visitedFromOutput.add(edge.sourceNode);
-                frontierOutput.push(edge.sourceNode);
+            if(edge.target.index == top && !visitedFromOutput.has(edge.source.index)){
+                visitedFromOutput.add(edge.source.index);
+                frontierOutput.push(edge.source.index);
             }
         }
     }
     //path상에 존재하지 않는 노드(extraneous) 연산
     const allNodeId = [];
     for (let node of nodeData){
-        allNodeId.push(node.id);
+        allNodeId.push(node.index);
     }
     const extraneous = new Set(allNodeId).difference(
         visitedFromOutput.intersection(new Set(visitedFromInput))

@@ -21,7 +21,7 @@ function addNode(nodeType, target=0){
     if(nodeType == 'maxpool3x3') nodeName = '3X3 MAXPOOL';
 
     const newData = {
-        id : nodeData[nodeData.length-1].id+1,
+        index : nodeData[nodeData.length-1].index+1,
         type : nodeType,
         name : nodeName,
         x : Math.random() * 400 + 200,
@@ -36,13 +36,13 @@ function deleteNode(nodeIndex){
     const edgeData = getEdgeData();
     
     for (let i=0; i<nodeData.length; i++){
-        if(nodeData[i].id == nodeIndex){
+        if(nodeData[i].index == nodeIndex){
             nodeData.splice(i, 1);
         }
     }
 
     for (let i=0; i<edgeData.length; i++){
-        if(edgeData[i].sourceNode == nodeIndex || edgeData[i].targetNode == nodeIndex){
+        if(edgeData[i].source.index == nodeIndex || edgeData[i].target.index == nodeIndex){
             edgeData.splice(i,1);
             i--;
         }

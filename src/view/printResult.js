@@ -1,10 +1,11 @@
 import * as d3 from "d3";
 import { setCell } from "../controller/cellController";
-import { getEdgeData, getNodeData } from "../data/data";
+import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
 import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
+import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
 import { getAccuracy } from "../service/getAccuracy";
 import { getRecommendation } from "../service/getRecommendation";
-import drawObject from "./drawObject";
+import drawObject, { calaulateForce, drawEdge, drawNode, drawObjectwithForce } from "./drawObject";
 
 
 export function printResult(){
@@ -15,12 +16,7 @@ export function printResult(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
     const cellStatus = cellSainityCheck();
-    let checker = 0;
-
-
-
-    console.log(cellStatus, nodeData, edgeData);
-    
+    let checker = 0;    
 
     
 
@@ -51,10 +47,10 @@ export function printResult(){
             }
 
             for (let node of nodeData){
-                if(node.id == ext){
+                if(node.index == ext){
                     node.status = 'ext';
                     for (let edge of edgeData){
-                        if(edge.sourceNode == node.id || edge.targetNode == node.id){
+                        if(edge.source.index == node.index || edge.target.index == node.index){
                             edge.isExt = 'ext';
                         }
                     }
@@ -91,19 +87,35 @@ export function printResult(){
         )
     }
     for (let node of nodeData){
-        if(cellStatus.extraneous.indexOf(node.id) == -1){
+        if(cellStatus.extraneous.indexOf(node.index) == -1){
             node.status = null;
         }
     }
     for (let edge of edgeData){
-        if (cellStatus.extraneous.indexOf(edge.sourceNode) == -1 &&
-        cellStatus.extraneous.indexOf(edge.targetNode) == -1){
+        if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
+        cellStatus.extraneous.indexOf(edge.target) == -1){
             edge.isExt = null;
         }
     }
     cellRecommendation();
     drawObject();
 
+}
+
+function copyCelltoMain(i){
+    const recommendNodeData = getRecommendNodeData(i+1);
+    const recommendEdgeData = getRecommendEdgeData(i+1);
+    const emptyEdgeData = initEdgeData();
+    const emptyNodeData = initNodeData();
+    emptyNodeData.splice(0);
+
+    for (let node of recommendNodeData){
+        emptyNodeData.push(node);
+    }
+    for (let edge of recommendEdgeData){
+        emptyEdgeData.push(edge);
+    }
+    printResult();
 }
 
 export async function cellRecommendation(){
@@ -114,36 +126,44 @@ export async function cellRecommendation(){
 
     const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data)
 
+    //update
     recommendCell
         .on("click", (_, d) => {
-            setCell(d[1], d[2]);
-            printResult();
+            const i = data.indexOf(d);
+            copyCelltoMain(i);
         })
-    
+        
     recommendCell
         .select("#recommend-accuracy")
         .text((d) => "Accuracy: " + Math.round(d[0] * 10000) / 10000);
 
+
+
+    //enter
     const recommendCellEnter = recommendCell
         .enter()
         .append("div")
-        .attr("class", "border bg-light svg-container mb-3 recommend-cell")
+        .attr("class", "row g-0 recommend-cell ")
+        .on("click", (_, d) => {
+            const i = data.indexOf(d);
+            copyCelltoMain(i);
+        });
         
 
     recommendCellEnter
+        .append("div")
+        .attr("class", "border bg-light svg-container mb-1 ")
         .append("svg")
         .attr("id", (_, i) => "recommend" + (i+1))
         .attr("viewBox", "0 0 800 600")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("class", "svg-content-responsive")
-        .on("click", (_, d) => {
-            setCell(d[1], d[2]);
-            printResult();
-        });
+        .attr("class", "svg-content-responsive recommend-cell-svg")
+        ;
     
     recommendCellEnter
         .append('div')
         .attr('id', 'recommend-accuracy')
+        .attr("class", "row g-0 d-flex justify-content-center align-middle mb-1")
         .text((d) => "Accuracy : " + Math.round(d[0] * 10000) / 10000);
 
 
@@ -155,7 +175,7 @@ export async function cellRecommendation(){
 
     for (let i=0; i<data.length; i++){
         setCell(data[i][1], data[i][2], i+1);
-        drawObject(null, i+1);
+        drawObjectwithForce(null, i+1)
     }
 
 

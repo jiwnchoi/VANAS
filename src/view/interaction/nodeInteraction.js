@@ -3,7 +3,7 @@ let isNodeClicked = null;
 import { updateEdge, isEdgeExists } from "../../controller/edgeController";
 import { deleteNode } from "../../controller/nodeController";
 import { makeEdge } from "../makeObject";
-import drawObject from "../drawObject";
+import drawObject, { drawEdge, drawNode } from "../drawObject";
 import { getNodeData } from "../../data/data";
 import { printResult } from "../printResult";
 
@@ -13,12 +13,9 @@ function dragNodeStart(event, d) {
  }
 
 function dragNode(event, d) {
-    if (d.type == "input" || d.type == "output") return null;
     d.x = event.x;
     d.y = event.y;
-    const nodeNum = d.id;
-    updateEdge(nodeNum);
-    drawObject();
+    drawObject(null);
 }
 
 function dragNodeEnd(event, d) {
@@ -63,7 +60,7 @@ function clickedNode(){
     else{
         isNodeClicked = targetNode;
         for (let node of nodeData){
-            if(node.id == targetNode) node.status = 'clicked';
+            if(node.index == targetNode) node.status = 'clicked';
         }
     }
     drawObject(isNodeClicked);
