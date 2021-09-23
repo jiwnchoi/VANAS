@@ -49,28 +49,21 @@ const heatmap = d3.select("#heatmap");
 const tooltip = d3.select("#tooltip");
 
 // read local json file
-let heatmapData;
-let httpRequest = new XMLHttpRequest(); // asynchronous request
-httpRequest.open("GET", "./result.json", true);
-httpRequest.send();
-httpRequest.addEventListener("readystatechange", function () {
-    if (this.readyState === this.DONE) { // when the request has completed
-        heatmapData = JSON.parse(this.response);
+d3.json("result.json").then((data) => {
+    generateHeatmap(data);
+    let options = document.getElementById("options");
+    let heatmapButton = document.createElement("button");
+    heatmapButton.innerText = "Generate Heatmap";
+    heatmapButton.classList.add("btn");
+    heatmapButton.classList.add("btn-primary");
+    heatmapButton.addEventListener("click", () => {
+        heatmap.select("svg").remove();
         generateHeatmap();
-        let options = document.getElementById("options");
-        let heatmapButton = document.createElement("button");
-        heatmapButton.innerText = "Generate Heatmap";
-        heatmapButton.classList.add("btn");
-        heatmapButton.classList.add("btn-primary");
-        heatmapButton.addEventListener("click", () => {
-            heatmap.select("svg").remove();
-            generateHeatmap();
-        });
-        options.appendChild(heatmapButton);
-    }
+    });
+    options.appendChild(heatmapButton);
 });
 
-function generateHeatmap() {
+function generateHeatmap(heatmapData) {
     let optionX = document.getElementById("optionX"),
         optionY = document.getElementById("optionY"),
         optionZ = document.getElementById("optionZ");
