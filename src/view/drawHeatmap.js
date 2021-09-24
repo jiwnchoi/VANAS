@@ -2,22 +2,25 @@ import * as d3 from "d3";
 import { legendColor } from "d3-svg-legend"
 import { setCell } from "../controller/cellController";
 
-let accuracyLegendMargin = 70;
+const accuracyLegendMargin = 70;
 const margin = { top: 30, right: 30, bottom: 30 + accuracyLegendMargin, left: 60 },
     width = 600,
     height = 400;
+
+const dataset = ["module_operations", "module_adjacency", "training_time", "trainable_parameters", "train_accuracy", "validation_accuracy", "test_accuracy"];
 
 let drawHeatmap = function () {
     let splitX = 100,
         splitY = 100,
         x = "x",
         y = "y",
-        z = "z",
-        funcX = d => d[x],
-        funcY = d => d[y],
-        funcZ = d => d[z];
+        z = "z";
 
     function heatmap(data) {
+        let funcX = d => d[dataset.indexOf(x)],
+            funcY = d => d[dataset.indexOf(y)],
+            funcZ = d => d[dataset.indexOf(z)];
+
         const graph = d3.create("svg")
             .attr("viewBox", [0, 0, width, height]);
 
@@ -95,8 +98,8 @@ let drawHeatmap = function () {
             binsById[id].push(point);
             if (zCur > binsById[id].zMax) {
                 binsById[id].zMax = zCur;
-                binsById[id].module_operations = point.module_operations;
-                binsById[id].module_adjacency = point.module_adjacency;
+                binsById[id].module_operations = point[0];//module_operations
+                binsById[id].module_adjacency = point[1];//module_adjacency
             }
         });
 

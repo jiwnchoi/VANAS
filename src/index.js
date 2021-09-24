@@ -49,8 +49,8 @@ const heatmap = d3.select("#heatmap");
 const tooltip = d3.select("#tooltip");
 
 // read local json file
-d3.json("result.json").then((data) => {
-    generateHeatmap(data);
+d3.json("nasbench_minified.json").then((data) => {
+    generateHeatmap(data.dataset);
     let options = document.getElementById("options");
     let heatmapButton = document.createElement("button");
     heatmapButton.innerText = "Generate Heatmap";
@@ -58,7 +58,7 @@ d3.json("result.json").then((data) => {
     heatmapButton.classList.add("btn-primary");
     heatmapButton.addEventListener("click", () => {
         heatmap.select("svg").remove();
-        generateHeatmap();
+        generateHeatmap(data.dataset);
     });
     options.appendChild(heatmapButton);
 });
