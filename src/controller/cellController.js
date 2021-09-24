@@ -3,38 +3,45 @@ import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCel
 import { addEdge } from "./edgeController";
 import { addNode } from "./nodeController";
 
-function initCell(target=0){
+function initCell(target = 0) {
     let nodeData, edgeData;
-    if (target==0){
+    if (target == 0) {
         nodeData = getNodeData();
         edgeData = getEdgeData();
     }
-    else{
+    else {
         nodeData = getRecommendNodeData(target);
         edgeData = getRecommendEdgeData(target);
     }
-    nodeData.splice(2,nodeData.length);
-    edgeData.splice(0,edgeData.length);
+    nodeData.splice(2, nodeData.length);
+    edgeData.splice(0, edgeData.length);
 }
 
-function setCell(ops, matrix, target=0){
+function setCell(ops, _matrix, target = 0) {
     initCell(target);
-    const operations = ops.slice(1,ops.length-1);
+    const operations = ops;
 
-    for (let op of operations){
+    for (let op of operations) {
         addNode(op, target);
     }
+    let matrix = [];
+    let matrixLength = _matrix.length / 3;
+    for (let i = 0; i < matrixLength; i++) {
+        let _line = _matrix[3 * i + 0] + _matrix[3 * i + 1] + _matrix[3 * i + 2];
+        let line = parseInt(_line).toString(2).padStart(matrixLength, '0');
+        matrix.push(line);
+    }
 
-    for (let i=0; i<matrix.length-1; i++){
-        for(let j=i+1; j<matrix.length; j++){
-            if (matrix[i][j] == 1){
-                if (i == 0 && j == matrix.length-1) addEdge(0,1, target);
-                else if (i == 0) addEdge(0, j+1, target);
-                else if(j == matrix.length-1) addEdge(i+1, 1, target);
-                else addEdge(i+1, j+1, target);
+    for (let i = 0; i < matrixLength; i++) {
+        for (let j = i + 1; j < matrixLength; j++) {
+            if (matrix[i][j] == 1) {
+                if (i == 0 && j == matrixLength - 1) addEdge(0, 1, target);
+                else if (i == 0) addEdge(0, j + 1, target);
+                else if (j == matrixLength - 1) addEdge(i + 1, 1, target);
+                else addEdge(i + 1, j + 1, target);
             }
         }
     }
 }
 
-export {setCell, initCell};
+export { setCell, initCell };

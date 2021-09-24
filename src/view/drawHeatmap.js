@@ -139,7 +139,7 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            console.log(d.module_adjacency);
+            //console.log(d.module_adjacency.length);
             setCell(d.module_operations, d.module_adjacency);
         }
 
