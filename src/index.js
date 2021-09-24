@@ -51,27 +51,18 @@ const tooltip = d3.select("#tooltip");
 // read local json file
 d3.json("nasbench_minified.json").then((data) => {
     generateHeatmap(data.dataset);
-    let options = document.getElementById("options");
-    let heatmapButton = document.createElement("button");
-    heatmapButton.innerText = "Generate Heatmap";
-    heatmapButton.classList.add("btn");
-    heatmapButton.classList.add("btn-primary");
+    let heatmapButton = document.getElementById("generateButton");
     heatmapButton.addEventListener("click", () => {
         heatmap.select("svg").remove();
         generateHeatmap(data.dataset);
     });
-    options.appendChild(heatmapButton);
 });
 
 function generateHeatmap(heatmapData) {
-    let optionX = document.getElementById("optionX"),
-        optionY = document.getElementById("optionY"),
-        optionZ = document.getElementById("optionZ");
-
     let heatmapResult = drawHeatmap()
-        .x(optionX.value)
-        .y(optionY.value)
-        .z(optionZ.value)
+        .x(document.getElementById("optionX").value)
+        .y(document.getElementById("optionY").value)
+        .z(document.getElementById("optionZ").value)
         .splitX(50)
         .splitY(30)
         (heatmapData);

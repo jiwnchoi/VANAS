@@ -32,6 +32,8 @@ function setCell(ops, _matrix, target = 0) {
         matrix.push(line);
     }
 
+    console.log(matrix);
+
     for (let i = 0; i < matrixLength; i++) {
         for (let j = i + 1; j < matrixLength; j++) {
             if (matrix[i][j] == 1) {
