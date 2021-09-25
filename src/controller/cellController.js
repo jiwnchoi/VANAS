@@ -30,13 +30,17 @@ function setCell(ops, matrix, target=0){
 
     for (let i=0; i<matrix.length-1; i++){
         for(let j=i+1; j<matrix.length; j++){
-            if (matrix[i][j] == 1){
+            if (matrix[i][j] == 1 || matrix[i][j] == "1"){
                 if (i == 0 && j == matrix.length-1) addEdge(0,1, target);
                 else if (i == 0) addEdge(0, j+1, target);
                 else if(j == matrix.length-1) addEdge(i+1, 1, target);
                 else addEdge(i+1, j+1, target);
             }
         }
+    }
+
+    if(target == 0){
+        console.log(ops, matrix, getNodeData(), getEdgeData());
     }
 }
 

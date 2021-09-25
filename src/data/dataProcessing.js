@@ -127,7 +127,7 @@ function decodeMatrix(matnum){
     for (let i=0; i<numberofNode; i++){
         const row = matnum.slice(i*3, (i+1)*3);
         const rowNum = Number(row).toString(2).padStart(numberofNode, '0');
-        matrix.push(rowNum.split(""));
+        matrix.push(rowNum.split("").map(x => Number(x)));
     }
     return matrix;
 }

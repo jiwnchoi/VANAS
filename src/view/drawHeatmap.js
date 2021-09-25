@@ -101,8 +101,8 @@ let drawHeatmap = function () {
             binsById[id].push(point);
             if (zCur > binsById[id].zMax) {
                 binsById[id].zMax = zCur;
-                binsById[id].module_operations = point[0];//module_operations
-                binsById[id].module_adjacency = point[1];//module_adjacency
+                binsById[id].module_operations = point[1];//module_operations
+                binsById[id].module_adjacency = point[0];//module_adjacency
             }
         });
 
@@ -142,7 +142,6 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            //console.log(d.module_adjacency.length);
             setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
             printResult();
             drawObjectwithForce(null, 0);
