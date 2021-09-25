@@ -1,6 +1,9 @@
 import * as d3 from "d3";
 import { legendColor } from "d3-svg-legend"
 import { setCell } from "../controller/cellController";
+import { decodeMatrix, decodeOperations } from "../data/dataProcessing";
+import drawObject, { drawObjectwithForce } from "./drawObject";
+import { printResult } from "./printResult";
 
 const accuracyLegendMargin = 70;
 const margin = { top: 30, right: 30, bottom: 30 + accuracyLegendMargin, left: 60 },
@@ -140,7 +143,9 @@ let drawHeatmap = function () {
         };
         const click = function (event, d) {
             //console.log(d.module_adjacency.length);
-            setCell(d.module_operations, d.module_adjacency);
+            setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
+            printResult();
+            drawObjectwithForce(null, 0);
         }
 
         graph.append("g")

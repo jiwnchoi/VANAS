@@ -149,8 +149,7 @@ export function cellRecommendation(){
 
     const data2 = getQuery(nodeData, edgeData);
     const data = data2.recommend;
-    console.log(data);
-    const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data)
+    const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data);
 
     //update
     recommendCell

@@ -4,6 +4,8 @@ const nodeData = [{
                     name : "INPUT",
                     x : 100,
                     y : 300,
+                    fx : 100,
+                    fy : 300,
                     status : null,
                 },
                 {
@@ -12,6 +14,8 @@ const nodeData = [{
                     name : "OUTPUT",
                     x : 700,
                     y : 300,
+                    fx : 700,
+                    fy : 300,
                     status : null,
                 }];
 

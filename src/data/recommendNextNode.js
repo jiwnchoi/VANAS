@@ -49,7 +49,6 @@ async function getNextNodeAccuracy(curruntNode){
         const newNodeData = nodeData.slice();
         const newEdgeData = edgeData.slice();
         let source, target;
-        console.log(curruntNode, targetNode, result);
         if (targetNode.index != 1){
             for (let node of newNodeData){
                 if (node.index == targetNode.index) source = node;
@@ -74,7 +73,6 @@ async function getNextNodeAccuracy(curruntNode){
 
 
         //extranous 제거
-        console.log(newEdgeData);
         const extraneous = cellSainityCheck(newNodeData, newEdgeData).extraneous;
         for (let ext of extraneous){
             for (let i=0; i<newNodeData.length; i++){
