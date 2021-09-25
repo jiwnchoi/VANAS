@@ -8,8 +8,7 @@ import { drawBarChartFromData } from "./view/drawBarChart";
 import { initCell, setCell } from "./controller/cellController";
 import { drawHeatmap } from "./view/drawHeatmap";
 import { cellRecommendation, printResult } from "./view/printResult";
-import { getSharpleyValue } from "./service/getQuery";
-
+import getSharpleyValue from "./service/getSharpleyValue";
 
 
 
@@ -41,59 +40,28 @@ data.then(json => drawBarChartFromData(json.children));
 
 
 
-// setCell(
-//     ['input',
-//     'conv3x3-bn-relu', 'maxpool3x3',
-//     'conv3x3-bn-relu', 'conv3x3-bn-relu',
-//     'conv1x1-bn-relu',
-//     'output'],
 
-//     [[0, 1, 0, 0, 1, 1, 0],
-//     [0, 0, 1, 0, 0, 0, 0],
-//     [0, 0, 0, 1, 0, 0, 1],
-//     [0, 0, 0, 0, 0, 1, 0],
-//     [0, 0, 0, 0, 0, 1, 0],
-//     [0, 0, 0, 0, 0, 0, 1],
-//     [0, 0, 0, 0, 0, 0, 0]]
-// )
+const heatmap = d3.select("#heatmap");
+const tooltip = d3.select("#tooltip");
 
-// const heatmap = d3.select("#heatmap");
-// const tooltip = d3.select("#tooltip");
+// read local json file
+d3.json("/nasbench_minified.json").then((data) => {
+    generateHeatmap(data.dataset);
+    let heatmapButton = document.getElementById("generateButton");
+    heatmapButton.addEventListener("click", () => {
+        heatmap.select("svg").remove();
+        generateHeatmap(data.dataset);
+    });
+});
 
-// // read local json file
-// let heatmapData;
-// let httpRequest = new XMLHttpRequest(); // asynchronous request
-// httpRequest.open("GET", "./result.json", true);
-// httpRequest.send();
-// httpRequest.addEventListener("readystatechange", function () {
-//     if (this.readyState === this.DONE) { // when the request has completed
-//         heatmapData = JSON.parse(this.response);
-//         generateHeatmap();
-//         let options = document.getElementById("options");
-//         let heatmapButton = document.createElement("button");
-//         heatmapButton.innerText = "Generate Heatmap";
-//         heatmapButton.classList.add("btn");
-//         heatmapButton.classList.add("btn-primary");
-//         heatmapButton.addEventListener("click", () => {
-//             heatmap.select("svg").remove();
-//             generateHeatmap();
-//         });
-//         options.appendChild(heatmapButton);
-//     }
-// });
-
-// function generateHeatmap() {
-//     let optionX = document.getElementById("optionX"),
-//         optionY = document.getElementById("optionY"),
-//         optionZ = document.getElementById("optionZ");
-
-//     let heatmapResult = drawHeatmap()
-//         .x(d => d[optionX.value])
-//         .y(d => d[optionY.value])
-//         .z(d => d[optionZ.value])
-//         .splitX(50)
-//         .splitY(30)
-//         (heatmapData);
-//     heatmap.append(() => heatmapResult[0]);
-//     tooltip.append(() => heatmapResult[1]);
-// };
+function generateHeatmap(heatmapData) {
+    let heatmapResult = drawHeatmap()
+        .x(document.getElementById("optionX").value)
+        .y(document.getElementById("optionY").value)
+        .z(document.getElementById("optionZ").value)
+        .splitX(50)
+        .splitY(30)
+        (heatmapData);
+    heatmap.append(() => heatmapResult.graph);
+    tooltip.append(() => heatmapResult.tooltip);
+};

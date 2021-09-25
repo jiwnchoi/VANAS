@@ -1,6 +1,6 @@
 import { getEdgeData, getNodeData } from "./data";
 import { cellSainityCheck } from "./dataProcessing";
-import { getQuery } from "../service/getQuery";
+import getQuery from "../service/getQuery";
 
 function getPathFromInput(curruntNode){
     const edgeData = getEdgeData();

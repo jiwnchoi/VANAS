@@ -3,7 +3,7 @@ import { setCell } from "../controller/cellController";
 import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
 import { cellSainityCheck } from "../data/dataProcessing";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
-import { getQuery } from "../service/getQuery";
+import getQuery from "../service/getQuery";
 import drawObject, { drawObjectwithForce } from "./drawObject";
 
 

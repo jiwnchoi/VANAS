@@ -1,27 +1,31 @@
 import * as d3 from "d3";
+import { legendColor } from "d3-svg-legend"
 import { setCell } from "../controller/cellController";
 
-const margin = { top: 30, right: 60, bottom: 30, left: 60 },
-    width = 700,
+const accuracyLegendMargin = 70;
+const margin = { top: 30, right: 30, bottom: 30 + accuracyLegendMargin, left: 60 },
+    width = 600,
     height = 400;
 
-let funcX = d => d[0],
-    funcY = d => d[1],
-    funcZ = d => d[2];
+const dataset = ["module_operations", "module_adjacency", "training_time", "trainable_parameters", "train_accuracy", "validation_accuracy", "test_accuracy"];
 
 let drawHeatmap = function () {
     let splitX = 100,
         splitY = 100,
-        x = funcX,
-        y = funcY,
-        z = funcZ;
+        x = "x",
+        y = "y",
+        z = "z";
 
     function heatmap(data) {
+        let funcX = d => d[dataset.indexOf(x)],
+            funcY = d => d[dataset.indexOf(y)],
+            funcZ = d => d[dataset.indexOf(z)];
+
         const graph = d3.create("svg")
             .attr("viewBox", [0, 0, width, height]);
 
-        let xExtent = [0, d3.max(data, x)],
-            yExtent = [0, d3.max(data, y)];
+        let xExtent = [0, d3.max(data, funcX)],
+            yExtent = [0, d3.max(data, funcY)];
 
         let xScale = d3.scaleLinear()
             .domain(xExtent)
@@ -42,16 +46,31 @@ let drawHeatmap = function () {
 
         let xAxis = g => g
             .attr("transform", `translate(0, ${height - margin.bottom})`)
-            .call(d3.axisBottom(xScale));
+            .call(d3.axisBottom(xScale))
+            .call(g => g
+                .append("text")
+                .attr("text-anchor", "end")
+                .attr("x", width - margin.right)
+                .attr("y", margin.bottom - 5 - accuracyLegendMargin)
+                .attr("fill", "currentColor")
+                .text(x));
 
         let yAxis = g => g
             .attr("transform", `translate(${margin.left}, 0)`)
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale))
+            .call(g => g
+                .append("text")
+                .attr("text-anchor", "start")
+                .attr("x", -margin.left)
+                .attr("y", margin.top - 10)
+                .attr("fill", "currentColor")
+                .text(y));
 
         // generate rectbin
         let binsById = {};
         let xRange = d3.range(xExtent[0], xExtent[1] + dx, dx),
             yRange = d3.range(yExtent[0], yExtent[1] + dy, dy);
+
         yRange.forEach(Y => {
             xRange.forEach(X => {
                 let pi = Math.floor(X / dx);
@@ -71,23 +90,23 @@ let drawHeatmap = function () {
 
         //push each points to the bins
         data.forEach(point => {
-            let pi = Math.floor(x(point) / dx);
-            let pj = Math.floor(y(point) / dy);
-            let zCur = z(point);
+            let pi = Math.floor(funcX(point) / dx);
+            let pj = Math.floor(funcY(point) / dy);
+            let zCur = funcZ(point);
 
             let id = pi + '-' + pj;
             binsById[id].push(point);
             if (zCur > binsById[id].zMax) {
                 binsById[id].zMax = zCur;
-                binsById[id].module_operations = point.module_operations;
-                binsById[id].module_adjacency = point.module_adjacency;
+                binsById[id].module_operations = point[0];//module_operations
+                binsById[id].module_adjacency = point[1];//module_adjacency
             }
         });
 
         let rectbinData = Object.values(binsById);
 
         let zExtent = d3.extent(rectbinData.map(d => d.zMax).filter(d => d !== 0));
-        let color = d3.scaleSequential(d3.interpolateViridis)
+        let colorScale = d3.scaleSequential(d3.interpolateViridis)
             .domain(zExtent);
 
         // size of squares
@@ -120,7 +139,7 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            console.log(d.module_adjacency);
+            //console.log(d.module_adjacency.length);
             setCell(d.module_operations, d.module_adjacency);
         }
 
@@ -149,7 +168,7 @@ let drawHeatmap = function () {
             .attr("y", d => yScale(d.y))
             .attr("width", widthInPx)
             .attr("height", heightInPx)
-            .attr("fill", d => { return d.length === 0 ? "transparent" : color(d.zMax) }) //make visible only when there is an element
+            .attr("fill", d => { return d.length === 0 ? "transparent" : colorScale(d.zMax) }) //make visible only when there is an element
             .attr("stroke", "grey")
             .attr("stroke-width", "0.2")
             .on("mouseover", mouseover)
@@ -157,7 +176,46 @@ let drawHeatmap = function () {
             .on("mouseleave", mouseleave)
             .on("click", click);
 
-        return [graph.node(), tooltip.node()];
+
+        // accuracy color legend
+        let legendWidth = 300, legendCells = 10;
+        graph.append("g")
+            .attr("class", "accuracyLegend")
+            .attr("transform", `translate(${width / 2 - legendWidth / 2},${height - margin.bottom + accuracyLegendMargin})`);
+
+        let accuracyLegend = legendColor()
+            .title("Accuracy")
+            .shapeWidth(legendWidth / legendCells)
+            .shapePadding(legendWidth / legendCells)
+            .labelFormat(d3.format(".3f"))
+            .labels(function ({
+                i,
+                genLength,
+                generatedLabels,
+                labelDelimiter
+            }) {
+                return (Math.round(generatedLabels[i] * 1000) / 10 + '%');
+            })
+            .cells(legendCells)
+            .orient("horizontal")
+            .scale(colorScale);
+
+        graph.select(".accuracyLegend")
+            .call(accuracyLegend)
+        graph.select(".accuracyLegend")
+            .select(".legendTitle")
+            .style("font-size", "15px")
+            .style("text-anchor", "middle")
+            .attr("transform", `translate(${legendWidth / 2},-10)`);
+        graph.select(".accuracyLegend")
+            .select(".legendCells")
+            .style("font-size", "10px")
+            .selectAll(".cell")
+            .select(".label")
+            .style("text-anchor", "middle")
+            .attr("transform", `translate(${legendWidth / legendCells / 2},25)`);;
+
+        return { graph: graph.node(), tooltip: tooltip.node() };
     };
 
     heatmap.splitX = function (_) {
