@@ -4,15 +4,11 @@ import * as d3 from "d3";
 import { drawDeleteBox, svgInit } from "./view/svgInit";
 import drawObject from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
-import { getSharpleyValue } from "./service/getSharpleyValue";
 import { drawBarChartFromData } from "./view/drawBarChart";
 import { initCell, setCell } from "./controller/cellController";
 import { drawHeatmap } from "./view/drawHeatmap";
 import { cellRecommendation, printResult } from "./view/printResult";
-
-
-
-
+import { getSharpleyValue } from "./service/getQuery";
 
 
 
@@ -26,7 +22,7 @@ svgInit(sharpleyvalue);
 drawObject();
 export let fullDataset = null;
 
-const fullDatasetPromise = d3.json('/build/nasbench_structured.json');
+const fullDatasetPromise = d3.json('/nasbench_structured.json');
 fullDatasetPromise.then((json) => {
     fullDataset = json;
     cellRecommendation();

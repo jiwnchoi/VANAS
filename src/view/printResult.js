@@ -1,10 +1,10 @@
 import * as d3 from "d3";
 import { setCell } from "../controller/cellController";
 import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
-import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
+import { cellSainityCheck } from "../data/dataProcessing";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
-import { getRecommendationLocal } from "../service/localQuerying";
-import drawObject, { calaulateForce, drawEdge, drawNode, drawObjectwithForce } from "./drawObject";
+import { getQuery } from "../service/getQuery";
+import drawObject, { drawObjectwithForce } from "./drawObject";
 
 
 export async function printResult(){
@@ -85,7 +85,7 @@ export async function printResult(){
                 i--;
             }
         }
-        const json = getRecommendationLocal(tmpNodeData, tmpEdgeData).query;
+        const json = getQuery(tmpNodeData, tmpEdgeData).query;
         if (json){
             
             d3.select("#analytics")
@@ -147,7 +147,7 @@ export function cellRecommendation(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
 
-    const data2 = getRecommendationLocal(nodeData, edgeData);
+    const data2 = getQuery(nodeData, edgeData);
     const data = data2.recommend;
     console.log(data);
     const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data)

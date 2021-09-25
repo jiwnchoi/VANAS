@@ -17,6 +17,9 @@ function initCell(target=0){
     edgeData.splice(0,edgeData.length);
 }
 
+
+//ops랑 matrix는 decode된 것을 넣어야 합니다. 
+//./data/dataProcessing의 decodeOperations와 decodeMatrix 함수를 이용해서 넣어주면 됩니다.
 function setCell(ops, matrix, target=0){
     initCell(target);
     const operations = ops.slice(1,ops.length-1);

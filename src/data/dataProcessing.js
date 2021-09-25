@@ -10,89 +10,14 @@ Set.prototype.intersection = function(setB) {
         return intersection;
     }
 
-    Set.prototype.difference = function(setB) {
-        var difference = new Set(this);
-        for (var elem of setB) {
-            difference.delete(elem);
-        }
-        return difference;
+Set.prototype.difference = function(setB) {
+    var difference = new Set(this);
+    for (var elem of setB) {
+        difference.delete(elem);
     }
-
-
-
-function createMatrix(extraneous, originalNodeData, originalEdgeData){
-    const ops = [];
-    
-    const nodeData = originalNodeData.slice();
-    const edgeData = originalEdgeData.slice();
-    for (let ext of extraneous){
-        for (let i=0; i<nodeData.length; i++){
-            if (nodeData[i].index == ext){
-                nodeData.splice(i,1);
-                i--;
-            }
-        }
-        for (let i=0; i<edgeData.length; i++){
-            if (edgeData[i].source.index == ext || 
-                edgeData[i].target.index == ext){
-                edgeData.splice(i,1);
-                i--;
-            }
-        }
-    }
-
-    //Topological Sort by DFS
-    const visitedFromInput = [0]
-    const frontier = [0];
-    const topologicalSort = [];
-
-    while (frontier.length > 0){
-        let hasChildren = 0;
-        const top = frontier[frontier.length-1];
-        for (let edge of edgeData){
-            if (edge.source.index == top && (visitedFromInput.indexOf(edge.target.index) == -1)){
-                visitedFromInput.push(edge.target.index);
-                frontier.push(edge.target.index);
-                hasChildren = 1;
-                break;
-            }
-        }
-        if (!hasChildren){
-            topologicalSort.push(frontier.pop());
-        }
-    }
-    topologicalSort.reverse();
-
-    const matrix = [];
-    for (let i=0; i<nodeData.length; i++){
-        const row = [];
-        for (let j=0; j<nodeData.length; j++){
-            row.push(0);
-            
-        }
-        ops.push(null);
-        matrix.push(row);
-    }
-
-    for (let i=0; i<nodeData.length; i++){
-        const sortedSourceNodeId = i;
-        const objectNodeId = topologicalSort[i];
-        for (let node of originalNodeData){
-            if(node.index == objectNodeId){ 
-                ops[sortedSourceNodeId] = node.type;
-            }
-        }
-        for (let edge of edgeData){
-            if (edge.source.index == objectNodeId){
-                const sortedTargetNodeId = topologicalSort.indexOf(edge.target.index);
-                matrix[sortedSourceNodeId][sortedTargetNodeId] = 1;
-            }
-        }
-
-    }
-
-    return [matrix, ops];
+    return difference;
 }
+
 
 
 
@@ -177,7 +102,53 @@ function cellSainityCheck(nodeData, edgeData){
     return cellStatus;
 }
 
+function decodeOperations(opsnum){
+    const ops = ['input'];
+    const opsarr = String(opsnum).split("");
 
-export {createMatrix, cellSainityCheck};
+    for (let op of opsarr){
+        if (op == '2'){
+            ops.push('conv1x1-bn-relu');
+        }
+        else if (op == '3'){
+            ops.push('conv3x3-bn-relu');
+        }
+        else if (op == '4'){
+            ops.push('maxpool3x3');
+        }
+    }
+    ops.push('output');
+    return ops;
+}
+
+function decodeMatrix(matnum){
+    const numberofNode = parseInt(matnum.length / 3);
+    const matrix = [];
+    for (let i=0; i<numberofNode; i++){
+        const row = matnum.slice(i*3, (i+1)*3);
+        const rowNum = Number(row).toString(2).padStart(numberofNode, '0');
+        matrix.push(rowNum.split(""));
+    }
+    return matrix;
+}
+
+function hashingOperations(ops){
+    let res = 0;
+    for (let op of ops){
+        if (op == 'conv1x1-bn-relu'){
+            res += 100;
+        }
+        else if (op == 'conv3x3-bn-relu'){
+            res += 10;
+        }
+        else if (op == 'maxpool3x3'){
+            res += 1;
+        }
+    }
+    return res.toString().padStart(3,'0');
+}
+
+
+export { cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations};
 
 

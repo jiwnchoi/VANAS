@@ -42,7 +42,7 @@ async function drawNextEdge(clickedNode){
             if (d.label == 0){
                 return "";
             }
-            else return new String(d.candidateMatrixAccuracy).slice(0,5);
+            else return new String(d.testAccuracy).slice(0,5);
 
         })
         .attr("fill", "gray")
