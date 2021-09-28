@@ -49,7 +49,6 @@ async function drawNextEdge(clickedNode){
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("font-size", 14)
-        .attr("font-family", "Roboto")
         .attr("transform", d => "translate("+[(d.source.x + d.target.x)/2, (d.source.y + d.target.y)/2]+")" );
     
 
@@ -163,23 +162,23 @@ function drawNode(target = 0){
     nodeGroups.select("circle")
         .attr("fill", (d) => {
             if(d.type == "input" || d.type == "output"){
-                return "white";
+                return "#0d6efd";
             }
             else if (d.type == "conv1x1-bn-relu"){
-                return "#F8D7DA";
+                return "#dc3545";
             }
             else if (d.type == "conv3x3-bn-relu"){
-                return "#A3CFBB";
+                return "#ffc107";
             }
             else if (d.type == "maxpool3x3"){
-                return "#9EC5FE";
+                return "#198754";
             }
         })
         .style("filter", (d)=>{
             if(d.status == null){
-                return "url(#drop-shadow)";
+                return null;
             } 
-            else if (d.status){
+            else if (d.status == 'ext'){
                 return "url(#drop-shadow-ext)"
             }
             else if (d.status == 'clicked'){
@@ -204,23 +203,23 @@ function drawNode(target = 0){
         .attr("r", radius)
         .attr("fill", (d) => {
             if(d.type == "input" || d.type == "output"){
-                return "white";
+                return "#0d6efd";
             }
             else if (d.type == "conv1x1-bn-relu"){
-                return "#F8D7DA";
+                return "#dc3545";
             }
             else if (d.type == "conv3x3-bn-relu"){
-                return "#A3CFBB";
+                return "#ffc107";
             }
             else if (d.type == "maxpool3x3"){
-                return "#9EC5FE";
+                return "#198754";
             }
         })
         .style("filter", (d)=>{
             if(d.status == null){
-                return "url(#drop-shadow)";
+                return null;
             } 
-            else if (d.status){
+            else if (d.status == 'ext'){
                 return "url(#drop-shadow-ext)"
             }
             else if (d.status == 'clicked'){
@@ -230,11 +229,10 @@ function drawNode(target = 0){
 
     nodeGroupsEnter.append("text")
         .text(d => d.name)
-        .attr("fill", "black")
+        .attr("fill", "white")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
-        .attr("font-size", 11)
-        .attr("font-family", "Roboto");
+        .attr("font-size", 11);
     
     //EXIT
     nodeGroups.exit().remove();
