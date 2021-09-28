@@ -81,15 +81,18 @@ export default function getQuery(nodeData, edgeData){
                 }
                 cnt++;
             }
+
+            
             const mappedSourceIndex = nodeMapper.indexOf(sourceIndex);
             const mappedTargetIndex = nodeMapper.indexOf(targetIndex);
 
-            if(moduleAdjacency[mappedSourceIndex][mappedTargetIndex] != 1){
-                skip = true;
-                break;
+            if(moduleAdjacency[mappedSourceIndex][mappedTargetIndex] == 1){
+                moduleAdjacency[mappedSourceIndex][mappedTargetIndex] = 0;
             }
             else{
-                moduleAdjacency[mappedSourceIndex][mappedTargetIndex] = 0;
+                skip = true;
+
+                break;
             }
         }
         
@@ -110,6 +113,10 @@ export default function getQuery(nodeData, edgeData){
                 validation_accuracy : data[5],
                 test_accuracy : data[6]
             }
+        }
+        else{
+                    if(nodeMapper.includes(undefined) == false)
+                    console.log(nodeMapper, edgeData, moduleOperations);
         }
         
         if(skip == false){
