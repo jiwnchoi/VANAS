@@ -1,14 +1,13 @@
 import * as d3 from "d3";
 import { setCell } from "../controller/cellController";
 import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
-import { cellSainityCheck, createMatrix } from "../data/dataProcessing";
+import { cellSainityCheck } from "../data/dataProcessing";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
-import { getAccuracy } from "../service/getAccuracy";
-import { getRecommendation } from "../service/getRecommendation";
-import drawObject, { calaulateForce, drawEdge, drawNode, drawObjectwithForce } from "./drawObject";
+import getQuery from "../service/getQuery";
+import drawObject, { drawObjectwithForce } from "./drawObject";
 
 
-export function printResult(){
+export async function printResult(){
 
     d3.select("#initAlert").attr("class","visually-hidden");
 
@@ -26,36 +25,35 @@ export function printResult(){
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
+
     if(!cellStatus.isConnected){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#connectAlert")
             .attr("class", "notcell alert alert-warning");
         checker++;
     }
+
     if(!cellStatus.isAcyclic){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#cycleAlert")
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
+
     if(cellStatus.extraneous.length > 0){
         d3.select("#analytics").attr("class", "visually-hidden");
 
         for (let ext of cellStatus.extraneous){
-            if(ext ==0 || ext ==1){
-                continue;
-            }
-
             for (let node of nodeData){
-                if(node.index == ext){
+                if(node.index == ext && node.index != 0 && node.index != 1){
                     node.status = 'ext';
-                    for (let edge of edgeData){
-                        if(edge.source.index == node.index || edge.target.index == node.index){
-                            edge.isExt = 'ext';
-                        }
-                    }
                 } 
                 
+            }
+            for (let edge of edgeData){
+                if(edge.source.index == ext || edge.target.index == ext){
+                    edge.isExt = true;
+                }
             }
         }
         d3.select("#extraneousAlert")
@@ -69,22 +67,41 @@ export function printResult(){
         d3.selectAll(".notcell")
             .attr("class", "visually-hidden");
 
-        const data = getAccuracy(createMatrix(cellStatus.extraneous, nodeData, getEdgeData()));
-        data.then(json => {
-                d3.select("#analytics")
-                    .attr("class", "alert bg-light alert-secondary");
-                d3.select("#trainable_parameters")
-                    .text(json.trainable_parameters);
-                d3.select("#training_time")
-                    .text(json.training_time);
-                d3.select("#train_accuracy")
-                    .text(json.train_accuracy);
-                d3.select("#validation_accuracy")
-                    .text(json.validation_accuracy);
-                d3.select("#test_accuracy")
-                    .text(json.test_accuracy);
-            }  
-        )
+        const tmpNodeData = nodeData.slice();
+        const tmpEdgeData = edgeData.slice();
+        for (let i=0; i<tmpNodeData.length; i++){
+            if (cellStatus.extraneous.indexOf(tmpNodeData[i].index) != -1){
+                tmpNodeData.splice(i,1);
+                i--;
+            }
+        }
+        for (let i=0; i<tmpEdgeData.length; i++){
+            if (cellStatus.extraneous.indexOf(tmpEdgeData[i].source.index) != -1){
+                tmpEdgeData.splice(i,1);
+                i--;
+            }
+            if (cellStatus.extraneous.indexOf(tmpEdgeData[i].target.index) != -1){
+                tmpEdgeData.splice(i,1);
+                i--;
+            }
+        }
+        const json = getQuery(tmpNodeData, tmpEdgeData).query;
+        if (json){
+            
+            d3.select("#analytics")
+                .attr("class", "alert bg-light alert-secondary");
+            d3.select("#trainable_parameters")
+                .text(json.trainable_parameters);
+            d3.select("#training_time")
+                .text(json.training_time);
+            d3.select("#train_accuracy")
+                .text(json.train_accuracy);
+            d3.select("#validation_accuracy")
+                .text(json.validation_accuracy);
+            d3.select("#test_accuracy")
+                .text(json.test_accuracy);
+        }
+        
     }
     for (let node of nodeData){
         if(cellStatus.extraneous.indexOf(node.index) == -1){
@@ -94,13 +111,21 @@ export function printResult(){
     for (let edge of edgeData){
         if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
         cellStatus.extraneous.indexOf(edge.target) == -1){
-            edge.isExt = null;
+            edge.isExt = false;
         }
     }
-    cellRecommendation();
+    
     drawObject();
+    cellRecommendation();
 
 }
+
+function querying(){
+    return new Promise((resolve, reject) => {
+        
+    })
+}
+
 
 function copyCelltoMain(i){
     const recommendNodeData = getRecommendNodeData(i+1);
@@ -118,13 +143,13 @@ function copyCelltoMain(i){
     printResult();
 }
 
-export async function cellRecommendation(){
+export function cellRecommendation(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
 
-    const data = await getRecommendation(edgeData, nodeData);
-
-    const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data)
+    const data2 = getQuery(nodeData, edgeData);
+    const data = data2.recommend;
+    const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data);
 
     //update
     recommendCell

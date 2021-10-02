@@ -1,6 +1,6 @@
-import { getAccuracy } from "../service/getAccuracy";
 import { getEdgeData, getNodeData } from "./data";
-import { cellSainityCheck, createMatrix } from "./dataProcessing";
+import { cellSainityCheck } from "./dataProcessing";
+import getQuery from "../service/getQuery";
 
 function getPathFromInput(curruntNode){
     const edgeData = getEdgeData();
@@ -21,32 +21,6 @@ function getPathFromInput(curruntNode){
 }
 
 
-function createCandidateMatrix(curruntNode, targetNode){
-    const nodeData = getNodeData();
-    const newEdgeData = getEdgeData().slice();
-    let source, target;
-    if (targetNode != 1){
-        for (let node of nodeData){
-            if (node.index == targetNode) source = node;
-            if (node.index == 1) target = node;
-        }
-        newEdgeData.push(
-            {
-                source,
-                target
-            }
-        );
-    }
-    for (let node of nodeData){
-            if (node.index == targetNode) target = node;
-            if (node.index == curruntNode) source = node;
-        }
-    newEdgeData.push({
-        source,
-        target,
-    });
-    return createMatrix(cellSainityCheck(nodeData, newEdgeData).extraneous, nodeData, newEdgeData);
-}
 
 async function getNextNodeAccuracy(curruntNode){
     const path = getPathFromInput(curruntNode);
@@ -71,10 +45,52 @@ async function getNextNodeAccuracy(curruntNode){
         }
         if (pass) continue;
 
-        const matrixandops = createCandidateMatrix(curruntNode, targetNode.index);
-        const candidateMatrixAccuracy = await getAccuracy(matrixandops).then(
-            json => json.test_accuracy
-        );
+        //edgeData에서 엣지 추가
+        const newNodeData = nodeData.slice();
+        const newEdgeData = edgeData.slice();
+        let source, target;
+        if (targetNode.index != 1){
+            for (let node of newNodeData){
+                if (node.index == targetNode.index) source = node;
+                if (node.index == 1) target = node;
+            }
+            newEdgeData.push(
+                {
+                    source,
+                    target
+                }
+            );
+        }
+        for (let node of newNodeData){
+            if (node.index == targetNode.index) target = node;
+            if (node.index == curruntNode) source = node;
+        }
+        newEdgeData.push({
+            source,
+            target,
+        });
+
+
+
+        //extranous 제거
+        const extraneous = cellSainityCheck(newNodeData, newEdgeData).extraneous;
+        for (let ext of extraneous){
+            for (let i=0; i<newNodeData.length; i++){
+                if (newNodeData[i].index == ext){
+                    newNodeData.splice(i,1);
+                    i--;
+                }
+            }
+            for (let i=0; i<newEdgeData.length; i++){
+                if (newEdgeData[i].source.index == ext || 
+                    newEdgeData[i].target.index == ext){
+                    newEdgeData.splice(i,1);
+                    i--;
+                }
+            }
+        }
+        
+        const testAccuracy = getQuery(newNodeData, newEdgeData).query.test_accuracy;
         
         const isDirect = targetNode.index == 1 ? 1 : 0;
 
@@ -82,7 +98,7 @@ async function getNextNodeAccuracy(curruntNode){
                 source : nodeData.filter((d, i) => d.index == curruntNode)[0],
                 target : targetNode,
                 label : 1,
-                candidateMatrixAccuracy
+                testAccuracy
             });
 
         if (isDirect != 1){
@@ -90,7 +106,7 @@ async function getNextNodeAccuracy(curruntNode){
                 source : targetNode,
                 target : nodeData[1],
                 label : 0,
-                candidateMatrixAccuracy
+                testAccuracy
             });
         }
         

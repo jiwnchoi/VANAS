@@ -30,7 +30,7 @@ function addEdge(sourceNode, targetNode, targetCell=0){
         source,
         target,
         edgeClassName,
-        isExt : null,
+        isExt : false,
         isDelete : null,
     }
     edgeData.push(newEdge);

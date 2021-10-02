@@ -42,14 +42,13 @@ async function drawNextEdge(clickedNode){
             if (d.label == 0){
                 return "";
             }
-            else return new String(d.candidateMatrixAccuracy).slice(0,5);
+            else return new String(d.testAccuracy).slice(0,5);
 
         })
         .attr("fill", "gray")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("font-size", 14)
-        .attr("font-family", "Roboto")
         .attr("transform", d => "translate("+[(d.source.x + d.target.x)/2, (d.source.y + d.target.y)/2]+")" );
     
 
@@ -79,7 +78,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return "tomato";
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'orange';
             }
             else{
@@ -90,7 +89,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return 'url(#endDelete)'
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'url(#endExt)';
             }
             else{
@@ -112,7 +111,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return "tomato";
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'orange';
             }
             else{
@@ -123,7 +122,7 @@ function drawEdge(target = 0){
             if (d.isDelete == 'delete'){
                 return 'url(#endDelete)'
             }
-            else if (d.isExt == 'ext'){
+            else if (d.isExt){
                 return 'url(#endExt)';
             }
             else{
@@ -161,9 +160,23 @@ function drawNode(target = 0){
         .text(d => d.name);
     
     nodeGroups.select("circle")
+        .attr("fill", (d) => {
+            if(d.type == "input" || d.type == "output"){
+                return "#0d6efd";
+            }
+            else if (d.type == "conv1x1-bn-relu"){
+                return "#dc3545";
+            }
+            else if (d.type == "conv3x3-bn-relu"){
+                return "#ffc107";
+            }
+            else if (d.type == "maxpool3x3"){
+                return "#198754";
+            }
+        })
         .style("filter", (d)=>{
             if(d.status == null){
-                return "url(#drop-shadow)";
+                return null;
             } 
             else if (d.status == 'ext'){
                 return "url(#drop-shadow-ext)"
@@ -188,10 +201,23 @@ function drawNode(target = 0){
     
     nodeGroupsEnter.append("circle")
         .attr("r", radius)
-        .attr("fill", "white")
+        .attr("fill", (d) => {
+            if(d.type == "input" || d.type == "output"){
+                return "#0d6efd";
+            }
+            else if (d.type == "conv1x1-bn-relu"){
+                return "#dc3545";
+            }
+            else if (d.type == "conv3x3-bn-relu"){
+                return "#ffc107";
+            }
+            else if (d.type == "maxpool3x3"){
+                return "#198754";
+            }
+        })
         .style("filter", (d)=>{
             if(d.status == null){
-                return "url(#drop-shadow)";
+                return null;
             } 
             else if (d.status == 'ext'){
                 return "url(#drop-shadow-ext)"
@@ -203,11 +229,10 @@ function drawNode(target = 0){
 
     nodeGroupsEnter.append("text")
         .text(d => d.name)
-        .attr("fill", "black")
+        .attr("fill", "white")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
-        .attr("font-size", 11)
-        .attr("font-family", "Roboto");
+        .attr("font-size", 11);
     
     //EXIT
     nodeGroups.exit().remove();
