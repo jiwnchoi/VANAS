@@ -101,8 +101,8 @@ let drawHeatmap = function () {
             binsById[id].push(point);
             if (zCur > binsById[id].zMax) {
                 binsById[id].zMax = zCur;
-                binsById[id].module_operations = point[0];//module_operations
-                binsById[id].module_adjacency = point[1];//module_adjacency
+                binsById[id].module_operations = point[1];//module_operations
+                binsById[id].module_adjacency = point[0];//module_adjacency
             }
         });
 
@@ -217,7 +217,7 @@ let drawHeatmap = function () {
             .selectAll(".cell")
             .select(".label")
             .style("text-anchor", "middle")
-            .attr("transform", `translate(${legendWidth / legendCells / 2},25)`);;
+            .attr("transform", `translate(${legendWidth / legendCells / 2},25)`);
 
         return { graph: graph.node(), tooltip: tooltip.node() };
     };

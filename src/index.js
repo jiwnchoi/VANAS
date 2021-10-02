@@ -43,37 +43,6 @@ d3.select("#generateButton").on("click", () => {
 const data = getSharpleyValue();
 data.then(json => drawBarChartFromData(json.children));
 
-
-
-// setCell(
-//     ['input',
-//     'conv3x3-bn-relu', 'maxpool3x3',
-//     'conv3x3-bn-relu', 'conv3x3-bn-relu',
-//     'conv1x1-bn-relu',
-//     'output'],
-
-//     [[0, 1, 0, 0, 1, 1, 0],
-//     [0, 0, 1, 0, 0, 0, 0],
-//     [0, 0, 0, 1, 0, 0, 1],
-//     [0, 0, 0, 0, 0, 1, 0],
-//     [0, 0, 0, 0, 0, 1, 0],
-//     [0, 0, 0, 0, 0, 0, 1],
-//     [0, 0, 0, 0, 0, 0, 0]]
-// )
-
-const heatmap = d3.select("#heatmap");
-const tooltip = d3.select("#tooltip");
-
-// read local json file
-d3.json("nasbench_minified.json").then((data) => {
-    generateHeatmap(data.dataset);
-    let heatmapButton = document.getElementById("generateButton");
-    heatmapButton.addEventListener("click", () => {
-        heatmap.select("svg").remove();
-        generateHeatmap(data.dataset);
-    });
-});
-
 function generateHeatmap(heatmapData) {
     let heatmapResult = drawHeatmap()
         .x(document.getElementById("optionX").value)

@@ -22,20 +22,11 @@ function initCell(target = 0) {
 //./data/dataProcessing의 decodeOperations와 decodeMatrix 함수를 이용해서 넣어주면 됩니다.
 function setCell(ops, matrix, target = 0) {
     initCell(target);
-    const operations = ops;
+    const operations = ops.slice(1, ops.length - 1);
 
     for (let op of operations) {
         addNode(op, target);
     }
-    let matrix = [];
-    let matrixLength = _matrix.length / 3;
-    for (let i = 0; i < matrixLength; i++) {
-        let _line = _matrix[3 * i + 0] + _matrix[3 * i + 1] + _matrix[3 * i + 2];
-        let line = parseInt(_line).toString(2).padStart(matrixLength, '0');
-        matrix.push(line);
-    }
-
-    console.log(matrix);
 
     for (let i = 0; i < matrix.length - 1; i++) {
         for (let j = i + 1; j < matrix.length; j++) {
