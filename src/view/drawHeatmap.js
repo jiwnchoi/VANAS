@@ -142,9 +142,11 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
-            drawObjectwithForce(null, 0);
-            printResult();
+            if (d.length != 0) {
+                setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
+                drawObjectwithForce(null, 0);
+                printResult();
+            }
         }
 
         graph.append("g")
