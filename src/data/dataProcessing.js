@@ -125,11 +125,9 @@ function decodeMatrix(matnum) {
     const numberofNode = matnum.length / 3;
     const matrix = [];
     for (let i = 0; i < numberofNode; i++) {
-        const rownum = matnum[3 * i + 0] + matnum[3 * i + 1] + matnum[3 * i + 2];
-        const rowstring = parseInt(rownum).toString(2).padStart(numberofNode, '0');
-        let row = [];
-        for (let c of rowstring) row.push(parseInt(c));
-        matrix.push(row);
+        const row = matnum.slice(i * 3, (i + 1) * 3);
+        const rowNum = Number(row).toString(2).padStart(numberofNode, '0');
+        matrix.push(rowNum.split("").map(x => Number(x)));
     }
     return matrix;
 }

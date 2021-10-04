@@ -130,7 +130,9 @@ let drawHeatmap = function () {
 
         // Three function that change the tooltip when user hover / move / leave a cell
         const mouseover = function (event, d) {
-            tooltip.style("opacity", 1);
+            if (d.length != 0) {
+                tooltip.style("opacity", 1);
+            }
         };
         const mousemove = function (event, d) {
             tooltip
