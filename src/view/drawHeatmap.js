@@ -130,7 +130,9 @@ let drawHeatmap = function () {
 
         // Three function that change the tooltip when user hover / move / leave a cell
         const mouseover = function (event, d) {
-            tooltip.style("opacity", 1);
+            if (d.length != 0) {
+                tooltip.style("opacity", 1);
+            }
         };
         const mousemove = function (event, d) {
             tooltip
@@ -142,10 +144,11 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
-            drawObjectwithForce(null, 0);
-            printResult();
-            
+            if (d.length != 0) {
+                setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
+                drawObjectwithForce(null, 0);
+                printResult();
+            }
         }
 
         graph.append("g")
@@ -218,7 +221,7 @@ let drawHeatmap = function () {
             .selectAll(".cell")
             .select(".label")
             .style("text-anchor", "middle")
-            .attr("transform", `translate(${legendWidth / legendCells / 2},25)`);;
+            .attr("transform", `translate(${legendWidth / legendCells / 2},25)`);
 
         return { graph: graph.node(), tooltip: tooltip.node() };
     };

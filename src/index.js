@@ -43,7 +43,6 @@ d3.select("#generateButton").on("click", () => {
 const data = getSharpleyValue();
 data.then(json => drawBarChartFromData(json.children));
 
-
 function generateHeatmap(heatmapData) {
     let heatmapResult = drawHeatmap()
         .x(document.getElementById("optionX").value)
