@@ -1,9 +1,10 @@
-import { getEdgeData, getNodeData } from "../data/data";
+import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
 import printRecommendation from "../view/printRecommendation";
 import printResult from "../view/printResult";
 import { addEdge } from "./edgeController";
 import { addNode } from "./nodeController";
+
 
 
 function copyCelltoMain(i) {
