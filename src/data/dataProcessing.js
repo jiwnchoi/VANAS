@@ -25,8 +25,6 @@ function cellSainityCheck(nodeData, edgeData) {
     if (nodeData == null) nodeData = getNodeData();
     if (edgeData == null) edgeData = getEdgeData();
 
-
-
     const numNodes = nodeData.length;
     const numEdges = edgeData.length;
 
@@ -102,9 +100,9 @@ function cellSainityCheck(nodeData, edgeData) {
     return cellStatus;
 }
 
-function decodeOperations(opsnum) {
+function decodeOperations(opsstr){
     const ops = ['input'];
-    const opsarr = String(opsnum).split("");
+    const opsarr = String(opsstr).split("");
 
     for (let op of opsarr) {
         if (op == '2') {
@@ -121,14 +119,27 @@ function decodeOperations(opsnum) {
     return ops;
 }
 
-function decodeMatrix(matnum) {
-    const numberofNode = matnum.length / 3;
-    const matrix = [];
-    for (let i = 0; i < numberofNode; i++) {
-        const row = matnum.slice(i * 3, (i + 1) * 3);
-        const rowNum = Number(row).toString(2).padStart(numberofNode, '0');
-        matrix.push(rowNum.split("").map(x => Number(x)));
+function decodeMatrix(edges) {
+    let splitEdges = null;
+    if (typeof edges == "string") {
+        splitEdges = edges.split("");
+    } else {
+        splitEdges = [];
+        for (let edge of edges) {
+            splitEdges.push(edge[0]);
+            splitEdges.push(edge[1]);
+        }
     }
+    const nodeIndex = new Set(splitEdges);
+    const emptyRow = new Array(nodeIndex.size).fill(0);
+    const matrix = [];
+    for (let i = 0; i < nodeIndex.size; i++) {
+        matrix.push(emptyRow.slice());
+    }
+    for (let i = 0; i < splitEdges.length; i += 2) {
+        matrix[Number(splitEdges[i])][Number(splitEdges[i + 1])] = 1;
+    }
+
     return matrix;
 }
 

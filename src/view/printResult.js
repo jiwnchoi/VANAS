@@ -3,12 +3,12 @@ import { setCell } from "../controller/cellController";
 import { getEdgeData, getNodeData, initEdgeData, initNodeData } from "../data/data";
 import { cellSainityCheck } from "../data/dataProcessing";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
-import getQuery from "../service/getQuery";
+import { getQuery, getRecommend } from "../service/getQueryNetworkx";
 import drawObject, { drawObjectwithForce } from "./drawObject";
 
 
 export async function printResult(){
-
+    d3.select("#analytics").attr("class", "visually-hidden");
     d3.select("#initAlert").attr("class","visually-hidden");
 
 
@@ -85,7 +85,7 @@ export async function printResult(){
                 i--;
             }
         }
-        const json = getQuery(tmpNodeData, tmpEdgeData).query;
+        const json = getQuery(tmpNodeData, tmpEdgeData);
         if (json){
             
             d3.select("#analytics")
@@ -100,6 +100,9 @@ export async function printResult(){
                 .text(json.validation_accuracy);
             d3.select("#test_accuracy")
                 .text(json.test_accuracy);
+        }
+        else{
+            d3.select("#analytics").attr("class", "visually-hidden");
         }
         
     }
@@ -147,8 +150,7 @@ export function cellRecommendation(){
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
 
-    const data2 = getQuery(nodeData, edgeData);
-    const data = data2.recommend;
+    const data = getRecommend(nodeData, edgeData);
     const recommendCell = d3.select("#recommend-col").selectAll(".recommend-cell").data(data);
 
     //update

@@ -144,11 +144,12 @@ let drawHeatmap = function () {
             tooltip.style("opacity", 0);
         };
         const click = function (event, d) {
-            if (d.length != 0) {
-                setCell(decodeOperations(d.module_operations), decodeMatrix(d.module_adjacency), 0);
-                drawObjectwithForce(null, 0);
-                printResult();
-            }
+            const ops = decodeOperations(d.module_operations);
+            const matrix = decodeMatrix(d.module_adjacency);
+            setCell(ops, matrix, 0);
+            drawObjectwithForce(null, 0);
+            printResult();
+            
         }
 
         graph.append("g")

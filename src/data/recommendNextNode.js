@@ -1,6 +1,6 @@
 import { getEdgeData, getNodeData } from "./data";
 import { cellSainityCheck } from "./dataProcessing";
-import getQuery from "../service/getQuery";
+import {getQuery} from "../service/getQueryNetworkx";
 
 function getPathFromInput(curruntNode){
     const edgeData = getEdgeData();
@@ -90,7 +90,7 @@ async function getNextNodeAccuracy(curruntNode){
             }
         }
         
-        const testAccuracy = getQuery(newNodeData, newEdgeData).query.test_accuracy;
+        const testAccuracy = getQuery(newNodeData, newEdgeData).test_accuracy;
         
         const isDirect = targetNode.index == 1 ? 1 : 0;
 

@@ -1,12 +1,15 @@
 import * as d3 from "d3";
 import { drawDeleteBox, svgInit } from "./view/svgInit";
-import drawObject from "./view/drawObject.js";
+import drawObject, { drawObjectwithForce } from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
 import { drawBarChartFromData } from "./view/drawBarChart";
 import { initCell, setCell } from "./controller/cellController";
 import { drawHeatmap } from "./view/drawHeatmap";
 import { cellRecommendation, printResult } from "./view/printResult";
 import getSharpleyValue from "./service/getSharpleyValue";
+import { decodeMatrix, decodeOperations } from "./data/dataProcessing";
+import getQuery from "./service/getQuery2";
+import { getEdgeData, getNodeData } from "./data/data";
 
 export let fullDataset = null;
 export let unstructuredDataset = null;

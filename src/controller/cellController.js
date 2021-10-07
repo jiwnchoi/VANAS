@@ -39,8 +39,7 @@ function setCell(ops, matrix, target = 0) {
         }
     }
 
-    if (target == 0) {
-        console.log(ops, matrix, getNodeData(), getEdgeData());
+    if(target == 0){
     }
 }
 
