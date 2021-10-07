@@ -25,6 +25,8 @@ function addEdge(sourceNode, targetNode, targetCell=0){
             target = node;
         }
     }
+    source.outdegree +=1;
+    target.indegree += 1;
     const edgeClassName = "sourcenode"+sourceNode+" targetnode"+targetNode
     const newEdge = {
         source,
@@ -40,6 +42,8 @@ function deleteEdge(edgeClassName){
     const edgeData = getEdgeData();
     for (let i=0; i<edgeData.length; i++){
         if (edgeData[i].edgeClassName == edgeClassName){
+            edgeData[i].source.outdegree --;
+            edgeData[i].target.indegree --;
             edgeData.splice(i,1);
             break;
         }

@@ -1,5 +1,4 @@
 import { getEdgeData, getNodeData } from "../data/data";
-import { reorderData } from "../data/dataProcessing";
 import { getRecommendNodeData } from "../data/recommendCellData";
 
 function addNode(nodeType, target=0){
@@ -26,9 +25,11 @@ function addNode(nodeType, target=0){
         name : nodeName,
         x : Math.random() * 400 + 200,
         y : Math.random() * 350 + 100,
+        indegree: 0,
+        outdegree: 0,
     }
     nodeData.push(newData);
-    return 1;
+    
 }
 
 function deleteNode(nodeIndex){
@@ -47,6 +48,7 @@ function deleteNode(nodeIndex){
             i--;
         }
     }
+    printRecommendation();
 }
 
 export {addNode, deleteNode};

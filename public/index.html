@@ -35,133 +35,138 @@
             </div>
         </nav>
     </header>
+    
+    <main id="loading" class="container-xxl bd-layout overflow-hidden d-flex justify-content-center">
+        <div class="d-flex flex-column align-items-center">
+            <div class="d-flex mt-5 mb-5"><h1>Loading NASBench Visualizer...</h1></div>
+            <div class="d-flex  spinner-border spinner-border-xxl text-primary" role="status" style="width: 20rem; height: 20rem;"></div>
 
+        </div>
+    </main>
+    
+    <main id="main" class="bd-main container-xxl bd-layout overflow-hidden visually-hidden">
+        <div class="row g-3">
 
-    <main class="container-xxl bd-layout overflow-hidden">
-        <main class="bd-main">
-            <div class="row g-3">
-
-                <div class="col-lg-5">
-                    <ul class="list-group list-group-horizontal" id="options">
-                        <li class="list-group-item ">
-                            <label for="optionX">X축</label>
-                            <select class="form-select form-select-sm" id="optionX">
-                                <option value=trainable_parameters selected="selected"># of trainable parameters
-                                </option>
-                                <option value=training_time>training time</option>
-                                <option value=test_accuracy>accuracy</option>
-                            </select>
-                        </li>
-                        <li class="list-group-item ">
-                            <label for="optionY">Y축</label>
-                            <select class="form-select form-select-sm" id="optionY">
-                                <option value=trainable_parameters># of trainable parameters</option>
-                                <option value=training_time selected="selected">training time</option>
-                                <option value=test_accuracy>accuracy</option>
-                            </select>
-                        </li>
-                        <li class="list-group-item ">
-                            <label for="optionZ">Z축</label>
-                            <select class="form-select form-select-sm" id="optionZ">
-                                <option value=trainable_parameters># of trainable parameters</option>
-                                <option value=training_time>training time</option>
-                                <option value=test_accuracy selected="selected">accuracy</option>
-                            </select>
-                        </li>
-                        <button id="generateButton" class="btn btn-primary">Generate Heatmap</button>
-                    </ul>
-                    <div class="border bg-light svg-container mb-3">
-                        <svg id="heatmap" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
-                            class="svg-content-responsive"></svg>
-                        <div id="tooltip"></div>
-                    </div>
-
-
-                    <div class="border bg-light svg-container">
-                        <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
-                            class="svg-content-responsive"></svg>
-                    </div>
-
+            <div class="col-lg-5">
+                <ul class="list-group list-group-horizontal" id="options">
+                    <li class="list-group-item ">
+                        <label for="optionX">X축</label>
+                        <select class="form-select form-select-sm" id="optionX">
+                            <option value=trainable_parameters selected="selected"># of trainable parameters
+                            </option>
+                            <option value=training_time>training time</option>
+                            <option value=test_accuracy>accuracy</option>
+                        </select>
+                    </li>
+                    <li class="list-group-item ">
+                        <label for="optionY">Y축</label>
+                        <select class="form-select form-select-sm" id="optionY">
+                            <option value=trainable_parameters># of trainable parameters</option>
+                            <option value=training_time selected="selected">training time</option>
+                            <option value=test_accuracy>accuracy</option>
+                        </select>
+                    </li>
+                    <li class="list-group-item ">
+                        <label for="optionZ">Z축</label>
+                        <select class="form-select form-select-sm" id="optionZ">
+                            <option value=trainable_parameters># of trainable parameters</option>
+                            <option value=training_time>training time</option>
+                            <option value=test_accuracy selected="selected">accuracy</option>
+                        </select>
+                    </li>
+                    <button id="generateButton" class="btn btn-primary">Generate Heatmap</button>
+                </ul>
+                <div class="border bg-light svg-container mb-3">
+                    <svg id="heatmap" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
+                        class="svg-content-responsive"></svg>
+                    <div id="tooltip"></div>
                 </div>
-                <div class="col-lg-5">
 
 
-                    <div class="border bg-light svg-container mb-2">
-                        <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
-                            class="svg-content-responsive"></svg>
-                    </div>
-
-                    <div class="mb-2 g-1 d-flex justify-content-between">
-                        <button id="conv1x1-bn-relu" type="button" class=" btn btn-danger append-button">(+) 1X1
-                            CONV</button>
-                        <button id="conv3x3-bn-relu" type="button" class=" btn btn-warning append-button">(+) 3X3
-                            CONV</button>
-                        <button id="maxpool3x3" type="button" class=" btn btn-success append-button">(+) 3X3
-                        POOL</button>
-                        <button id="init-cell" type="button" class=" btn btn-primary append-button">Init
-                            Cell</button>
-                    </div>
-                        
-                        
-                        
-                        
-                
-                    <div id="initAlert" class="alert alert-primary" role="alert">
-                        Drag node at the right position.<br>
-                        Click source node and target node to make edge.
-                    </div>
-                    <div id="connectAlert" class="notcell alert alert-warning visually-hidden" role="alert">
-                        Input node and output node must be connected.
-                    </div>
-                    <div id="edgeNumberAlert" class="notcell alert alert-danger visually-hidden" role="alert">
-                        The number of edges must be less than 10.
-                    </div>
-                    <div id="nodeNumberAlert" class="notcell alert alert-danger visually-hidden" role="alert">
-                        The number of nodes must be less than 8.
-                    </div>
-                    <div id="extraneousAlert" class="notcell alert alert-warning visually-hidden" role="alert">
-                        There is extraneous edge. (with orange shadow)
-                    </div>
-                    <div id="cycleAlert" class="notcell alert alert-danger visually-hidden" role="alert">
-                        Cell is not acyclic. (with orange shadow)
-                    </div>
-
-                    <div id="analytics" class="visually-hidden" role="alert">
-                        <h4>NAS Benchmark Result</h4>
-                        <hr>
-                        <h5>Trainable Parameters</h5>
-                        <div id="trainable_parameters">
-
-                        </div>
-                        <h5>Training Time</h5>
-                        <div id="training_time">
-
-                        </div>
-                        <h5>Train Accuracy</h5>
-                        <div id="train_accuracy">
-
-                        </div>
-                        <h5>Validation Accuracy</h5>
-                        <div id="validation_accuracy">
-
-                        </div>
-                        <h5>Test Accuracy</h5>
-                        <div id="test_accuracy">
-
-                        </div>
-                    </div>
-
-
-                </div>
-                <div id="recommend-col" class="col-lg-2">
-
+                <div class="border bg-light svg-container">
+                    <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
+                        class="svg-content-responsive"></svg>
                 </div>
 
             </div>
-        </main>
+            <div class="col-lg-5">
 
 
+                <div class="border bg-light svg-container mb-2">
+                    <svg id="architecture" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
+                        class="svg-content-responsive"></svg>
+                </div>
+
+                <div class="mb-2 g-1 d-flex justify-content-between">
+                    <button id="conv1x1-bn-relu" type="button" class=" btn btn-danger append-button">(+) 1X1
+                        CONV</button>
+                    <button id="conv3x3-bn-relu" type="button" class=" btn btn-warning append-button">(+) 3X3
+                        CONV</button>
+                    <button id="maxpool3x3" type="button" class=" btn btn-success append-button">(+) 3X3
+                    POOL</button>
+                    <button id="init-cell" type="button" class=" btn btn-primary append-button">Init
+                        Cell</button>
+                </div>
+                    
+                    
+                    
+                    
+            
+                <div id="initAlert" class="alert alert-primary" role="alert">
+                    Drag node at the right position.<br>
+                    Click source node and target node to make edge.
+                </div>
+                <div id="connectAlert" class="notcell alert alert-warning visually-hidden" role="alert">
+                    Input node and output node must be connected.
+                </div>
+                <div id="edgeNumberAlert" class="notcell alert alert-danger visually-hidden" role="alert">
+                    The number of edges must be less than 10.
+                </div>
+                <div id="nodeNumberAlert" class="notcell alert alert-danger visually-hidden" role="alert">
+                    The number of nodes must be less than 8.
+                </div>
+                <div id="extraneousAlert" class="notcell alert alert-warning visually-hidden" role="alert">
+                    There is extraneous edge. (with orange shadow)
+                </div>
+                <div id="cycleAlert" class="notcell alert alert-danger visually-hidden" role="alert">
+                    Cell is not acyclic. (with orange shadow)
+                </div>
+
+                <div id="analytics" class="visually-hidden" role="alert">
+                    <h4>NAS Benchmark Result</h4>
+                    <hr>
+                    <h5>Trainable Parameters</h5>
+                    <div id="trainable_parameters">
+
+                    </div>
+                    <h5>Training Time</h5>
+                    <div id="training_time">
+
+                    </div>
+                    <h5>Train Accuracy</h5>
+                    <div id="train_accuracy">
+
+                    </div>
+                    <h5>Validation Accuracy</h5>
+                    <div id="validation_accuracy">
+
+                    </div>
+                    <h5>Test Accuracy</h5>
+                    <div id="test_accuracy">
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div id="recommend-col" class="col-lg-2">
+
+            </div>
+
+        </div>
     </main>
+
+
 
     <footer class="border-top bd-footer p-2 mt-5 bg-light">
         <div class="container p-3">

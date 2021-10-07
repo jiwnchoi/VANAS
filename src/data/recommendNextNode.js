@@ -1,6 +1,8 @@
+import getQuery from "../service/getQuery";
 import { getEdgeData, getNodeData } from "./data";
 import { cellSainityCheck } from "./dataProcessing";
-import {getQuery} from "../service/getQueryNetworkx";
+
+
 
 function getPathFromInput(curruntNode){
     const edgeData = getEdgeData();
@@ -23,6 +25,7 @@ function getPathFromInput(curruntNode){
 
 
 async function getNextNodeAccuracy(curruntNode){
+    return [];
     const path = getPathFromInput(curruntNode);
 
     if (path == null){

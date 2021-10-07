@@ -3,7 +3,8 @@ import { legendColor } from "d3-svg-legend"
 import { setCell } from "../controller/cellController";
 import { decodeMatrix, decodeOperations } from "../data/dataProcessing";
 import { drawObjectwithForce } from "./drawObject";
-import { printResult } from "./printResult";
+import printRecommendation from "./printRecommendation";
+import printResult from "./printResult";
 
 const accuracyLegendMargin = 70;
 const margin = { top: 30, right: 30, bottom: 30 + accuracyLegendMargin, left: 60 },
@@ -148,6 +149,7 @@ let drawHeatmap = function () {
             const matrix = decodeMatrix(d.module_adjacency);
             setCell(ops, matrix, 0);
             drawObjectwithForce(null, 0);
+            printRecommendation();
             printResult();
             
         }

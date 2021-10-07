@@ -19,7 +19,16 @@ Set.prototype.difference = function (setB) {
 }
 
 
+function isCompleteCell(nodeData, edgeData){
+    const result = cellSainityCheck(nodeData, edgeData);
+    if(result.isConnected && result.isAcyclic && result.extraneous.length == 0){
+        return true;
+    }
+    else{
+        return false;
+    }
 
+}
 
 function cellSainityCheck(nodeData, edgeData) {
     if (nodeData == null) nodeData = getNodeData();
@@ -160,6 +169,6 @@ function hashingOperations(ops) {
 }
 
 
-export { cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations };
+export { isCompleteCell, cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations };
 
 

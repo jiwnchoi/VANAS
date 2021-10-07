@@ -1,7 +1,27 @@
 import { getEdgeData, getNodeData } from "../data/data";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData";
+import printRecommendation from "../view/printRecommendation";
+import printResult from "../view/printResult";
 import { addEdge } from "./edgeController";
 import { addNode } from "./nodeController";
+
+
+function copyCelltoMain(i) {
+    const recommendNodeData = getRecommendNodeData(i + 1);
+    const recommendEdgeData = getRecommendEdgeData(i + 1);
+    const emptyEdgeData = initEdgeData();
+    const emptyNodeData = initNodeData();
+    emptyNodeData.splice(0);
+
+    for (let node of recommendNodeData) {
+        emptyNodeData.push(node);
+    }
+    for (let edge of recommendEdgeData) {
+        emptyEdgeData.push(edge);
+    }
+    printResult();
+    printRecommendation();
+}
 
 function initCell(target = 0) {
     let nodeData, edgeData;
@@ -14,6 +34,10 @@ function initCell(target = 0) {
         edgeData = getRecommendEdgeData(target);
     }
     nodeData.splice(2, nodeData.length);
+    nodeData[0].indegree = 0;
+    nodeData[0].outdegree = 0;
+    nodeData[1].indegree = 0;
+    nodeData[1].outdegree = 0;
     edgeData.splice(0, edgeData.length);
 }
 
@@ -43,4 +67,4 @@ function setCell(ops, matrix, target = 0) {
     }
 }
 
-export { setCell, initCell };
+export { setCell, initCell, copyCelltoMain };

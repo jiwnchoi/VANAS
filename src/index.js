@@ -1,15 +1,13 @@
 import * as d3 from "d3";
 import { drawDeleteBox, svgInit } from "./view/svgInit";
-import drawObject, { drawObjectwithForce } from "./view/drawObject.js";
+import drawObject from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
 import { drawBarChartFromData } from "./view/drawBarChart";
-import { initCell, setCell } from "./controller/cellController";
+import { initCell } from "./controller/cellController";
 import { drawHeatmap } from "./view/drawHeatmap";
-import { cellRecommendation, printResult } from "./view/printResult";
 import getSharpleyValue from "./service/getSharpleyValue";
-import { decodeMatrix, decodeOperations } from "./data/dataProcessing";
-import getQuery from "./service/getQuery2";
-import { getEdgeData, getNodeData } from "./data/data";
+import printResult from "./view/printResult";
+import printRecommendation from "./view/printRecommendation";
 
 export let fullDataset = null;
 export let unstructuredDataset = null;
@@ -17,6 +15,8 @@ const heatmap = d3.select("#heatmap");
 const tooltip = d3.select("#tooltip");
 const architecture = d3.select("#architecture");
 const sharpleyvalue = d3.select("#sharpleyvalue");
+
+
 
 svgInit(architecture);
 drawDeleteBox(architecture);
@@ -27,8 +27,10 @@ const fullDatasetPromise = d3.json('/nasbench_minified.json');
 fullDatasetPromise.then((json) => {
     fullDataset = json;
     unstructuredDataset = Object.values(fullDataset).reduce((acc, cur) => acc.concat(cur));
-    cellRecommendation();
+    printRecommendation();
     generateHeatmap(unstructuredDataset);
+    d3.select("#loading").attr("class","visually-hidden");
+    d3.select("#main").attr("class", "bd-main container-xxl bd-layout overflow-hidden");
 });
 
 
@@ -36,6 +38,7 @@ d3.selectAll(".append-button").on("click", makeNode);
 d3.select("#init-cell").on("click", () => {
     initCell();
     printResult();
+    printRecommendation();
 });
 d3.select("#generateButton").on("click", () => {
     heatmap.select("svg").remove();
