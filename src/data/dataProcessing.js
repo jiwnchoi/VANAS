@@ -19,12 +19,12 @@ Set.prototype.difference = function (setB) {
 }
 
 
-function isCompleteCell(nodeData, edgeData){
+function isCompleteCell(nodeData, edgeData) {
     const result = cellSainityCheck(nodeData, edgeData);
-    if(result.isConnected && result.isAcyclic && result.extraneous.length == 0){
+    if (result.isConnected && result.isAcyclic && result.extraneous.length == 0) {
         return true;
     }
-    else{
+    else {
         return false;
     }
 
@@ -109,7 +109,7 @@ function cellSainityCheck(nodeData, edgeData) {
     return cellStatus;
 }
 
-function decodeOperations(opsstr){
+function decodeOperations(opsstr) {
     const ops = ['input'];
     const opsarr = String(opsstr).split("");
 
@@ -168,7 +168,33 @@ function hashingOperations(ops) {
     return res.toString().padStart(3, '0');
 }
 
+function excludeExtraneous(nodeData, edgeData) {
+    const extraneous = cellSainityCheck(nodeData, edgeData).extraneous;
 
-export { isCompleteCell, cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations };
+    const newNodeData = nodeData.filter((node) => {
+        if (extraneous.indexOf(node.index) == -1) return false;
+        else return true;
+    })
+
+    const newEdgeData = edgeData.filter((edge) => {
+        if (extraneous.indexOf(edge.source.index) == -1 ||
+            extraneous.indexOf(edge.target.index) == -1) return false;
+        else return true;
+    })
+
+    const result = [newNodeData, newEdgeData];
+    return result;
+}
+
+function getChildren(source, edgeData){
+    return edgeData.filter(edge => edge.source.index == source)
+        .map(edge => edge.index);
+}
+
+
+
+
+
+export { excludeExtraneous, isCompleteCell, cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations };
 
 

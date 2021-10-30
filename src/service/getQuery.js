@@ -1,31 +1,5 @@
 import { fullDataset } from '..';
 import { decodeOperations } from '../data/dataProcessing';
-import isIsomorphic from 'graph-isomorphisms';
-
-
-class Graph {
-    constructor(edges, N){
-
-        this.n = N;
-        this.adjList = {};
-        this.indegree = {};
-        this.nodeList = [];
-        for (let edge of edges){
-            if(this.adjList[edge[0]] == undefined){
-                this.adjList[edge[0]] = [];
-                this.indegree[edge[0]] = 0;
-                this.nodeList.push(edge[0]);
-            }
-            if (this.adjList[edge[1]] == undefined) {
-                this.adjList[edge[1]] = [];
-                this.indegree[edge[1]] = 0;
-                this.nodeList.push(edge[1]);
-            }
-            this.adjList[edge[0]].push(edge[1]);
-            this.indegree[edge[1]] ++;
-        }
-    }
-}
 
 const codedOperation = {
     'input': 0,
@@ -35,67 +9,84 @@ const codedOperation = {
     'maxpool3x3': 4
 }
 
-function arrayDiff(a1, a2){
-    for (let idx in a1){
-        if (a1[idx] != a2[idx]) return false;
+
+
+function matchGraph(nodeData, edgeData, dataEdges, dataOps){
+    const dataMapper = {
+        2 : [],
+        3 : [],
+        4 : [],
     }
-    return true;
-}
-
-function getAllTopologicalOrder(graph, path, discoverd, result){
-
-    for (let v of graph.nodeList){
-        if (graph.indegree[v] == 0 && !discoverd[v]){
-            for (let u of graph.adjList[v]){
-                graph.indegree[u] --;
-            }
-            path.push(v);
-            discoverd[v] = true;
-
-            getAllTopologicalOrder(graph, path, discoverd, result);
-
-            for (let u of graph.adjList[v]){
-                graph.indegree[u] ++;
-            }
-            path.pop();
-            discoverd[v] = false;
-        }
+    const userMapper = {
+        2 : [],
+        3 : [],
+        4 : []
     }
-    if(path.length == graph.n) result.push(path.slice());
 
-}
+    //dataMapper에 Type 별로 index 분리
+    for (let i = 1; i < dataOps.length-1; i++){
+        dataMapper[dataOps[i]].push(i);
+    }
+    //userMapper에 Type 별로 index 분리
+    for (const node of nodeData){
+        if (node.index == 0 || node.index ==1) continue;
+        userMapper[codedOperation[node.type]].push(node.index);
+    }
 
-function isIsomorphicGraph(edges, dataEdges, nodeData, edgeData, ops){
+
+
+    const dataOpsType = decodeOperations(dataOps);
+    const candidateSequence = new Array(nodeData.length);
+    candidateSequence[0] = 0;
+    candidateSequence[nodeData.length - 1] = 1;
     
-    const isomorphismCheck = isIsomorphic(edges, dataEdges);
-    const decodedOperations = decodeOperations(ops);
-    if (isomorphismCheck.length == 0) return false;
-    
+    //가능한 모든 Sequence 생성
 
-
-
-
-    const graph = new Graph(edges, nodeData.length);
-    const discoverd = {};
-    for (let node of nodeData){
-        discoverd[node.index] = false;
+    let beforeQueue = [candidateSequence];
+    let afterQueue = [];
+    for (let i=1; i<nodeData.length-1; i++){
+        while (beforeQueue.length > 0){
+            const currentSequence = beforeQueue.shift();
+            const currentType = codedOperation[dataOpsType[i]];
+            for (const userIndex of userMapper[currentType]) {
+                const newSequence = currentSequence.slice();
+                if (newSequence.indexOf(userIndex) != -1) continue
+                else newSequence[i] = userIndex;
+                afterQueue.push(newSequence);
+            }
+        }
+        beforeQueue = afterQueue;
+        afterQueue = [];
     }
-    const path = [];
-    const topoList = [];
-    getAllTopologicalOrder(graph, path, discoverd, topoList);
-    for (let topoSeq of topoList){
-        const topoOperations = [];
-        topoOperations.length = decodedOperations.length;
-        for(let node of nodeData){
-            topoOperations[topoSeq.indexOf(node.index)] = node.type;
+    const allCandidateSequence = beforeQueue;
+
+
+    const dataMatrix = [];
+    for (const node of nodeData) {
+        dataMatrix.push(new Array(nodeData.length).fill(0));
+    }
+    for (const edge of dataEdges){
+        dataMatrix[edge[0]][edge[1]] = 1;
+    }
+    //복호화 Matrix랑 Sequence로 만든 Matrix랑 대조
+    for (const sequence of allCandidateSequence){
+        const emptyMatrix = [];
+        for (const node of nodeData){
+            emptyMatrix.push(new Array(nodeData.length).fill(0));
         }
-        if (arrayDiff(topoOperations, decodedOperations)) {
-            return true;
+
+        let check = true;
+        for (const edge of edgeData){
+            const source = sequence.indexOf(edge.source.index);
+            const target = sequence.indexOf(edge.target.index);
+            if(dataMatrix[source][target] == 0){
+                check = false;
+                break;
+            }
         }
+        if (check) return sequence;
     }
     return false;
-
-
 
 }
 
@@ -115,9 +106,9 @@ export default function getQuery(nodeData, edgeData){
         for (let i=0; i<data[0].length; i+=2){
             dataEdges.push([Number(data[0][i]), Number(data[0][i+1])]);
         }
-
-        if (isIsomorphicGraph(edges, dataEdges, nodeData, edgeData, data[1])) {
-            
+        const dataOps = data[1];
+        const graphMatcher = matchGraph(nodeData, edgeData, dataEdges, dataOps);
+        if (graphMatcher) {
             query.push({
                 dataEdges,
                 ops: data[1],
@@ -126,10 +117,11 @@ export default function getQuery(nodeData, edgeData){
                 train_accuracy : data[4],
                 validation_accuracy : data[5],
                 test_accuracy : data[6],
+                sharpley_value : data[7],
+                graph_mathcer : graphMatcher
             })
         }
     }
-    if(query.length > 1) console.log(query);
     return query[0];
 }
 
