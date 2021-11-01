@@ -5,30 +5,18 @@ import { removeEdge } from "../makeObject";
 
 
 function edgeMouseOver(){
-    const edgeClassName = d3.select(this).attr('class');
-    const edgeData = getEdgeData();
-    for (let edge of edgeData){
-        if (edge.edgeClassName == edgeClassName){
-            edge.isDelete = 'delete';
-        }
-    }
+    d3.select(this).datum().isDelete = 'delete';
     drawObject();
 }
 
 function edgeMouseOut(){
-    const edgeClassName = d3.select(this).attr('class');
-    const edgeData = getEdgeData();
-    for (let edge of edgeData){
-        if (edge.edgeClassName == edgeClassName){
-            edge.isDelete = null;
-        }
-    }
+    d3.select(this).datum().isDelete = null;
     drawObject();
 }
 
 function edgeClicked(){
-    const edgeClassName = d3.select(this).attr('class');
-    removeEdge(edgeClassName);
+    removeEdge(d3.select(this).datum());
+    drawObject();
 }
 
 export {edgeMouseOver, edgeMouseOut, edgeClicked}

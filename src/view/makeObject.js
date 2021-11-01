@@ -25,8 +25,8 @@ function makeEdge(sourceNode, targetNode, target=0){
     printResult();
 }
 
-function removeEdge(edgeClassName){
-    deleteEdge(edgeClassName);
+function removeEdge(edge){
+    deleteEdge(edge);
     printResult();
 }
 

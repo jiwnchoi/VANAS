@@ -56,76 +56,96 @@ async function drawNextEdge(clickedNode){
     recommendEdgeGroup.exit().remove()
 }
 
-function drawEdge(target = 0){
-    let edgeData, edge;
-    if (target == 0){
+function drawEdge(target=0){
+    let edgeData, edgeGroup, sharpleyValue;
+    if (target == 0) {
         edgeData = getEdgeData();
-        edge = d3.select("#architecture").selectAll("line").data(edgeData);
+        edgeGroup = d3.select("#architecture").selectAll(".edge").data(edgeData);
     }
-    else{
+    else {
         edgeData = getRecommendEdgeData(target);
-        edge = d3.select("#recommend" + target).selectAll("line").data(edgeData);
+        edgeGroup = d3.select("#recommend" + target).selectAll(".edge").data(edgeData);
     }
-     
+
     //UPDATE
-    edge        
-        .attr("class", d => d.edgeClassName)
+    edgeGroup
+        .select("line")
         .attr("x1", d => d.source.x)
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y)
         .attr("stroke", (d) => {
-            if (d.isDelete == 'delete'){
+            if (d.isDelete == 'delete') {
                 return "tomato";
             }
-            else if (d.isExt){
+            else if (d.isExt) {
                 return 'orange';
             }
-            else{
+            else {
                 return 'black';
             }
         })
         .style("marker-end", (d) => {
-            if (d.isDelete == 'delete'){
+            if (d.isDelete == 'delete') {
                 return 'url(#endDelete)'
             }
-            else if (d.isExt){
+            else if (d.isExt) {
                 return 'url(#endExt)';
             }
-            else{
+            else {
                 return "url(#end)";
             }
         })
-    
+
+    edgeGroup
+        .select("text")
+        .text(d => {
+            if (d.sharpleyValue == null) return "";
+            else return d.sharpleyValue;
+        })
+        .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
+        .attr("fill", d => {
+            if (d.sharpleyValue > 0) {
+                return "red";
+            }
+            else if (d.sharpleyValue < 0) {
+                return "blue";
+            }
+            else return "gray";
+        })
+
+
     //ENTER
-    edge
-        .enter()
+    const edgeGroupEnter = edgeGroup.enter().append("g")
+        .attr("class", "edge")
+
+
+    edgeGroupEnter
         .append("line")
-        .attr("class", d => d.edgeClassName)
         .attr("x1", d => d.source.x)
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y)
         .attr("stroke-width", 3)
         .attr("stroke", (d) => {
-            if (d.isDelete == 'delete'){
+            if (d.isDelete == 'delete') {
                 return "tomato";
             }
-            else if (d.isExt){
+            else if (d.isExt) {
                 return 'orange';
             }
-            else{
+            else {
                 return 'black';
             }
         })
         .style("marker-end", (d) => {
-            if (d.isDelete == 'delete'){
+            if (d.isDelete == 'delete') {
                 return 'url(#endDelete)'
             }
-            else if (d.isExt){
+            else if (d.isExt) {
                 return 'url(#endExt)';
             }
-            else{
+            else {
                 return "url(#end)";
             }
         })
@@ -133,9 +153,31 @@ function drawEdge(target = 0){
         .on("mouseout", edgeInteraction.edgeMouseOut)
         .on("click", edgeInteraction.edgeClicked);
 
+    edgeGroupEnter
+        .append("text")
+        .text(d => {
+            if (d.sharpleyValue == null) return "";
+            else return d.sharpleyValue;
+        })
+        .attr("fill", d => {
+            if (d.sharpleyValue > 0){
+                return "red";
+            }
+            else if (d.sharpleyValue < 0){
+                return "blue";
+            }
+            else return "gray";
+        })
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
+        .attr("font-size", 14);
+        
+        
     //EXIT
-    edge.exit().remove()
+    edgeGroup.exit().remove()
 }
+
 
 function drawNode(target = 0){
     let nodeData, nodeGroups;
@@ -237,6 +279,7 @@ function drawNode(target = 0){
     //EXIT
     nodeGroups.exit().remove();
 }
+
 
 export default async function drawObject(clickedNode, target=0){  
     drawNode(target);

@@ -1,6 +1,6 @@
 import getQuery from "../service/getQuery";
 import { getEdgeData, getNodeData } from "./data";
-import { cellSainityCheck } from "./dataProcessing";
+import { cellSainityCheck, excludeExtraneous } from "./dataProcessing";
 
 function addEdge(sourceNode, targetNode, nodeData, edgeData) {
     if (sourceNode == targetNode) {
@@ -17,11 +17,9 @@ function addEdge(sourceNode, targetNode, nodeData, edgeData) {
     }
     source.outdegree += 1;
     target.indegree += 1;
-    const edgeClassName = "sourcenode" + sourceNode + " targetnode" + targetNode
     const newEdge = {
         source,
         target,
-        edgeClassName,
         isExt: false,
         isDelete: null,
     }
@@ -50,7 +48,6 @@ function getPathFromInput(curruntNode){
 
 
 async function getNextNodeAccuracy(curruntNode){
-    return [];
     const path = getPathFromInput(curruntNode);
 
     if (path == null){
@@ -93,24 +90,10 @@ async function getNextNodeAccuracy(curruntNode){
 
 
         //extranous 제거
-        const extraneous = cellSainityCheck(nodeData, newEdgeData).extraneous;
-        for (let ext of extraneous){
-            for (let i=0; i<nodeData.length; i++){
-                if (nodeData[i].index == ext){
-                    nodeData.splice(i,1);
-                    i--;
-                }
-            }
-            for (let i=0; i<newEdgeData.length; i++){
-                if (newEdgeData[i].source.index == ext || 
-                    newEdgeData[i].target.index == ext){
-                    newEdgeData.splice(i,1);
-                    i--;
-                }
-            }
-        }
+        const [newNodeData, newEdgeDataExcluded] = excludeExtraneous(nodeData, newEdgeData);
+
         
-        const testAccuracy = getQuery(nodeData, newEdgeData).test_accuracy;
+        const testAccuracy = getQuery(nodeData, newEdgeDataExcluded).test_accuracy;
         
         const isDirect = targetNode.index == 1 ? 1 : 0;
 

@@ -1,5 +1,6 @@
 import { getEdgeData, getNodeData } from "../data/data";
 import { getRecommendNodeData } from "../data/recommendCellData";
+import printRecommendation from "../view/printRecommendation";
 
 function addNode(nodeType, target=0){
     let nodeData;

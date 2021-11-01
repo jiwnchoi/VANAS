@@ -2,7 +2,7 @@ export function drawDeleteBox(svg){
     const rectMargin = 30;
     const rectHeight = 80;
     const deleteBox = svg.append("g")
-        .attr("transform", "translate("+[rectMargin, 600-rectMargin-rectHeight]+")" )
+        .attr("transform", "translate("+[rectMargin, 700-rectMargin-rectHeight]+")" )
         .attr("id", "deleteBox").attr("visibility","hidden")
         .attr("width",800-rectMargin*2).attr("height",rectHeight)
         .attr("rx","5").attr("ry","5");

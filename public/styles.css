@@ -1,3 +1,4 @@
+
 .svg-container {
     display: inline-block;
     position: relative;
@@ -12,6 +13,14 @@
     top: 0;
     left: 0;
 }
+.svg-container2 {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 87.5%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+  }
 
 .idc {
   font-weight:bold;

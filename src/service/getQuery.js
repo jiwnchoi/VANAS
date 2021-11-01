@@ -1,4 +1,4 @@
-import { fullDataset } from '..';
+import { fullDataset, unstructuredDataset } from '..';
 import { decodeOperations } from '../data/dataProcessing';
 
 const codedOperation = {
@@ -41,7 +41,7 @@ function matchGraph(nodeData, edgeData, dataEdges, dataOps){
     candidateSequence[nodeData.length - 1] = 1;
     
     //가능한 모든 Sequence 생성
-
+    
     let beforeQueue = [candidateSequence];
     let afterQueue = [];
     for (let i=1; i<nodeData.length-1; i++){
@@ -94,14 +94,27 @@ function matchGraph(nodeData, edgeData, dataEdges, dataOps){
 
 export default function getQuery(nodeData, edgeData){
 
-    const key = nodeData.map(node => String(node.indegree) + String(node.outdegree) + String(codedOperation[node.type])).sort()
-    const keySting = key.join("");
+    // const key = nodeData.map(node => String(node.indegree) + String(node.outdegree) + String(codedOperation[node.type])).sort()
+    // const keyString = key.join("");
+    const tmp = [0,0,0, edgeData.length];
+    for (const node of nodeData){
+        if (node.type == 'conv1x1-bn-relu') tmp[0] ++;
+        if (node.type == 'conv3x3-bn-relu') tmp[1]++;
+        if (node.type == 'maxpool3x3') tmp[2]++;
+    }
+
+    
+    const keyString = tmp.join("");
     const edges = edgeData.map(edge => [edge.source.index, edge.target.index]);
     let query = [];
-    const dataset = fullDataset[keySting];
-
+    console.log(keyString);
+    
+    const dataset = fullDataset[keyString];
+    console.log(fullDataset);
 
     for (let data of dataset){
+        if(nodeData.length != data[1].length+2) continue;
+        if(edgeData.length * 2 != data[0].length) continue;
         const dataEdges = [];
         for (let i=0; i<data[0].length; i+=2){
             dataEdges.push([Number(data[0][i]), Number(data[0][i+1])]);
@@ -118,7 +131,7 @@ export default function getQuery(nodeData, edgeData){
                 validation_accuracy : data[5],
                 test_accuracy : data[6],
                 sharpley_value : data[7],
-                graph_mathcer : graphMatcher
+                graph_matcher : graphMatcher
             })
         }
     }

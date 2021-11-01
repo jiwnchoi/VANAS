@@ -172,18 +172,16 @@ function excludeExtraneous(nodeData, edgeData) {
     const extraneous = cellSainityCheck(nodeData, edgeData).extraneous;
 
     const newNodeData = nodeData.filter((node) => {
-        if (extraneous.indexOf(node.index) == -1) return false;
-        else return true;
+        if (extraneous.indexOf(node.index) == -1) return true;
+        else return false;
     })
 
     const newEdgeData = edgeData.filter((edge) => {
-        if (extraneous.indexOf(edge.source.index) == -1 ||
-            extraneous.indexOf(edge.target.index) == -1) return false;
+        if (extraneous.indexOf(edge.source.index) != -1 ||
+            extraneous.indexOf(edge.target.index) != -1) return false;
         else return true;
     })
-
-    const result = [newNodeData, newEdgeData];
-    return result;
+    return [newNodeData, newEdgeData];
 }
 
 function getChildren(source, edgeData){

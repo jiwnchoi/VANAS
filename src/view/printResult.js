@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { getEdgeData, getNodeData } from "../data/data";
-import { cellSainityCheck } from "../data/dataProcessing";
+import { cellSainityCheck, excludeExtraneous } from "../data/dataProcessing";
 import getQuery from "../service/getQuery";
 import drawObject from "./drawObject";
 
@@ -65,27 +65,10 @@ export default async function printResult(){
         d3.selectAll(".notcell")
             .attr("class", "visually-hidden");
 
-        const tmpNodeData = nodeData.slice();
-        const tmpEdgeData = edgeData.slice();
-        for (let i=0; i<tmpNodeData.length; i++){
-            if (cellStatus.extraneous.indexOf(tmpNodeData[i].index) != -1){
-                tmpNodeData.splice(i,1);
-                i--;
-            }
-        }
-        for (let i=0; i<tmpEdgeData.length; i++){
-            if (cellStatus.extraneous.indexOf(tmpEdgeData[i].source.index) != -1){
-                tmpEdgeData.splice(i,1);
-                i--;
-            }
-            if (cellStatus.extraneous.indexOf(tmpEdgeData[i].target.index) != -1){
-                tmpEdgeData.splice(i,1);
-                i--;
-            }
-        }
+        const [tmpNodeData, tmpEdgeData] = excludeExtraneous(nodeData, edgeData);
+        console.log(nodeData, edgeData, tmpNodeData, tmpEdgeData);
         const json = getQuery(tmpNodeData, tmpEdgeData);
         if (json){
-            
             d3.select("#analytics")
                 .attr("class", "alert bg-light alert-secondary");
             d3.select("#trainable_parameters")
@@ -98,6 +81,18 @@ export default async function printResult(){
                 .text(json.validation_accuracy);
             d3.select("#test_accuracy")
                 .text(json.test_accuracy);
+
+            const sharpleyValues = json.sharpley_value;
+            const graphMatcher = json.graph_matcher;
+            console.log(sharpleyValues, graphMatcher, json)
+            for (const edge of tmpEdgeData){
+                const source = graphMatcher.indexOf(edge.source.index);
+                const target = graphMatcher.indexOf(edge.target.index);
+                const key = String(source) + String(target);
+                if(sharpleyValues[key] == "") edge.sharpleyValue = null;
+                else edge.sharpleyValue = sharpleyValues[key];
+            }
+            console.log(edgeData);
         }
         else{
             d3.select("#analytics").attr("class", "visually-hidden");

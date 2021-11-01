@@ -27,27 +27,26 @@ function addEdge(sourceNode, targetNode, targetCell=0){
     }
     source.outdegree +=1;
     target.indegree += 1;
-    const edgeClassName = "sourcenode"+sourceNode+" targetnode"+targetNode
     const newEdge = {
         source,
         target,
-        edgeClassName,
         isExt : false,
         isDelete : null,
     }
     edgeData.push(newEdge);
 }
 
-function deleteEdge(edgeClassName){
+function deleteEdge(deleteEdge){
     const edgeData = getEdgeData();
     for (let i=0; i<edgeData.length; i++){
-        if (edgeData[i].edgeClassName == edgeClassName){
+        if (edgeData[i] == deleteEdge){
             edgeData[i].source.outdegree --;
             edgeData[i].target.indegree --;
             edgeData.splice(i,1);
             break;
         }
     }
+    console.log(edgeData);
 }
 
 function isEdgeExists(sourceNode, targetNode){
