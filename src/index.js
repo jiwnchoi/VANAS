@@ -8,6 +8,7 @@ import { drawHeatmap } from "./view/drawHeatmap";
 import getSharpleyValue from "./service/getSharpleyValue";
 import printResult from "./view/printResult";
 import printRecommendation from "./view/printRecommendation";
+import printPreset from "./view/printPreset";
 
 export let fullDataset = null;
 export let unstructuredDataset = null;
@@ -15,8 +16,6 @@ const heatmap = d3.select("#heatmap");
 const tooltip = d3.select("#tooltip");
 const architecture = d3.select("#architecture");
 const sharpleyvalue = d3.select("#sharpleyvalue");
-
-
 
 svgInit(architecture);
 drawDeleteBox(architecture);
@@ -28,6 +27,7 @@ fullDatasetPromise.then((json) => {
     fullDataset = json;
     unstructuredDataset = Object.values(fullDataset).reduce((acc, cur) => acc.concat(cur));
     printRecommendation();
+    printPreset();
     generateHeatmap(unstructuredDataset);
     d3.select("#loading").attr("class", "visually-hidden");
     d3.select("#main").attr("class", "bd-main container-xxl bd-layout overflow-hidden");

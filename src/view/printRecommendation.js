@@ -60,6 +60,8 @@ export default function printRecommendation() {
         .exit()
         .remove()
 
+    console.log("recom");
+    console.log(data[0]);
     for (let i = 0; i < data.length; i++) {
         setCell(data[i][1], data[i][2], i + 1);
         drawObjectwithForce(null, i + 1)

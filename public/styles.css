@@ -51,6 +51,10 @@ button {
   font-size: 7;
 }
 
+#preset-name{
+  text-align: center;
+  font-size: 7;
+}
 
 .append-button {
   color : white;
