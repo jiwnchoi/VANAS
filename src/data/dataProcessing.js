@@ -19,13 +19,20 @@ Set.prototype.difference = function (setB) {
 }
 
 
+function isCompleteCell(nodeData, edgeData) {
+    const result = cellSainityCheck(nodeData, edgeData);
+    if (result.isConnected && result.isAcyclic && result.extraneous.length == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 
+}
 
 function cellSainityCheck(nodeData, edgeData) {
     if (nodeData == null) nodeData = getNodeData();
     if (edgeData == null) edgeData = getEdgeData();
-
-
 
     const numNodes = nodeData.length;
     const numEdges = edgeData.length;
@@ -102,9 +109,9 @@ function cellSainityCheck(nodeData, edgeData) {
     return cellStatus;
 }
 
-function decodeOperations(opsnum) {
+function decodeOperations(opsstr) {
     const ops = ['input'];
-    const opsarr = String(opsnum).split("");
+    const opsarr = String(opsstr).split("");
 
     for (let op of opsarr) {
         if (op == '2') {
@@ -121,14 +128,27 @@ function decodeOperations(opsnum) {
     return ops;
 }
 
-function decodeMatrix(matnum) {
-    const numberofNode = matnum.length / 3;
-    const matrix = [];
-    for (let i = 0; i < numberofNode; i++) {
-        const row = matnum.slice(i * 3, (i + 1) * 3);
-        const rowNum = Number(row).toString(2).padStart(numberofNode, '0');
-        matrix.push(rowNum.split("").map(x => Number(x)));
+function decodeMatrix(edges) {
+    let splitEdges = null;
+    if (typeof edges == "string") {
+        splitEdges = edges.split("");
+    } else {
+        splitEdges = [];
+        for (let edge of edges) {
+            splitEdges.push(edge[0]);
+            splitEdges.push(edge[1]);
+        }
     }
+    const nodeIndex = new Set(splitEdges);
+    const emptyRow = new Array(nodeIndex.size).fill(0);
+    const matrix = [];
+    for (let i = 0; i < nodeIndex.size; i++) {
+        matrix.push(emptyRow.slice());
+    }
+    for (let i = 0; i < splitEdges.length; i += 2) {
+        matrix[Number(splitEdges[i])][Number(splitEdges[i + 1])] = 1;
+    }
+
     return matrix;
 }
 
@@ -148,7 +168,31 @@ function hashingOperations(ops) {
     return res.toString().padStart(3, '0');
 }
 
+function excludeExtraneous(nodeData, edgeData) {
+    const extraneous = cellSainityCheck(nodeData, edgeData).extraneous;
 
-export { cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations };
+    const newNodeData = nodeData.filter((node) => {
+        if (extraneous.indexOf(node.index) == -1) return true;
+        else return false;
+    })
+
+    const newEdgeData = edgeData.filter((edge) => {
+        if (extraneous.indexOf(edge.source.index) != -1 ||
+            extraneous.indexOf(edge.target.index) != -1) return false;
+        else return true;
+    })
+    return [newNodeData, newEdgeData];
+}
+
+function getChildren(source, edgeData){
+    return edgeData.filter(edge => edge.source.index == source)
+        .map(edge => edge.index);
+}
+
+
+
+
+
+export { excludeExtraneous, isCompleteCell, cellSainityCheck, decodeMatrix, hashingOperations, decodeOperations };
 
 

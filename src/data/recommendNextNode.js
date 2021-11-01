@@ -1,6 +1,31 @@
-import { getEdgeData, getNodeData } from "./data";
-import { cellSainityCheck } from "./dataProcessing";
 import getQuery from "../service/getQuery";
+import { getEdgeData, getNodeData } from "./data";
+import { cellSainityCheck, excludeExtraneous } from "./dataProcessing";
+
+function addEdge(sourceNode, targetNode, nodeData, edgeData) {
+    if (sourceNode == targetNode) {
+        return 0;
+    }
+    let source, target;
+    for (let node of nodeData) {
+        if (node.index == sourceNode) {
+            source = node;
+        }
+        if (node.index == targetNode) {
+            target = node;
+        }
+    }
+    source.outdegree += 1;
+    target.indegree += 1;
+    const newEdge = {
+        source,
+        target,
+        isExt: false,
+        isDelete: null,
+    }
+    edgeData.push(newEdge);
+}
+
 
 function getPathFromInput(curruntNode){
     const edgeData = getEdgeData();
@@ -37,60 +62,38 @@ async function getNextNodeAccuracy(curruntNode){
         if (path.has(targetNode.index)){
             continue;
         }
-        let pass = 0;
+        let pass = false;
         for (let edge of edgeData){
             if(edge.source.index == curruntNode && edge.target.index == targetNode.index){
-                pass = 1;
+                pass = true;
             }
         }
         if (pass) continue;
 
         //edgeData에서 엣지 추가
-        const newNodeData = nodeData.slice();
         const newEdgeData = edgeData.slice();
         let source, target;
+
         if (targetNode.index != 1){
-            for (let node of newNodeData){
+            for (let node of nodeData){
                 if (node.index == targetNode.index) source = node;
                 if (node.index == 1) target = node;
             }
-            newEdgeData.push(
-                {
-                    source,
-                    target
-                }
-            );
+            addEdge(source, target, nodeData, newEdgeData);
         }
-        for (let node of newNodeData){
+        for (let node of nodeData){
             if (node.index == targetNode.index) target = node;
             if (node.index == curruntNode) source = node;
         }
-        newEdgeData.push({
-            source,
-            target,
-        });
+        addEdge(source, target, nodeData, newEdgeData);
 
 
 
         //extranous 제거
-        const extraneous = cellSainityCheck(newNodeData, newEdgeData).extraneous;
-        for (let ext of extraneous){
-            for (let i=0; i<newNodeData.length; i++){
-                if (newNodeData[i].index == ext){
-                    newNodeData.splice(i,1);
-                    i--;
-                }
-            }
-            for (let i=0; i<newEdgeData.length; i++){
-                if (newEdgeData[i].source.index == ext || 
-                    newEdgeData[i].target.index == ext){
-                    newEdgeData.splice(i,1);
-                    i--;
-                }
-            }
-        }
+        const [newNodeData, newEdgeDataExcluded] = excludeExtraneous(nodeData, newEdgeData);
+
         
-        const testAccuracy = getQuery(newNodeData, newEdgeData).query.test_accuracy;
+        const testAccuracy = getQuery(nodeData, newEdgeDataExcluded).test_accuracy;
         
         const isDirect = targetNode.index == 1 ? 1 : 0;
 

@@ -1,138 +1,142 @@
-import { fullDataset } from '..';
-import { hashingOperations, decodeMatrix, decodeOperations } from '../data/dataProcessing';
+import { fullDataset, unstructuredDataset } from '..';
+import { decodeOperations } from '../data/dataProcessing';
 
+const codedOperation = {
+    'input': 0,
+    'output': 1,
+    'conv1x1-bn-relu': 2,
+    'conv3x3-bn-relu': 3,
+    'maxpool3x3': 4
+}
+
+
+
+function matchGraph(nodeData, edgeData, dataEdges, dataOps){
+    const dataMapper = {
+        2 : [],
+        3 : [],
+        4 : [],
+    }
+    const userMapper = {
+        2 : [],
+        3 : [],
+        4 : []
+    }
+
+    //dataMapper에 Type 별로 index 분리
+    for (let i = 1; i < dataOps.length-1; i++){
+        dataMapper[dataOps[i]].push(i);
+    }
+    //userMapper에 Type 별로 index 분리
+    for (const node of nodeData){
+        if (node.index == 0 || node.index ==1) continue;
+        userMapper[codedOperation[node.type]].push(node.index);
+    }
+
+
+
+    const dataOpsType = decodeOperations(dataOps);
+    const candidateSequence = new Array(nodeData.length);
+    candidateSequence[0] = 0;
+    candidateSequence[nodeData.length - 1] = 1;
+    
+    //가능한 모든 Sequence 생성
+    
+    let beforeQueue = [candidateSequence];
+    let afterQueue = [];
+    for (let i=1; i<nodeData.length-1; i++){
+        while (beforeQueue.length > 0){
+            const currentSequence = beforeQueue.shift();
+            const currentType = codedOperation[dataOpsType[i]];
+            for (const userIndex of userMapper[currentType]) {
+                const newSequence = currentSequence.slice();
+                if (newSequence.indexOf(userIndex) != -1) continue
+                else newSequence[i] = userIndex;
+                afterQueue.push(newSequence);
+            }
+        }
+        beforeQueue = afterQueue;
+        afterQueue = [];
+    }
+    const allCandidateSequence = beforeQueue;
+
+
+    const dataMatrix = [];
+    for (const node of nodeData) {
+        dataMatrix.push(new Array(nodeData.length).fill(0));
+    }
+    for (const edge of dataEdges){
+        dataMatrix[edge[0]][edge[1]] = 1;
+    }
+    //복호화 Matrix랑 Sequence로 만든 Matrix랑 대조
+    for (const sequence of allCandidateSequence){
+        const emptyMatrix = [];
+        for (const node of nodeData){
+            emptyMatrix.push(new Array(nodeData.length).fill(0));
+        }
+
+        let check = true;
+        for (const edge of edgeData){
+            const source = sequence.indexOf(edge.source.index);
+            const target = sequence.indexOf(edge.target.index);
+            if(dataMatrix[source][target] == 0){
+                check = false;
+                break;
+            }
+        }
+        if (check) return sequence;
+    }
+    return false;
+
+}
 
 
 
 export default function getQuery(nodeData, edgeData){
-    const opsType = nodeData.map(node => node.type);
-    const opsIndex = nodeData.map(node => node.index);
-    const encodedOperations = hashingOperations(opsType);
-    const result = {query : null, recommend : null};
-    const recommend = [];
 
-    const dataset = fullDataset[encodedOperations];
+    // const key = nodeData.map(node => String(node.indegree) + String(node.outdegree) + String(codedOperation[node.type])).sort()
+    // const keyString = key.join("");
+    const tmp = [0,0,0, edgeData.length];
+    for (const node of nodeData){
+        if (node.type == 'conv1x1-bn-relu') tmp[0] ++;
+        if (node.type == 'conv3x3-bn-relu') tmp[1]++;
+        if (node.type == 'maxpool3x3') tmp[2]++;
+    }
+
+    
+    const keyString = tmp.join("");
+    const edges = edgeData.map(edge => [edge.source.index, edge.target.index]);
+    let query = [];
+    console.log(keyString);
+    
+    const dataset = fullDataset[keyString];
+    console.log(fullDataset);
+
     for (let data of dataset){
-        
-        let cnt = 0;
-        let skip = false;
-
-        const moduleOperations = decodeOperations(data[1]);
-        const moduleAdjacency = decodeMatrix(data[0]);
-        const moduleAdjacencyOrg = JSON.parse(JSON.stringify(moduleAdjacency));
-        const sortedOpsType = JSON.stringify(opsType.slice().sort());
-        const sortedModuleOperations = JSON.stringify(moduleOperations.slice().sort());
-        if(sortedOpsType != sortedModuleOperations) continue;
-        
-        const nodeMapper = [];
-        nodeMapper.length = nodeData.length;
-
-        nodeMapper[0] = 0
-        nodeMapper[nodeMapper.length - 1] = 1
-
-        const conv33Index = [];
-        const conv11Index = [];
-        const pool33Index = [];
-        for(let i=0; i<moduleOperations.length; i++){
-            if(moduleOperations[i] == 'conv3x3-bn-relu'){
-                conv33Index.push(i);
-            }
-            else if(moduleOperations[i]  == 'conv1x1-bn-relu'){
-                conv11Index.push(i);
-            }
-            else if(moduleOperations[i]  == 'maxpool3x3'){
-                pool33Index.push(i);
-            }
+        if(nodeData.length != data[1].length+2) continue;
+        if(edgeData.length * 2 != data[0].length) continue;
+        const dataEdges = [];
+        for (let i=0; i<data[0].length; i+=2){
+            dataEdges.push([Number(data[0][i]), Number(data[0][i+1])]);
         }
-        
-        for (let edge of edgeData){
-            const sourceIndex = edge.source.index;
-            const targetIndex = edge.target.index;
-            const sourceType = opsType[opsIndex.indexOf(sourceIndex)];
-            const targetType = opsType[opsIndex.indexOf(targetIndex)];
-
-            if (nodeMapper.indexOf(sourceIndex) == -1){
-                if(sourceType == 'conv3x3-bn-relu'){
-                    const idx = conv33Index.shift();
-                    nodeMapper[idx] = sourceIndex;
-                }
-                else if (sourceType == 'conv1x1-bn-relu'){
-                    const idx = conv11Index.shift();
-                    nodeMapper[idx] = sourceIndex;
-                }
-                else if (sourceType == 'maxpool3x3'){
-                    const idx = pool33Index.shift();
-                    nodeMapper[idx] = sourceIndex;
-                }
-                cnt++;
-            }
-            if (nodeMapper.indexOf(targetIndex) == -1){
-                if(targetType == 'conv3x3-bn-relu'){
-                    const idx = conv33Index.shift();
-                    nodeMapper[idx] = targetIndex;
-                }
-                else if (targetType == 'conv1x1-bn-relu'){
-                    const idx = conv11Index.shift();
-                    nodeMapper[idx] = targetIndex;
-                }
-                else if (targetType == 'maxpool3x3'){
-                    const idx = pool33Index.shift();
-                    nodeMapper[idx] = targetIndex;
-                }
-                cnt++;
-            }
-
-            
-            const mappedSourceIndex = nodeMapper.indexOf(sourceIndex);
-            const mappedTargetIndex = nodeMapper.indexOf(targetIndex);
-
-            if(moduleAdjacency[mappedSourceIndex][mappedTargetIndex] == 1){
-                moduleAdjacency[mappedSourceIndex][mappedTargetIndex] = 0;
-            }
-            else{
-                skip = true;
-
-                break;
-            }
-        }
-        
-        let check = 1;
-        for (let row of moduleAdjacency){
-            for (let col of row){
-                if (col == 1){
-                    check = 0;
-                }
-            }
-        }
-        
-        if (check){
-            result.query = {
+        const dataOps = data[1];
+        const graphMatcher = matchGraph(nodeData, edgeData, dataEdges, dataOps);
+        if (graphMatcher) {
+            query.push({
+                dataEdges,
+                ops: data[1],
                 trainable_parameters : data[3],
                 training_time : data[2],
                 train_accuracy : data[4],
                 validation_accuracy : data[5],
-                test_accuracy : data[6]
-            }
+                test_accuracy : data[6],
+                sharpley_value : data[7],
+                graph_matcher : graphMatcher
+            })
         }
-        else{
-                    if(nodeMapper.includes(undefined) == false)
-                    console.log(nodeMapper, edgeData, moduleOperations);
-        }
-        
-        if(skip == false){
-            recommend.push(
-                [
-                    data[6], //final_test_accuracy
-                    moduleOperations,
-                    moduleAdjacencyOrg,
-                ]
-            )
-        }
-
-
     }
-    recommend.sort((a, b) => b[0] - a[0]);
-    result.recommend = recommend.slice(0,5);
-    return result;
+    return query[0];
 }
-    
+
+
+

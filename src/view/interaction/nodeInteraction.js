@@ -5,7 +5,7 @@ import { deleteNode } from "../../controller/nodeController";
 import { makeEdge } from "../makeObject";
 import drawObject, { drawEdge, drawNode } from "../drawObject";
 import { getNodeData } from "../../data/data";
-import { printResult } from "../printResult";
+import printResult from "../printResult";
 
 function dragNodeStart(event, d) {
     if (d.type == "input" || d.type == "output") return null;
@@ -35,7 +35,7 @@ function deleteBoxCheck(x, y){
 
     if ( rectMargin < x &&
          x < 800-rectMargin &&
-         600-rectMargin-rectHeight < y && 
+         700-rectMargin-rectHeight < y && 
          y < 600-rectMargin){
         return true;
     }
