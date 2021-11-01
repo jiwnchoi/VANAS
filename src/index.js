@@ -23,13 +23,13 @@ drawDeleteBox(architecture);
 svgInit(sharpleyvalue);
 drawObject();
 
-const fullDatasetPromise = d3.json('/nasbench_minified_nodeedgenum.json');
+const fullDatasetPromise = d3.json('/nasbench_minified_numberkey.json');
 fullDatasetPromise.then((json) => {
     fullDataset = json;
     unstructuredDataset = Object.values(fullDataset).reduce((acc, cur) => acc.concat(cur));
     printRecommendation();
     generateHeatmap(unstructuredDataset);
-    d3.select("#loading").attr("class","visually-hidden");
+    d3.select("#loading").attr("class", "visually-hidden");
     d3.select("#main").attr("class", "bd-main container-xxl bd-layout overflow-hidden");
 });
 
@@ -51,9 +51,9 @@ data.then(json => drawBarChartFromData(json.children));
 
 function generateHeatmap(heatmapData) {
     let heatmapResult = drawHeatmap()
-        .x(document.getElementById("optionX").value)
-        .y(document.getElementById("optionY").value)
-        .z(document.getElementById("optionZ").value)
+        .x(d3.select("#optionX").property("value"))
+        .y(d3.select("#optionY").property("value"))
+        .z(d3.select("#optionZ").property("value"))
         .splitX(50)
         .splitY(30)
         (heatmapData);

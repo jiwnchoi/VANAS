@@ -35,15 +35,18 @@
             </div>
         </nav>
     </header>
-    
+
     <main id="loading" class="container-xxl bd-layout overflow-hidden d-flex justify-content-center">
         <div class="d-flex flex-column align-items-center">
-            <div class="d-flex mt-5 mb-5"><h1>Loading NASBench Visualizer...</h1></div>
-            <div class="d-flex  spinner-border spinner-border-xxl text-primary" role="status" style="width: 20rem; height: 20rem;"></div>
+            <div class="d-flex mt-5 mb-5">
+                <h1>Loading NASBench Visualizer...</h1>
+            </div>
+            <div class="d-flex  spinner-border spinner-border-xxl text-primary" role="status"
+                style="width: 20rem; height: 20rem;"></div>
 
         </div>
     </main>
-    
+
     <main id="main" class="bd-main container-xxl bd-layout overflow-hidden visually-hidden">
         <div class="row g-3">
 
@@ -52,8 +55,7 @@
                     <li class="list-group-item ">
                         <label for="optionX">X축</label>
                         <select class="form-select form-select-sm" id="optionX">
-                            <option value=trainable_parameters selected="selected"># of trainable parameters
-                            </option>
+                            <option value=trainable_parameters selected="selected"># of trainable parameters</option>
                             <option value=training_time>training time</option>
                             <option value=test_accuracy>accuracy</option>
                         </select>
@@ -103,15 +105,15 @@
                     <button id="conv3x3-bn-relu" type="button" class=" btn btn-warning append-button">(+) 3X3
                         CONV</button>
                     <button id="maxpool3x3" type="button" class=" btn btn-success append-button">(+) 3X3
-                    POOL</button>
+                        POOL</button>
                     <button id="init-cell" type="button" class=" btn btn-primary append-button">Init
                         Cell</button>
                 </div>
-                    
-                    
-                    
-                    
-            
+
+
+
+
+
                 <div id="initAlert" class="alert alert-primary" role="alert">
                     Drag node at the right position.<br>
                     Click source node and target node to make edge.
