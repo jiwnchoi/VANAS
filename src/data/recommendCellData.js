@@ -104,6 +104,7 @@ const recommendNodeData = {
         status: null,
     }
     ],
+
     6: [{
         index: 0,
         type: "input",

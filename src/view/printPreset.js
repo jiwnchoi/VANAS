@@ -21,10 +21,16 @@ function getPreset() {
 
 export default function printPreset() {
     const data = getPreset();
-    console.log("preset");
-    console.log(data[0]);
+
     for (let i = 0; i < 5; i++) {
         setCell(data[i][1], data[i][2], i + 6);
         drawObjectwithForce(null, i + 6);
     }
+
+    const presetCell = d3.select("#preset-col").selectAll(".preset-cell").data(data);
+    presetCell
+        .on("click", (_, d) => {
+            const i = data.indexOf(d);
+            copyCelltoMain(i + 5);
+        });
 }
