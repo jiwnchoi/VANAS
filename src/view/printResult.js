@@ -7,7 +7,7 @@ import drawObject from "./drawObject";
 
 export default async function printResult(){
     d3.select("#analytics").attr("class", "visually-hidden");
-    d3.select("#initAlert").attr("class","visually-hidden");
+    // d3.select("#initAlert").attr("class","visually-hidden");
 
 
     const nodeData = getNodeData();

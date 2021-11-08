@@ -90,7 +90,10 @@
 
             </div>
             <div class="col-lg-5">
-
+                <div id="initAlert" class="alert alert-primary" role="alert">
+                    Drag node at the right position.<br>
+                    Click source node and target node to make edge.
+                </div>
 
                 <div class="border bg-light svg-container2 mb-2">
                     <svg id="architecture" viewBox="0 0 800 700" preserveAspectRatio="xMinYMin meet"
@@ -98,7 +101,7 @@
                 </div>
 
                 <div class="mb-2 g-1 d-flex justify-content-between">
-                    <button id="conv1x1-bn-relu" type="button" class=" btn btn-danger append-button">(+) 1X1
+                    <button id="conv1x1-bn-relu" type="button" class=" btn btn-purple append-button">(+) 1X1
                         CONV</button>
                     <button id="conv3x3-bn-relu" type="button" class=" btn btn-warning append-button">(+) 3X3
                         CONV</button>
@@ -112,10 +115,7 @@
                     
                     
             
-                <div id="initAlert" class="alert alert-primary" role="alert">
-                    Drag node at the right position.<br>
-                    Click source node and target node to make edge.
-                </div>
+                
                 <div id="connectAlert" class="notcell alert alert-warning visually-hidden" role="alert">
                     Input node and output node must be connected.
                 </div>

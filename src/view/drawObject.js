@@ -7,20 +7,21 @@ import * as edgeInteraction from "./interaction/edgeInteraction.js"
 import { getNextNodeAccuracy } from "../data/recommendNextNode.js";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData.js";
 
-async function drawNextEdge(clickedNode){
+
+async function drawNextEdge(clickedNode) {
     let recommendEdgeData = null;
-    if (clickedNode == null){
+    if (clickedNode == null) {
         recommendEdgeData = [];
     }
-    else{
+    else {
         recommendEdgeData = await getNextNodeAccuracy(clickedNode);
     }
     const recommendEdgeGroup = d3.select("#architecture").selectAll(".recommendLine").data(recommendEdgeData);
-    
+
     //ENTER
     const recommendEdgeGroupEnter = recommendEdgeGroup.enter().append("g")
         .attr("class", "recommendLine")
-    
+
     recommendEdgeGroupEnter
         .append("line")
         .attr("x1", d => d.source.x)
@@ -31,33 +32,33 @@ async function drawNextEdge(clickedNode){
         .attr("stroke-dasharray", "10,10")
         .attr("d", "M5 40 l215 0")
         .attr("stroke", "gray")
-        .style("marker-end", d =>{
-            if (d.label == 0 || d.source.index==0 && d.target.index ==1) return "url(#endRecommend)";
+        .style("marker-end", d => {
+            if (d.label == 0 || d.source.index == 0 && d.target.index == 1) return "url(#endRecommend)";
             else return null;
         })
 
     recommendEdgeGroupEnter
         .append("text")
         .text(d => {
-            if (d.label == 0){
+            if (d.label == 0) {
                 return "";
             }
-            else return new String(d.testAccuracy).slice(0,5);
+            else return new String(d.testAccuracy).slice(0, 5);
 
         })
         .attr("fill", "gray")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("font-size", 14)
-        .attr("transform", d => "translate("+[(d.source.x + d.target.x)/2, (d.source.y + d.target.y)/2]+")" );
-    
+        .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")");
+
 
     //EXIT
     recommendEdgeGroup.exit().remove()
 }
 
-function drawEdge(target=0){
-    let edgeData, edgeGroup, sharpleyValue;
+function drawEdge(target = 0) {
+    let edgeData, edgeGroup;
     if (target == 0) {
         edgeData = getEdgeData();
         edgeGroup = d3.select("#architecture").selectAll(".edge").data(edgeData);
@@ -75,44 +76,54 @@ function drawEdge(target=0){
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y)
         .attr("stroke", (d) => {
-            if (d.isDelete == 'delete') {
-                return "tomato";
+            if (d.sharpleyValue == null) {
+                return 'black';
             }
-            else if (d.isExt) {
-                return 'orange';
+            else if (d.sharpleyValue > 0) {
+                return "#0D6EFD";
+            }
+            else if (d.sharpleyValue < 0) {
+                return "#dc3545";
             }
             else {
                 return 'black';
             }
         })
         .style("marker-end", (d) => {
-            if (d.isDelete == 'delete') {
-                return 'url(#endDelete)'
+            if (d.sharpleyValue == null) {
+                return 'url(#end)'
             }
-            else if (d.isExt) {
-                return 'url(#endExt)';
-            }
-            else {
-                return "url(#end)";
-            }
-        })
-
-    edgeGroup
-        .select("text")
-        .text(d => {
-            if (d.sharpleyValue == null) return "";
-            else return d.sharpleyValue;
-        })
-        .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
-        .attr("fill", d => {
-            if (d.sharpleyValue > 0) {
-                return "red";
+            else if (d.sharpleyValue > 0) {
+                return 'url(#endPositive)'
             }
             else if (d.sharpleyValue < 0) {
-                return "blue";
+                return 'url(#endNegative)';
             }
-            else return "gray";
+            else {
+                return 'black';
+            }
         })
+        .attr("opacity", (d) => {
+            if (d.isExt) return 0.2;
+            else return 1;
+        });
+
+    // edgeGroup
+    //     .select("text")
+    //     .text(d => {
+    //         if (d.sharpleyValue == null) return "";
+    //         else return d.sharpleyValue;
+    //     })
+    //     .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
+    //     .attr("fill", d => {
+    //         if (d.sharpleyValue > 0) {
+    //             return "red";
+    //         }
+    //         else if (d.sharpleyValue < 0) {
+    //             return "blue";
+    //         }
+    //         else return "gray";
+    //     });
 
 
     //ENTER
@@ -127,145 +138,169 @@ function drawEdge(target=0){
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y)
         .attr("stroke-width", 3)
+        .attr("opacity", (d) => {
+            if (d.isExt) return 0.2;
+            else return 1;
+        })
         .attr("stroke", (d) => {
-            if (d.isDelete == 'delete') {
-                return "tomato";
+            if (d.sharpleyValue == null) {
+                return 'black';
             }
-            else if (d.isExt) {
-                return 'orange';
+            else if (d.sharpleyValue > 0) {
+                return "#0D6EFD";
+            }
+            else if (d.sharpleyValue < 0) {
+                return "#dc3545";
             }
             else {
                 return 'black';
             }
         })
         .style("marker-end", (d) => {
-            if (d.isDelete == 'delete') {
-                return 'url(#endDelete)'
+            if (d.sharpleyValue == null) {
+                return 'url(#end)'
             }
-            else if (d.isExt) {
-                return 'url(#endExt)';
+            else if (d.sharpleyValue > 0) {
+                return 'url(#endPositive)'
+            }
+            else if (d.sharpleyValue < 0) {
+                return 'url(#endNegative)';
             }
             else {
-                return "url(#end)";
+                return 'black';
             }
         })
         .on("mouseover", edgeInteraction.edgeMouseOver)
         .on("mouseout", edgeInteraction.edgeMouseOut)
         .on("click", edgeInteraction.edgeClicked);
 
-    edgeGroupEnter
-        .append("text")
-        .text(d => {
-            if (d.sharpleyValue == null) return "";
-            else return d.sharpleyValue;
-        })
-        .attr("fill", d => {
-            if (d.sharpleyValue > 0){
-                return "red";
-            }
-            else if (d.sharpleyValue < 0){
-                return "blue";
-            }
-            else return "gray";
-        })
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "middle")
-        .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
-        .attr("font-size", 14);
-        
-        
+    // edgeGroupEnter
+    //     .append("text")
+    //     .text(d => {
+    //         if (d.sharpleyValue == null) return "";
+    //         else return d.sharpleyValue;
+    //     })
+    //     .attr("fill", d => {
+    //         if (d.sharpleyValue > 0) {
+    //             return "red";
+    //         }
+    //         else if (d.sharpleyValue < 0) {
+    //             return "blue";
+    //         }
+    //         else return "gray";
+    //     })
+    //     .attr("font-weight", "bold")
+    //     .attr("text-anchor", "middle")
+    //     .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
+    //     .attr("font-size", 14);
+
+
     //EXIT
     edgeGroup.exit().remove()
 }
 
 
-function drawNode(target = 0){
+function drawNode(target = 0) {
     let nodeData, nodeGroups;
-    if (target == 0){
+    if (target == 0) {
         nodeData = getNodeData();
         nodeGroups = d3.select("#architecture").selectAll(".node").data(nodeData);
     }
-    else{
+    else {
         nodeData = getRecommendNodeData(target);
         nodeGroups = d3.select("#recommend" + target).selectAll(".node").data(nodeData);
     }
     const radius = 40;
     //INIT
-    
+
     //UPDATE
     nodeGroups
-        .attr("id", d=>"node"+d.index)
-        .attr("transform", d => "translate("+[d.x, d.y]+")" )
-        
+        .attr("id", d => "node" + d.index)
+        .attr("transform", d => "translate(" + [d.x, d.y] + ")")
+
 
     nodeGroups.select("text")
         .text(d => d.name);
-    
+
     nodeGroups.select("circle")
+        .attr("opacity", (d) => {
+            if (d.status == 'ext') return 0.4;
+            else return 1;
+        })
         .attr("fill", (d) => {
-            if(d.type == "input" || d.type == "output"){
-                return "#0d6efd";
+            if (d.type == "input" || d.type == "output") {
+                return "#6C757D";
             }
-            else if (d.type == "conv1x1-bn-relu"){
-                return "#dc3545";
+            else if (d.type == "conv1x1-bn-relu") {
+                return "#6f42c1";
             }
-            else if (d.type == "conv3x3-bn-relu"){
+            else if (d.type == "conv3x3-bn-relu") {
                 return "#ffc107";
             }
-            else if (d.type == "maxpool3x3"){
+            else if (d.type == "maxpool3x3") {
                 return "#198754";
             }
         })
-        .style("filter", (d)=>{
-            if(d.status == null){
+        .style("filter", (d) => {
+            if (d.status == null) {
                 return null;
-            } 
-            else if (d.status == 'ext'){
-                return "url(#drop-shadow-ext)"
             }
-            else if (d.status == 'clicked'){
+            // else if (d.status == 'ext') {
+            //     return "url(#drop-shadow-ext)"
+            // }
+            else if (d.status == 'clicked') {
                 return "url(#drop-shadow-start)"
+            }
+            else {
+                return null;
             }
         });
 
     //ENTER
     const nodeGroupsEnter = nodeGroups.enter().append("g")
-        .attr("id", d=>"node"+d.index)
-        .attr("transform", d => "translate("+[d.x, d.y]+")" )
+        .attr("id", d => "node" + d.index)
+        .attr("transform", d => "translate(" + [d.x, d.y] + ")")
         .attr("class", "node")
         .call(
             d3.drag()
-            .on("start", nodeInteraction.dragNodeStart)
-            .on("drag", nodeInteraction.dragNode)
-            .on("end", nodeInteraction.dragNodeEnd)
+                .on("start", nodeInteraction.dragNodeStart)
+                .on("drag", nodeInteraction.dragNode)
+                .on("end", nodeInteraction.dragNodeEnd)
         )
         .on("click", nodeInteraction.clickedNode);
-    
+
     nodeGroupsEnter.append("circle")
         .attr("r", radius)
+        .attr("opacity", (d) => {
+            if (d.status == 'ext') return 0.4;
+            else return 1;
+        })
         .attr("fill", (d) => {
-            if(d.type == "input" || d.type == "output"){
-                return "#0d6efd";
+            if (d.type == "input" || d.type == "output") {
+                return "#6C757D";
             }
-            else if (d.type == "conv1x1-bn-relu"){
-                return "#dc3545";
+            else if (d.type == "conv1x1-bn-relu") {
+                return "#6f42c1";
             }
-            else if (d.type == "conv3x3-bn-relu"){
+            else if (d.type == "conv3x3-bn-relu") {
                 return "#ffc107";
             }
-            else if (d.type == "maxpool3x3"){
+            else if (d.type == "maxpool3x3") {
                 return "#198754";
             }
         })
-        .style("filter", (d)=>{
-            if(d.status == null){
+        .style("filter", (d) => {
+            if (d.status == null) {
                 return null;
-            } 
-            else if (d.status == 'ext'){
-                return "url(#drop-shadow-ext)"
             }
-            else if (d.status == 'clicked'){
+            // else if (d.status == 'ext') {
+            //     return "url(#drop-shadow-ext)"
+            // }
+            else if (d.status == 'clicked') {
                 return "url(#drop-shadow-start)"
+            }
+            else{
+                return null;
             }
         });
 
@@ -275,13 +310,13 @@ function drawNode(target = 0){
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("font-size", 11);
-    
+
     //EXIT
     nodeGroups.exit().remove();
 }
 
 
-export default async function drawObject(clickedNode, target=0){  
+export default async function drawObject(clickedNode, target = 0) {
     drawNode(target);
     drawEdge(target);
     d3.selectAll(".node").raise();
@@ -289,25 +324,25 @@ export default async function drawObject(clickedNode, target=0){
     d3.selectAll(".node").raise();
 }
 
-export function drawObjectwithForce(clickedNode, target = 0){
+export function drawObjectwithForce(clickedNode, target = 0) {
     calaulateForce(target);
     drawNode(target);
     drawEdge(target);
     d3.selectAll(".node").raise();
 }
 
-export function calaulateForce(target){
+export function calaulateForce(target) {
     let nodeData, edgeData;
-    
-    if (target){
+
+    if (target) {
         nodeData = getRecommendNodeData(target);
         edgeData = getRecommendEdgeData(target);
     }
-    else{
+    else {
         nodeData = getNodeData();
         edgeData = getEdgeData();
     }
-    
+
     const simulation = d3.forceSimulation(nodeData)
         .force('charge', d3.forceManyBody())
         .force('collison', d3.forceCollide(120))
@@ -315,6 +350,6 @@ export function calaulateForce(target){
         .force('center', d3.forceCenter(400, 300))
         .stop()
         .tick(10000)
-    
+
 }
 

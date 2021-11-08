@@ -23,7 +23,7 @@ drawDeleteBox(architecture);
 svgInit(sharpleyvalue);
 drawObject();
 
-const fullDatasetPromise = d3.json('/nasbench_minified_nodeedgenum.json');
+const fullDatasetPromise = d3.json('/nasbench_minified_numberkey.json');
 fullDatasetPromise.then((json) => {
     fullDataset = json;
     unstructuredDataset = Object.values(fullDataset).reduce((acc, cur) => acc.concat(cur));

@@ -46,6 +46,11 @@ button {
   font-size: 10px;
 }
 
+.btn-purple {
+  color : #6f42c1;
+  background-color: #6f42c1;
+}
+
 #recommend-accuracy{
   text-align: center;
   font-size: 7;

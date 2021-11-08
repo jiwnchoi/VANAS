@@ -54,17 +54,29 @@ export function svgInit(svg){
         .attr("points","0 0, 6 2, 0 4")
         .attr("fill","black");
     
-    const markerDelete = defs.append("marker")
-        .attr("id", "endDelete")
+    const markerNegative = defs.append("marker")
+        .attr("id", "endNegative")
         .attr("orient", "auto")
         .attr("markerWidth", 6)
         .attr("markerHeight", 4)
         .attr("refX", 18.1)
         .attr("refY", 2)
 
-    markerDelete.append("polygon")
+    markerNegative.append("polygon")
         .attr("points","0 0, 6 2, 0 4")
-        .attr("fill","tomato");
+        .attr("fill","#dc3545");
+
+    const markerPositive = defs.append("marker")
+        .attr("id", "endPositive")
+        .attr("orient", "auto")
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 4)
+        .attr("refX", 18.1)
+        .attr("refY", 2)
+
+    markerPositive.append("polygon")
+        .attr("points", "0 0, 6 2, 0 4")
+        .attr("fill", "#0D6EFD");
 
     const markerExt = defs.append("marker")
         .attr("id", "endExt")

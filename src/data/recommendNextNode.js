@@ -8,15 +8,13 @@ function addEdge(sourceNode, targetNode, nodeData, edgeData) {
     }
     let source, target;
     for (let node of nodeData) {
-        if (node.index == sourceNode) {
+        if (node == sourceNode) {
             source = node;
         }
-        if (node.index == targetNode) {
+        if (node == targetNode) {
             target = node;
         }
     }
-    source.outdegree += 1;
-    target.indegree += 1;
     const newEdge = {
         source,
         target,
@@ -73,7 +71,6 @@ async function getNextNodeAccuracy(curruntNode){
         //edgeData에서 엣지 추가
         const newEdgeData = edgeData.slice();
         let source, target;
-
         if (targetNode.index != 1){
             for (let node of nodeData){
                 if (node.index == targetNode.index) source = node;
@@ -88,15 +85,13 @@ async function getNextNodeAccuracy(curruntNode){
         addEdge(source, target, nodeData, newEdgeData);
 
 
-
         //extranous 제거
         const [newNodeData, newEdgeDataExcluded] = excludeExtraneous(nodeData, newEdgeData);
 
-        
-        const testAccuracy = getQuery(nodeData, newEdgeDataExcluded).test_accuracy;
-        
-        const isDirect = targetNode.index == 1 ? 1 : 0;
+        const testAccuracy = getQuery(newNodeData, newEdgeDataExcluded).test_accuracy;
 
+
+        const isDirect = targetNode.index == 1 ? 1 : 0;
         result.push({
                 source : nodeData.filter((d, i) => d.index == curruntNode)[0],
                 target : targetNode,
