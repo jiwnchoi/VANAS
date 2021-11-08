@@ -11,7 +11,7 @@ import printRecommendation from "./view/printRecommendation";
 import printPreset from "./view/printPreset";
 
 export let fullDataset = null;
-export let unstructuredDataset = null;
+export let unstructuredDataset = null; //0: matrix 1:? 2: time 3: parameter 6: accuracy
 const heatmap = d3.select("#heatmap");
 const tooltip = d3.select("#tooltip");
 const architecture = d3.select("#architecture");

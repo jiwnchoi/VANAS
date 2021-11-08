@@ -51,9 +51,9 @@ button {
   font-size: 7;
 }
 
-#preset-name{
+.preset-name{
   text-align: center;
-  font-size: 7;
+  font-size: 4;
 }
 
 .append-button {
