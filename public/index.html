@@ -51,30 +51,30 @@
         <div class="row g-3">
             <div class="col-lg-5">
                 <ul class="list-group list-group-horizontal" id="options">
-                    <li class="list-group-item ">
-                        <label for="optionX">X축</label>
+                    <li class="list-group-item flex-fill ">
+                        <label for="optionX">X axis</label>
                         <select class="form-select form-select-sm" id="optionX">
                             <option value=trainable_parameters selected="selected"># of trainable parameters</option>
                             <option value=training_time>training time</option>
-                            <option value=test_accuracy>accuracy</option>
+                            <!-- <option value=test_accuracy>accuracy</option> -->
                         </select>
                     </li>
-                    <li class="list-group-item ">
-                        <label for="optionY">Y축</label>
+                    <li class="list-group-item flex-fill ">
+                        <label for="optionY">Y axis</label>
                         <select class="form-select form-select-sm" id="optionY">
                             <option value=trainable_parameters># of trainable parameters</option>
                             <option value=training_time selected="selected">training time</option>
                             <option value=test_accuracy>accuracy</option>
                         </select>
                     </li>
-                    <li class="list-group-item ">
-                        <label for="optionZ">Z축</label>
+                    <!-- <li class="list-group-item ">
+                        <label for="optionZ">Z axis</label>
                         <select class="form-select form-select-sm" id="optionZ">
                             <option value=trainable_parameters># of trainable parameters</option>
                             <option value=training_time>training time</option>
                             <option value=test_accuracy selected="selected">accuracy</option>
                         </select>
-                    </li>
+                    </li> -->
                     <button id="generateButton" class="btn btn-primary">Generate Heatmap</button>
                 </ul>
                 <div class="border bg-light svg-container mb-3">

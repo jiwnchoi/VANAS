@@ -53,7 +53,7 @@ function generateHeatmap(heatmapData) {
     let heatmapResult = drawHeatmap()
         .x(d3.select("#optionX").property("value"))
         .y(d3.select("#optionY").property("value"))
-        .z(d3.select("#optionZ").property("value"))
+        .z("test_accuracy")
         .splitX(50)
         .splitY(30)
         (heatmapData);
