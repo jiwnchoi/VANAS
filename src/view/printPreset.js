@@ -12,13 +12,22 @@ function convertItem(item) {
     return res;
 }
 
+function performanceCalculator(item, k = 0) {
+    let ret = 1;
+    ret *= item[6] * item[6] * item[6];
+    if (k === 1) console.log(ret);
+    ret /= Math.log(Math.log(item[3])) * Math.log(item[2]);
+    if (k === 1) console.log(ret);
+    return ret;
+}
+
 function getPreset() {
     let results = [];
     let inception, highestAccuracy = unstructuredDataset[0], highestPerformance = unstructuredDataset[0];
-    unstructuredDataset.forEach((item, i) => {
+    unstructuredDataset.forEach((item) => {
         if (item[2] === 1156 && item[3] === 2694282) inception = item;
         if (highestAccuracy[6] < item[6]) highestAccuracy = item;
-        if ((highestPerformance[6] * highestPerformance[3] / highestPerformance[2]) < (item[6] * item[3] / item[2])) highestPerformance = item;
+        if (performanceCalculator(highestPerformance) < performanceCalculator(item, 0)) highestPerformance = item;
     });
     results.push(convertItem(inception));
     results.push(convertItem(highestPerformance));
