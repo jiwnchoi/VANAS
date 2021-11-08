@@ -51,11 +51,9 @@ button {
   font-size: 7;
 }
 
-.preset-name{
-  text-align: center;
-  font-size: 4;
+#preset-col li{
+  width:100%;
 }
-
 .append-button {
   color : white;
 }
