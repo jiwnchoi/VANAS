@@ -35,45 +35,46 @@
             </div>
         </nav>
     </header>
-    
+
     <main id="loading" class="container-xxl bd-layout overflow-hidden d-flex justify-content-center">
         <div class="d-flex flex-column align-items-center">
-            <div class="d-flex mt-5 mb-5"><h1>Loading NASBench Visualizer...</h1></div>
-            <div class="d-flex  spinner-border spinner-border-xxl text-primary" role="status" style="width: 20rem; height: 20rem;"></div>
+            <div class="d-flex mt-5 mb-5">
+                <h1>Loading NASBench Visualizer...</h1>
+            </div>
+            <div class="d-flex  spinner-border spinner-border-xxl text-primary" role="status"
+                style="width: 20rem; height: 20rem;"></div>
 
         </div>
     </main>
-    
+
     <main id="main" class="bd-main container-xxl bd-layout overflow-hidden visually-hidden">
         <div class="row g-3">
-
             <div class="col-lg-5">
                 <ul class="list-group list-group-horizontal" id="options">
-                    <li class="list-group-item ">
-                        <label for="optionX">X축</label>
+                    <li class="list-group-item flex-fill ">
+                        <label for="optionX">X axis</label>
                         <select class="form-select form-select-sm" id="optionX">
-                            <option value=trainable_parameters selected="selected"># of trainable parameters
-                            </option>
+                            <option value=trainable_parameters selected="selected"># of trainable parameters</option>
                             <option value=training_time>training time</option>
-                            <option value=test_accuracy>accuracy</option>
+                            <!-- <option value=test_accuracy>accuracy</option> -->
                         </select>
                     </li>
-                    <li class="list-group-item ">
-                        <label for="optionY">Y축</label>
+                    <li class="list-group-item flex-fill ">
+                        <label for="optionY">Y axis</label>
                         <select class="form-select form-select-sm" id="optionY">
                             <option value=trainable_parameters># of trainable parameters</option>
                             <option value=training_time selected="selected">training time</option>
                             <option value=test_accuracy>accuracy</option>
                         </select>
                     </li>
-                    <li class="list-group-item ">
-                        <label for="optionZ">Z축</label>
+                    <!-- <li class="list-group-item ">
+                        <label for="optionZ">Z axis</label>
                         <select class="form-select form-select-sm" id="optionZ">
                             <option value=trainable_parameters># of trainable parameters</option>
                             <option value=training_time>training time</option>
                             <option value=test_accuracy selected="selected">accuracy</option>
                         </select>
-                    </li>
+                    </li> -->
                     <button id="generateButton" class="btn btn-primary">Generate Heatmap</button>
                 </ul>
                 <div class="border bg-light svg-container mb-3">
@@ -90,10 +91,35 @@
 
             </div>
             <div id="cellBuilder" class="col-lg-5">
+                <ul class="list-group list-group-horizontal" id="preset-col">
+                    <li class="list-group-item preset-cell">
+                        <div class="border bg-light svg-container mb-1 "><svg id="recommend6" viewBox="0 0 800 600"
+                                preserveAspectRatio="xMinYMin meet" class="svg-content-responsive recommend-cell-svg">
+                            </svg>
+                        </div>
+                        <div class="preset-name row d-flex justify-content-center mb-1">Inception-like
+                        </div>
+                    </li>
+                    <li class="list-group-item preset-cell">
+                        <div class="border bg-light svg-container mb-1 "><svg id="recommend7" viewBox="0 0 800 600"
+                                preserveAspectRatio="xMinYMin meet" class="svg-content-responsive recommend-cell-svg">
+                            </svg>
+                        </div>
+                        <div class="preset-name row d-flex justify-content-center mb-1">Highest Performance
+                        </div>
+                    </li>
+                    <li class="list-group-item preset-cell">
+                        <div class="border bg-light svg-container mb-1 "><svg id="recommend8" viewBox="0 0 800 600"
+                                preserveAspectRatio="xMinYMin meet" class="svg-content-responsive recommend-cell-svg">
+                            </svg>
+                        </div>
+                        <div class="preset-name row d-flex justify-content-center mb-1">Highest Accuracy
+                        </div>
+                    </li>
+                </ul>
                 <div id="initAlert" class="alert alert-primary" role="alert">
                     Click source node and target node to make edge.
                 </div>
-
                 <div class="border bg-light svg-container2 mb-2">
                     <svg id="architecture" viewBox="0 0 800 700" preserveAspectRatio="xMinYMin meet"
                         class="svg-content-responsive"></svg>
@@ -105,7 +131,7 @@
                     <button id="conv3x3-bn-relu" type="button" class=" btn btn-warning append-button">(+) 3X3
                         CONV</button>
                     <button id="maxpool3x3" type="button" class=" btn btn-success append-button">(+) 3X3
-                    POOL</button>
+                        POOL</button>
                     <button id="init-cell" type="button" class=" btn btn-primary append-button">Init
                         Cell</button>
                 </div>

@@ -137,7 +137,7 @@ let drawHeatmap = function () {
         };
         const mousemove = function (event, d) {
             tooltip
-                .html("accuracy: " + d.zMax)
+                .html("accuracy: " + d3.format(".2%")(d.zMax))
                 .style("top", (event.y) + "px")
                 .style("left", (event.x + 10) + "px");
         };
@@ -151,7 +151,7 @@ let drawHeatmap = function () {
             drawObjectwithForce(null, 0);
             printRecommendation();
             printResult();
-            
+
         }
 
         graph.append("g")
@@ -198,14 +198,14 @@ let drawHeatmap = function () {
             .title("Accuracy")
             .shapeWidth(legendWidth / legendCells)
             .shapePadding(legendWidth / legendCells)
-            .labelFormat(d3.format(".3f"))
+            .labelFormat(d3.format(".1%"))
             .labels(function ({
                 i,
                 genLength,
                 generatedLabels,
                 labelDelimiter
             }) {
-                return (Math.round(generatedLabels[i] * 1000) / 10 + '%');
+                return generatedLabels[i];
             })
             .cells(legendCells)
             .orient("horizontal")
