@@ -35,10 +35,6 @@ function initCell(target = 0) {
         edgeData = getRecommendEdgeData(target);
     }
     nodeData.splice(2, nodeData.length);
-    nodeData[0].indegree = 0;
-    nodeData[0].outdegree = 0;
-    nodeData[1].indegree = 0;
-    nodeData[1].outdegree = 0;
     edgeData.splice(0, edgeData.length);
 }
 
@@ -69,3 +65,4 @@ function setCell(ops, matrix, target = 0) {
 }
 
 export { setCell, initCell, copyCelltoMain };
+

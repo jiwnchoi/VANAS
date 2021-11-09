@@ -7,8 +7,6 @@ const nodeData = [{
                     fx : 100,
                     fy : 300,
                     status : null,
-                    indegree : 0,
-                    outdegree : 0,
                 },
                 {
                     index : 1,
@@ -19,8 +17,6 @@ const nodeData = [{
                     fx : 700,
                     fy : 300,
                     status : null,
-                    indegree: 0,
-                    outdegree: 0,
                 }];
 
 const edgeData = [

@@ -94,8 +94,6 @@ function matchGraph(nodeData, edgeData, dataEdges, dataOps){
 
 export default function getQuery(nodeData, edgeData){
 
-    // const key = nodeData.map(node => String(node.indegree) + String(node.outdegree) + String(codedOperation[node.type])).sort()
-    // const keyString = key.join("");
     const tmp = [0,0,0, edgeData.length];
     for (const node of nodeData){
         if (node.type == 'conv1x1-bn-relu') tmp[0] ++;
@@ -105,12 +103,9 @@ export default function getQuery(nodeData, edgeData){
 
     
     const keyString = tmp.join("");
-    const edges = edgeData.map(edge => [edge.source.index, edge.target.index]);
     let query = [];
-    console.log(keyString);
     
     const dataset = fullDataset[keyString];
-    console.log(fullDataset);
 
     for (let data of dataset){
         if(nodeData.length != data[1].length+2) continue;

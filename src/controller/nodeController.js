@@ -26,8 +26,6 @@ function addNode(nodeType, target=0){
         name : nodeName,
         x : Math.random() * 400 + 200,
         y : Math.random() * 350 + 100,
-        indegree: 0,
-        outdegree: 0,
     }
     nodeData.push(newData);
     

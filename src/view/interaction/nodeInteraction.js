@@ -36,7 +36,7 @@ function deleteBoxCheck(x, y){
     if ( rectMargin < x &&
          x < 800-rectMargin &&
          700-rectMargin-rectHeight < y && 
-         y < 600-rectMargin){
+         y < 800-rectMargin){
         return true;
     }
     return false;

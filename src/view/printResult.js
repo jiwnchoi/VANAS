@@ -7,8 +7,6 @@ import drawObject from "./drawObject";
 
 export default async function printResult(){
     d3.select("#analytics").attr("class", "visually-hidden");
-    // d3.select("#initAlert").attr("class","visually-hidden");
-
 
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
@@ -17,20 +15,21 @@ export default async function printResult(){
 
     
 
+    //number of edge check
     if(cellStatus.numEdges > 9){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#edgeNumberAlert")
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
-
+    //isconnected
     if(!cellStatus.isConnected){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#connectAlert")
             .attr("class", "notcell alert alert-warning");
         checker++;
     }
-
+    //isAcyclic
     if(!cellStatus.isAcyclic){
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#cycleAlert")
@@ -38,6 +37,17 @@ export default async function printResult(){
         checker++;
     }
 
+
+    //init ext info
+    for (let node of nodeData) {
+        node.status = null;
+    }
+    for (let edge of edgeData) {
+        edge.isExt = false;
+    }
+
+
+    // extraneous check
     if(cellStatus.extraneous.length > 0){
         d3.select("#analytics").attr("class", "visually-hidden");
 
@@ -66,7 +76,6 @@ export default async function printResult(){
             .attr("class", "visually-hidden");
 
         const [tmpNodeData, tmpEdgeData] = excludeExtraneous(nodeData, edgeData);
-        console.log(nodeData, edgeData, tmpNodeData, tmpEdgeData);
         const json = getQuery(tmpNodeData, tmpEdgeData);
         if (json){
             d3.select("#analytics")
@@ -84,7 +93,6 @@ export default async function printResult(){
 
             const sharpleyValues = json.sharpley_value;
             const graphMatcher = json.graph_matcher;
-            console.log(sharpleyValues, graphMatcher, json)
             for (const edge of tmpEdgeData){
                 const source = graphMatcher.indexOf(edge.source.index);
                 const target = graphMatcher.indexOf(edge.target.index);
@@ -92,26 +100,17 @@ export default async function printResult(){
                 if(sharpleyValues[key] == "") edge.sharpleyValue = null;
                 else edge.sharpleyValue = sharpleyValues[key];
             }
-            console.log(edgeData);
         }
         else{
             d3.select("#analytics").attr("class", "visually-hidden");
         }
         
     }
-    for (let node of nodeData){
-        if(cellStatus.extraneous.indexOf(node.index) == -1){
-            node.status = null;
-        }
-    }
-    for (let edge of edgeData){
-        if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
-        cellStatus.extraneous.indexOf(edge.target) == -1){
-            edge.isExt = false;
-        }
-    }
-    
+    console.log(nodeData, edgeData);
     drawObject();
+    
+    
+   
 
 }
 
