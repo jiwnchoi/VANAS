@@ -3,7 +3,7 @@ import drawObject from "../drawObject";
 import { removeEdge } from "../makeObject";
 
 
-const tooltip = d3.select("#architecture").append("div")
+const tooltip = d3.select("#cellBuilder").append("div")
     .attr("class", "tooltipMetric")
     .style("position", "fixed")
     .style("background-color", "white")
@@ -17,11 +17,16 @@ const tooltip = d3.select("#architecture").append("div")
 
 
 function edgeMouseOver(event, d){
+    function calcTooltipXcoordinate(event){
+        if (event.x < 1350) return (event.x + 10) + "px";
+        else return (event.x - 145) + "px";
+    }
+
     d3.select(this).datum().isDelete = 'delete';
     tooltip
-        .html("Metric: " + d.sharpleyValue)
+        .html("Contribution Rate: " + d.sharpleyValue)
         .style("top", (event.y) + "px")
-        .style("left", (event.x) + "px")
+        .style("left", calcTooltipXcoordinate(event))
         .classed("visually-hidden", false);
     drawObject();
 }

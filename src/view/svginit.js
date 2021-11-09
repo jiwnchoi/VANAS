@@ -47,7 +47,7 @@ export function svgInit(svg){
         .attr("orient", "auto")
         .attr("markerWidth", 6)
         .attr("markerHeight", 4)
-        .attr("refX", 18.1)
+        .attr("refX", 15)
         .attr("refY", 2)
 
     marker.append("polygon")
@@ -59,7 +59,7 @@ export function svgInit(svg){
         .attr("orient", "auto")
         .attr("markerWidth", 6)
         .attr("markerHeight", 4)
-        .attr("refX", 18.1)
+        .attr("refX", 15)
         .attr("refY", 2)
 
     markerNegative.append("polygon")
@@ -71,31 +71,20 @@ export function svgInit(svg){
         .attr("orient", "auto")
         .attr("markerWidth", 6)
         .attr("markerHeight", 4)
-        .attr("refX", 18.1)
+        .attr("refX", 15)
         .attr("refY", 2)
 
     markerPositive.append("polygon")
         .attr("points", "0 0, 6 2, 0 4")
         .attr("fill", "#0D6EFD");
 
-    const markerExt = defs.append("marker")
-        .attr("id", "endExt")
-        .attr("orient", "auto")
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 4)
-        .attr("refX", 18.1)
-        .attr("refY", 2)
-
-    markerExt.append("polygon")
-        .attr("points","0 0, 6 2, 0 4")
-        .attr("fill","orange");
 
     const markerRecommend = defs.append("marker")
         .attr("id", "endRecommend")
         .attr("orient", "auto")
         .attr("markerWidth", 6)
         .attr("markerHeight", 4)
-        .attr("refX", 18.1)
+        .attr("refX", 15)
         .attr("refY", 2)
 
     markerRecommend.append("polygon")

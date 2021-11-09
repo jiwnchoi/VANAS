@@ -137,7 +137,7 @@ function drawEdge(target = 0) {
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y)
-        .attr("stroke-width", 3)
+        .attr("stroke-width", 4)
         .attr("opacity", (d) => {
             if (d.isExt) return 0.2;
             else return 1;
