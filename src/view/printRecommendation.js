@@ -61,10 +61,10 @@ export default function printRecommendation() {
         .remove()
 
     for (let i = 0; i < data.length; i++) {
+        console.log(data[i]);
         setCell(data[i][1], data[i][2], i + 1);
-        drawObjectwithForce(null, i + 1)
+        drawObjectwithForce(null, i + 1);
     }
-
 
 
 }

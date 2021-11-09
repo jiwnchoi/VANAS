@@ -56,7 +56,9 @@ button {
   font-size: 7;
 }
 
-
+#preset-col li{
+  width:100%;
+}
 .append-button {
   color : white;
 }
