@@ -70,3 +70,9 @@ button {
 .section-title{
   font-size: 10;
 }
+
+.tooltip-inner {
+  max-width : 400px;
+  text-align: left;
+  /* width : 400px; */
+}
