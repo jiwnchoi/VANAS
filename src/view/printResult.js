@@ -7,11 +7,8 @@ import drawObject from "./drawObject";
 
 export default async function printResult() {
     d3.select("#analytics").attr("class", "visually-hidden");
-<<<<<<< HEAD
-=======
     d3.select("#initAlert").attr("class", "visually-hidden");
 
->>>>>>> origin/heatmap
 
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
@@ -19,44 +16,28 @@ export default async function printResult() {
     let checker = 0;
 
 
-<<<<<<< HEAD
-    //number of edge check
-    if(cellStatus.numEdges > 9){
-=======
 
     if (cellStatus.numEdges > 9) {
->>>>>>> origin/heatmap
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#edgeNumberAlert")
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
-<<<<<<< HEAD
-    //isconnected
-    if(!cellStatus.isConnected){
-=======
 
     if (!cellStatus.isConnected) {
->>>>>>> origin/heatmap
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#connectAlert")
             .attr("class", "notcell alert alert-warning");
         checker++;
     }
-<<<<<<< HEAD
-    //isAcyclic
-    if(!cellStatus.isAcyclic){
-=======
 
     if (!cellStatus.isAcyclic) {
->>>>>>> origin/heatmap
         d3.select("#analytics").attr("class", "visually-hidden");
         d3.select("#cycleAlert")
             .attr("class", "notcell alert alert-danger");
         checker++;
     }
 
-<<<<<<< HEAD
 
     //init ext info
     for (let node of nodeData) {
@@ -68,10 +49,7 @@ export default async function printResult() {
 
 
     // extraneous check
-    if(cellStatus.extraneous.length > 0){
-=======
     if (cellStatus.extraneous.length > 0) {
->>>>>>> origin/heatmap
         d3.select("#analytics").attr("class", "visually-hidden");
 
         for (let ext of cellStatus.extraneous) {
@@ -116,12 +94,8 @@ export default async function printResult() {
 
             const sharpleyValues = json.sharpley_value;
             const graphMatcher = json.graph_matcher;
-<<<<<<< HEAD
-            for (const edge of tmpEdgeData){
-=======
-            console.log(sharpleyValues, graphMatcher, json)
+            //console.log(sharpleyValues, graphMatcher, json)
             for (const edge of tmpEdgeData) {
->>>>>>> origin/heatmap
                 const source = graphMatcher.indexOf(edge.source.index);
                 const target = graphMatcher.indexOf(edge.target.index);
                 const key = String(source) + String(target);
@@ -134,26 +108,23 @@ export default async function printResult() {
         }
 
     }
-<<<<<<< HEAD
-    console.log(nodeData, edgeData);
-=======
-    for (let node of nodeData) {
-        if (cellStatus.extraneous.indexOf(node.index) == -1) {
-            node.status = null;
-        }
-    }
-    for (let edge of edgeData) {
-        if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
-            cellStatus.extraneous.indexOf(edge.target) == -1) {
-            edge.isExt = false;
-        }
-    }
+    // console.log(nodeData, edgeData);
+    // for (let node of nodeData) {
+    //     if (cellStatus.extraneous.indexOf(node.index) == -1) {
+    //         node.status = null;
+    //     }
+    // }
+    // for (let edge of edgeData) {
+    //     if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
+    //         cellStatus.extraneous.indexOf(edge.target) == -1) {
+    //         edge.isExt = false;
+    //     }
+    // }
 
->>>>>>> origin/heatmap
     drawObject();
-    
-    
-   
+
+
+
 
 }
 
