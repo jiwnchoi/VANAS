@@ -79,12 +79,14 @@ export default async function printResult() {
         const [tmpNodeData, tmpEdgeData] = excludeExtraneous(nodeData, edgeData);
         const json = getQuery(tmpNodeData, tmpEdgeData);
         if (json) {
+            let training_time_formatted = new Date(parseInt(json.training_time) * 1000).toISOString().substr(11, 8);
+
             d3.select("#analytics")
                 .attr("class", "alert bg-light alert-secondary");
             d3.select("#trainable_parameters")
                 .text(d3.format(",")(json.trainable_parameters));
             d3.select("#training_time")
-                .text(json.training_time);
+                .text(training_time_formatted);
             d3.select("#train_accuracy")
                 .text(d3.format(".2%")(json.train_accuracy));
             d3.select("#validation_accuracy")
@@ -106,7 +108,6 @@ export default async function printResult() {
         else {
             d3.select("#analytics").attr("class", "visually-hidden");
         }
-
     }
     // console.log(nodeData, edgeData);
     // for (let node of nodeData) {
