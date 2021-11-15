@@ -50,6 +50,7 @@
     <main id="main" class="bd-main container-xxl bd-layout overflow-hidden visually-hidden">
         <div class="row g-3">
             <div class="col-lg-5">
+                <div class="section-title">Heatmap View</div>
                 <ul class="list-group list-group-horizontal" id="options">
                     <li class="list-group-item flex-fill ">
                         <label for="optionX">X axis</label>
@@ -83,15 +84,16 @@
                     <div id="tooltip"></div>
                 </div>
 
-
+                <div class="section-title">Sharpley Value</div>
                 <div class="border bg-light svg-container">
                     <svg id="sharpleyvalue" viewBox="0 0 800 600" preserveAspectRatio="xMinYMin meet"
                         class="svg-content-responsive"></svg>
                 </div>
-
             </div>
+
             <div id="cellBuilder" class="col-lg-5">
-                <ul class="list-group list-group-horizontal" id="preset-col">
+                <div class="section-title">Presets</div>
+                <ul class="list-group list-group-horizontal mb-2" id="preset-col">
                     <li class="list-group-item preset-cell">
                         <div class="border bg-light svg-container mb-1 "><svg id="recommend6" viewBox="0 0 800 600"
                                 preserveAspectRatio="xMinYMin meet" class="svg-content-responsive recommend-cell-svg">
@@ -117,12 +119,14 @@
                         </div>
                     </li>
                 </ul>
-                <div id="initAlert" class="alert alert-primary" role="alert">
-                    Click source node and target node to make edge.
-                </div>
-                <div class="border bg-light svg-container2 mb-2">
+
+                <div class="section-title">Model Viewer</div>
+                <div class="border bg-light svg-container2">
                     <svg id="architecture" viewBox="0 0 800 700" preserveAspectRatio="xMinYMin meet"
                         class="svg-content-responsive"></svg>
+                </div>
+                <div id="initAlert" class="alert alert-primary" role="alert">
+                    Click source node and target node to make edge.
                 </div>
 
                 <div class="mb-2 g-1 d-flex justify-content-between">
@@ -135,12 +139,8 @@
                     <button id="init-cell" type="button" class=" btn btn-primary append-button">Init
                         Cell</button>
                 </div>
-                    
-                    
-                    
-                    
-            
-                
+
+
                 <div id="connectAlert" class="notcell alert alert-warning visually-hidden" role="alert">
                     Input node and output node must be connected.
                 </div>
@@ -157,26 +157,26 @@
                     Cell is not acyclic. (with orange shadow)
                 </div>
 
+
+                <div id="analyticsTitle" class="visually-hidden">NAS Benchmark Result</div>
                 <div id="analytics" class="visually-hidden" role="alert">
-                    <h4>NAS Benchmark Result</h4>
-                    <hr>
-                    <h5>Trainable Parameters</h5>
+                    <div>Trainable Parameters</div>
                     <div id="trainable_parameters">
 
                     </div>
-                    <h5>Training Time</h5>
+                    <div>Training Time</div>
                     <div id="training_time">
 
                     </div>
-                    <h5>Train Accuracy</h5>
+                    <div>Train Accuracy</div>
                     <div id="train_accuracy">
 
                     </div>
-                    <h5>Validation Accuracy</h5>
+                    <div>Validation Accuracy</div>
                     <div id="validation_accuracy">
 
                     </div>
-                    <h5>Test Accuracy</h5>
+                    <div>Test Accuracy</div>
                     <div id="test_accuracy">
 
                     </div>

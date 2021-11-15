@@ -59,6 +59,14 @@ button {
 #preset-col li{
   width:100%;
 }
+#preset-name{
+  text-align: center;
+  font-size: 7;
+}
 .append-button {
   color : white;
+}
+
+.section-title{
+  font-size: 10;
 }
