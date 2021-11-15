@@ -7,7 +7,7 @@ import drawObject from "./drawObject";
 
 export default async function printResult() {
     d3.select("#analytics").attr("class", "visually-hidden");
-    d3.select("#initAlert").attr("class", "visually-hidden");
+    d3.select("#analyticsTitle").attr("class", "visually-hidden");
 
 
     const nodeData = getNodeData();
@@ -79,7 +79,7 @@ export default async function printResult() {
         const [tmpNodeData, tmpEdgeData] = excludeExtraneous(nodeData, edgeData);
         const json = getQuery(tmpNodeData, tmpEdgeData);
         if (json) {
-            d3.select("#analyticsTitle").attr("class", "section-title");
+            d3.select("#analyticsTitle").attr("class", "section-title mb-3");
 
             let training_time_formatted = new Date(parseInt(json.training_time) * 1000).toISOString().substr(11, 8);
             d3.select("#analytics")
