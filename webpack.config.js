@@ -13,23 +13,23 @@ module.exports = {
   mode: "none",
   module: {
     rules: [
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: "html-loader",
-            options: { minimize: true }
-          }
-        ]
-      }
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.js$/,
+        exclude: /node_modules/, 
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'], 
+            "plugins": ["@babel/plugin-transform-runtime"]
+          }, 
+        }, 
+      },
     ]
   },
   plugins: [
     new HtmlWebPackPlugin({
-      hash : true,
-      chunks : ['index'],
 			template: './public/index.html', 
-      filename: 'index.html'
     }),
   ]
 };
+

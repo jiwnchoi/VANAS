@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import "../public/styles.css";
 import { drawDeleteBox, svgInit } from "./view/svgInit";
 import drawObject from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
