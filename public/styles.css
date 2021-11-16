@@ -74,5 +74,5 @@ button {
 .tooltip-inner {
   max-width : 400px;
   text-align: left;
-  /* width : 400px; */
+  padding : 10px;
 }

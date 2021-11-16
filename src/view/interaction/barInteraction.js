@@ -2,6 +2,8 @@ import * as d3 from 'd3';
 import { addNode } from "../../controller/nodeController";
 import { getNodeData } from "../../data/data";
 import { makeEdge } from "../makeObject";
+import printRecommendation from '../printRecommendation';
+import printResult from '../printResult';
 
 function barClicked(source, target){
     const nodeData = getNodeData();
@@ -21,6 +23,8 @@ function barClicked(source, target){
         addNode(target);
         makeEdge(nodeData[nodeData.length-2].index, nodeData[nodeData.length-1].index);
     }
+    printRecommendation();
+    printResult();
 }
 
 function barMouseOver(){
