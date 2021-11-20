@@ -1,1 +1,1 @@
-# Neural Architecture Search Benchmark Visualizaer for Web
+# VANAS: A Visual Analytics System for Neural Architecture Search
