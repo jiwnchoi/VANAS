@@ -41,6 +41,11 @@ d3.select("#init-cell").on("click", () => {
     printResult();
     printRecommendation();
 });
+
+d3.selectAll("#optionX, #optionY").on("change", () => {
+    heatmap.select("svg").remove();
+    generateHeatmap(unstructuredDataset);
+});
 d3.select("#generateButton").on("click", () => {
     heatmap.select("svg").remove();
     generateHeatmap(unstructuredDataset);

@@ -79,7 +79,7 @@ export default async function printResult() {
         const [tmpNodeData, tmpEdgeData] = excludeExtraneous(nodeData, edgeData);
         const json = getQuery(tmpNodeData, tmpEdgeData);
         if (json) {
-            d3.select("#analyticsTitle").attr("class", "section-title mb-3");
+            d3.select("#analyticsTitle").classed("visually-hidden", false)
 
             let training_time_formatted = new Date(parseInt(json.training_time) * 1000).toISOString().substr(11, 8);
             d3.select("#analytics")
@@ -107,7 +107,7 @@ export default async function printResult() {
             }
         }
         else {
-            d3.select("#analyticsTitle").attr("class", "visually-hidden");
+            d3.select("#analyticsTitle").classed("visually-hidden", true)
             d3.select("#analytics").attr("class", "visually-hidden");
         }
     }

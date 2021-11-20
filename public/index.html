@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>NASBench Visualizer</title>
+        <title>VANAS: A Visual Analytics System for Neural Architecture Search</title>
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -26,41 +26,18 @@
     </head>
 
     <body>
-        <header class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
-            <nav class="container-fluid flex-wrap flex-md-nowrap">
-                <a class="navbar-brand p-0" href="#">NASBench Visualizer</a>
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#bdNavbar"
-                    aria-controls="bdNavbar"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="bdNavbar">
-                    <ul
-                        class="
-                            navbar-nav
-                            flex-row flex-wrap
-                            bd-navbar
-                            pt-2
-                            py-md-0
-                        "
-                    >
-                        <li class="nav-item col-4 col-md-auto">
-                            <a
-                                class="nav-link"
-                                href="https://github.com/jason-choi-skku/nasbench-101-visualizer"
-                                >Github</a
-                            >
+        <nav class="navbar navbar-light bg-light mb-2 py-1">
+            <div class="container align-items-center">
+                <a class="navbar-brand" href="#">VANAS</a>
+                <div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://github.com/jason-choi-skku/nasbench-101-visualizer"><i class="bi bi-box-arrow-in-right"></i> Github</a>
                         </li>
                     </ul>
                 </div>
-            </nav>
-        </header>
+            </div>
+        </nav>
 
         <main
             id="loading"
@@ -74,7 +51,7 @@
         >
             <div class="d-flex flex-column align-items-center">
                 <div class="d-flex mt-5 mb-5">
-                    <h1>Loading NASBench Visualizer...</h1>
+                    <h1>Loading Datasets...</h1>
                 </div>
                 <div
                     class="
@@ -100,8 +77,8 @@
         >
             <div class="row g-3">
                 <div class="col-lg-5">
-                    <div class="section-title mb-3">
-                        <h5 style="display: inline">Heatmap Viewer</h5>
+                    <div class="section-title mb-1">
+                        <h5 style="display: inline">Overview</h5>
                         <i
                             class="bi bi-question-circle"
                             data-bs-toggle="tooltip"
@@ -113,43 +90,45 @@
                             "
                         ></i>
                     </div>
-                    <ul class="list-group list-group-horizontal" id="options">
-                        <li class="list-group-item flex-fill">
+                    <div class="d-flex border border-bottom-0 rounded-top p-2 px-3" id="options">
+                        <div class="flex-fill align-items-center d-flex">
                             <label for="optionX">X axis</label>
                             <select
-                                class="form-select form-select-sm"
+                                class="form-select form-select-sm width-auto ms-2"
                                 id="optionX"
+                                
                             >
                                 <option
                                     value="trainable_parameters"
                                     selected="selected"
                                 >
-                                    # of trainable parameters
+                                    # of Parameters
                                 </option>
                                 <option value="training_time">
-                                    training time
+                                    Training Time
                                 </option>
                                 <!-- <option value=test_accuracy>accuracy</option> -->
                             </select>
-                        </li>
-                        <li class="list-group-item flex-fill">
+                        </div>
+                        <div class="flex-fill  align-items-center d-flex"> 
                             <label for="optionY">Y axis</label>
                             <select
-                                class="form-select form-select-sm"
+                                class="form-select form-select-sm width-auto ms-2"
                                 id="optionY"
+                             
                             >
                                 <option value="trainable_parameters">
-                                    # of trainable parameters
+                                    # of Parameters
                                 </option>
                                 <option
                                     value="training_time"
                                     selected="selected"
                                 >
-                                    training time
+                                    Training Time
                                 </option>
-                                <option value="test_accuracy">accuracy</option>
+                                <option value="test_accuracy">Accuracy</option>
                             </select>
-                        </li>
+                        </div>
                         <!-- <li class="list-group-item ">
                         <label for="optionZ">Z axis</label>
                         <select class="form-select form-select-sm" id="optionZ">
@@ -158,10 +137,10 @@
                             <option value=test_accuracy selected="selected">accuracy</option>
                         </select>
                     </li> -->
-                        <button id="generateButton" class="btn btn-primary">
-                            Generate Heatmap
-                        </button>
-                    </ul>
+                        <!-- <button id="generateButton" class="btn btn-primary">
+                            Update
+                        </button> -->
+                    </div>
                     <div class="border bg-light svg-container mb-3">
                         <svg
                             id="heatmap"
@@ -172,8 +151,8 @@
                         <div id="tooltip"></div>
                     </div>
 
-                    <div class="section-title mb-3">
-                        <h5 style="display: inline">Sharpley Value</h5>
+                    <div class="section-title mb-1">
+                        <h5 style="display: inline">Edge Importance</h5>
                         <i
                             class="bi bi-question-circle"
                             data-bs-toggle="tooltip"
@@ -189,6 +168,7 @@
                     <div class="border bg-light svg-container">
                         <svg
                             id="sharpleyvalue"
+                            height="400"
                             viewBox="0 0 800 600"
                             preserveAspectRatio="xMinYMin meet"
                             class="svg-content-responsive"
@@ -197,8 +177,8 @@
                 </div>
 
                 <div id="cellBuilder" class="col-lg-5">
-                    <div class="section-title mb-3">
-                        <h5 style="display: inline">Presets</h5>
+                    <div class="section-title mb-1">
+                        <h5 style="display: inline">Preset Architectures</h5>
                         <i
                             class="bi bi-question-circle"
                             data-bs-toggle="tooltip"
@@ -231,34 +211,9 @@
                                     row
                                     d-flex
                                     justify-content-center
-                                    mb-1
                                 "
                             >
                                 Inception-like
-                            </div>
-                        </li>
-                        <li class="list-group-item preset-cell">
-                            <div class="border bg-light svg-container mb-1">
-                                <svg
-                                    id="recommend7"
-                                    viewBox="0 0 800 600"
-                                    preserveAspectRatio="xMinYMin meet"
-                                    class="
-                                        svg-content-responsive
-                                        recommend-cell-svg
-                                    "
-                                ></svg>
-                            </div>
-                            <div
-                                class="
-                                    preset-name
-                                    row
-                                    d-flex
-                                    justify-content-center
-                                    mb-1
-                                "
-                            >
-                                Highest Performance
                             </div>
                         </li>
                         <li class="list-group-item preset-cell">
@@ -279,16 +234,38 @@
                                     row
                                     d-flex
                                     justify-content-center
-                                    mb-1
                                 "
                             >
-                                Highest Accuracy
+                                Best Accuracy
+                            </div>
+                        </li>
+                        <li class="list-group-item preset-cell">
+                            <div class="border bg-light svg-container mb-1">
+                                <svg
+                                    id="recommend7"
+                                    viewBox="0 0 800 600"
+                                    preserveAspectRatio="xMinYMin meet"
+                                    class="
+                                        svg-content-responsive
+                                        recommend-cell-svg
+                                    "
+                                ></svg>
+                            </div>
+                            <div
+                                class="
+                                    preset-name
+                                    row
+                                    d-flex
+                                    justify-content-center
+                                "
+                            >
+                                Best Throughput
                             </div>
                         </li>
                     </ul>
 
-                    <div class="section-title mb-3 mt-3">
-                        <h5 style="display: inline">Cell Builder</h5>
+                    <div class="section-title mb-1 mt-4">
+                        <h5 style="display: inline">Architecture Designer</h5>
                         <i
                             class="bi bi-question-circle"
                             data-bs-toggle="tooltip"
@@ -317,28 +294,28 @@
                             type="button"
                             class="btn btn-purple append-button"
                         >
-                            (+) 1X1 CONV
+                            (+) 1×1 CONV
                         </button>
                         <button
                             id="conv3x3-bn-relu"
                             type="button"
                             class="btn btn-warning append-button"
                         >
-                            (+) 3X3 CONV
+                            (+) 3×3 CONV
                         </button>
                         <button
                             id="maxpool3x3"
                             type="button"
                             class="btn btn-success append-button"
                         >
-                            (+) 3X3 POOL
+                            (+) 3×3 POOL
                         </button>
                         <button
                             id="init-cell"
                             type="button"
                             class="btn btn-primary append-button"
                         >
-                            Init Cell
+                            Reset
                         </button>
                     </div>
 
@@ -378,8 +355,8 @@
                         Cell is not acyclic. (with transparent node/edge)
                     </div>
 
-                    <div id="analyticsTitle" class="visually-hidden mb-3">
-                        <h5 style="display: inline">NAS Benchmark Result</h5>
+                    <div id="analyticsTitle" class="visually-hidden mb-1 mt-3">
+                        <h5 style="display: inline">Benchmark Result</h5>
                     </div>
                     <div id="analytics" class="visually-hidden" role="alert">
                         <div>Trainable Parameters</div>
@@ -395,8 +372,8 @@
                     </div>
                 </div>
                 <div id="recommend-col" class="col-lg-2">
-                    <div id="recommendTitle" class="mb-3">
-                        <h5 style="display: inline">Recommend</h5>
+                    <div id="recommendTitle" class="mb-1">
+                        <h5 style="display: inline">Recommendation</h5>
                         <i
                             class="bi bi-question-circle"
                             data-bs-toggle="tooltip"

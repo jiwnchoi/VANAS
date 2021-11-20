@@ -7,11 +7,17 @@ import printRecommendation from "./printRecommendation";
 import printResult from "./printResult";
 
 const accuracyLegendMargin = 70;
-const margin = { top: 30, right: 30, bottom: 30 + accuracyLegendMargin, left: 60 },
+const margin = { top: 5, right: 30, bottom: 10 + accuracyLegendMargin, left: 60 },
     width = 600,
     height = 400;
 
 const dataset = ["module_operations", "module_adjacency", "training_time", "trainable_parameters", "train_accuracy", "validation_accuracy", "test_accuracy"];
+
+const legendText = {
+    trainable_parameters: "# of Parameters",
+    training_time: "Training Time",
+    accuracy: "Accuracy"    
+}
 
 let drawHeatmap = function () {
     let splitX = 100,
@@ -50,25 +56,26 @@ let drawHeatmap = function () {
 
         let xAxis = g => g
             .attr("transform", `translate(0, ${height - margin.bottom})`)
-            .call(d3.axisBottom(xScale))
+            .call(d3.axisBottom(xScale).tickFormat(x === "trainable_parameters" ? d3.format(".2s") : x => x))
             .call(g => g
                 .append("text")
                 .attr("text-anchor", "end")
                 .attr("x", width - margin.right)
-                .attr("y", margin.bottom - 5 - accuracyLegendMargin)
+                .attr("y", 30)
                 .attr("fill", "currentColor")
-                .text(x));
+                .text(legendText[x]));
 
         let yAxis = g => g
             .attr("transform", `translate(${margin.left}, 0)`)
-            .call(d3.axisLeft(yScale))
+            .call(d3.axisLeft(yScale).tickFormat(y === "trainable_parameters" ? d3.format(".2s") : x => x))
             .call(g => g
                 .append("text")
-                .attr("text-anchor", "start")
-                .attr("x", -margin.left)
-                .attr("y", margin.top - 10)
+                .attr("text-anchor", "end")
+                .attr("x", -margin.left + 50)
+                .attr("y", -40)
                 .attr("fill", "currentColor")
-                .text(y));
+                .attr("transform", "rotate(-90)")
+                .text(legendText[y]));
 
         // generate rectbin
         let binsById = {};
@@ -110,7 +117,7 @@ let drawHeatmap = function () {
         let rectbinData = Object.values(binsById);
 
         let zExtent = d3.extent(rectbinData.map(d => d.zMax).filter(d => d !== 0));
-        let colorScale = d3.scaleSequential(d3.interpolateViridis)
+        let colorScale = d3.scaleSequential(d3.interpolateRdYlGn)
             .domain(zExtent);
 
         // size of squares
@@ -182,6 +189,7 @@ let drawHeatmap = function () {
             .attr("fill", d => { return d.length === 0 ? "transparent" : colorScale(d.zMax) }) //make visible only when there is an element
             .attr("stroke", "grey")
             .attr("stroke-width", "0.2")
+            .attr("stroke-opacity", .5)
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
@@ -189,23 +197,25 @@ let drawHeatmap = function () {
 
 
         // accuracy color legend
-        let legendWidth = 300, legendCells = 10;
+        let legendWidth = 400, legendCells = 10;
         graph.append("g")
             .attr("class", "accuracyLegend")
             .attr("transform", `translate(${width / 2 - legendWidth / 2},${height - margin.bottom + accuracyLegendMargin})`);
+
+        let percentFormat = d3.format(".1%");
 
         let accuracyLegend = legendColor()
             .title("Accuracy")
             .shapeWidth(legendWidth / legendCells)
             .shapePadding(legendWidth / legendCells)
-            .labelFormat(d3.format(".1%"))
+            .labelFormat(percentFormat)
             .labels(function ({
                 i,
                 genLength,
                 generatedLabels,
                 labelDelimiter
             }) {
-                return generatedLabels[i];
+                return "~ " + generatedLabels[i];
             })
             .cells(legendCells)
             .orient("horizontal")

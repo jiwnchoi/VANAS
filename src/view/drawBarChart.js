@@ -7,7 +7,7 @@ export function drawBarChartFromData(data){
     const sharpleyvalue = d3.select("#sharpleyvalue");
     const margin = {top : 50, bottom : 0, left : 50, right : 0};
     const width = 800 - margin.left - margin.right;
-    const height = 600 - margin.top - margin.bottom;
+    const height = 450 - margin.top - margin.bottom;
     const x = d3.scaleLinear()
         .range([margin.left, width])
         .domain([
@@ -19,7 +19,12 @@ export function drawBarChartFromData(data){
         .rangeRound([height-margin.bottom, margin.top])
         .padding(0.2);
 
+    // sharpleyvalue.attr("width", width).attr("height", height);
+    
     const rects = sharpleyvalue.selectAll("rect.bar").data(data);
+
+    let colorScale = d3.scaleSequential(d3.interpolateRdYlGn)
+        .domain([-0.03, 0.03]);
 
     rects
         .enter()
@@ -29,6 +34,7 @@ export function drawBarChartFromData(data){
         .attr("width", d => Math.abs(x(d.value) - x(0)))
         .attr("height", y.bandwidth())
         .attr("fill", d => {
+            return colorScale(d.value);
             if (d.value > 0){
                 return "#0d6efd";
             }

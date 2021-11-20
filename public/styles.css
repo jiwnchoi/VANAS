@@ -1,41 +1,44 @@
+body {
+  font-family: "Open Sans";
+}
 
 .svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 75%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
-  }
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
 .svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .svg-container2 {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 87.5%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
-  }
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 87.5%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
 
 .idc {
-  font-weight:bold;
-  font-family:"Rajdhani", sans-serif
- }
- .lab {
-  font-family:"Rajdhani", sans-serif
- }
+  font-weight: bold;
+  font-family: "Rajdhani", sans-serif;
+}
+.lab {
+  font-family: "Rajdhani", sans-serif;
+}
 
- a {
-  text-decoration:none
- }
- a:hover {
-  text-decoration:underline
- }
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
 body {
   min-height: 100vh;
   display: grid;
@@ -47,32 +50,40 @@ button {
 }
 
 .btn-purple {
-  color : #6f42c1;
+  color: #6f42c1;
   background-color: #6f42c1;
 }
 
-#recommend-accuracy{
+#recommend-accuracy {
   text-align: center;
   font-size: 7;
 }
 
-#preset-col li{
-  width:100%;
+.preset-cell {
+  padding-bottom: 0.25rem;
 }
-#preset-name{
+
+#preset-col li {
+  width: 100%;
+}
+#preset-name {
   text-align: center;
   font-size: 7;
 }
 .append-button {
-  color : white;
+  color: white;
 }
 
-.section-title{
+.section-title {
   font-size: 10;
 }
 
 .tooltip-inner {
-  max-width : 400px;
+  max-width: 400px;
   text-align: left;
-  padding : 10px;
+  padding: 10px;
+}
+
+.width-auto {
+  width: auto;
 }
