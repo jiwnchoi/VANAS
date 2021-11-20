@@ -30,13 +30,13 @@ function dragNodeEnd(event, d) {
 }
 
 function deleteBoxCheck(x, y){
-    const rectMargin = 30;
-    const rectHeight = 80;
+    const rectMargin = 20;
+    const rectHeight = 50;
 
     if ( rectMargin < x &&
          x < 800-rectMargin &&
          700-rectMargin-rectHeight < y && 
-         y < 800-rectMargin){
+         y < 700-rectMargin){
         return true;
     }
     return false;

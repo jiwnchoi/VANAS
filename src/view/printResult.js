@@ -6,9 +6,8 @@ import drawObject from "./drawObject";
 
 
 export default async function printResult() {
-    d3.select("#analytics").attr("class", "visually-hidden");
-    d3.select("#analyticsTitle").attr("class", "visually-hidden");
-
+    d3.select("#analytics").classed("visually-hidden", true);
+    d3.select("#analyticsTitle").classed("visually-hidden", true);
 
     const nodeData = getNodeData();
     const edgeData = getEdgeData();
@@ -82,8 +81,7 @@ export default async function printResult() {
             d3.select("#analyticsTitle").classed("visually-hidden", false)
 
             let training_time_formatted = new Date(parseInt(json.training_time) * 1000).toISOString().substr(11, 8);
-            d3.select("#analytics")
-                .attr("class", "alert bg-light alert-secondary");
+            d3.select("#analytics").classed("visually-hidden", false);
             d3.select("#trainable_parameters")
                 .text(d3.format(",")(json.trainable_parameters));
             d3.select("#training_time")
@@ -97,7 +95,6 @@ export default async function printResult() {
 
             const sharpleyValues = json.sharpley_value;
             const graphMatcher = json.graph_matcher;
-            //console.log(sharpleyValues, graphMatcher, json)
             for (const edge of tmpEdgeData) {
                 const source = graphMatcher.indexOf(edge.source.index);
                 const target = graphMatcher.indexOf(edge.target.index);
@@ -108,21 +105,10 @@ export default async function printResult() {
         }
         else {
             d3.select("#analyticsTitle").classed("visually-hidden", true)
-            d3.select("#analytics").attr("class", "visually-hidden");
+            d3.select("#analytics").classed("visually-hidden", true);
         }
     }
-    // console.log(nodeData, edgeData);
-    // for (let node of nodeData) {
-    //     if (cellStatus.extraneous.indexOf(node.index) == -1) {
-    //         node.status = null;
-    //     }
-    // }
-    // for (let edge of edgeData) {
-    //     if (cellStatus.extraneous.indexOf(edge.source.index) == -1 &&
-    //         cellStatus.extraneous.indexOf(edge.target) == -1) {
-    //         edge.isExt = false;
-    //     }
-    // }
+
 
     drawObject();
 

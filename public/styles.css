@@ -6,24 +6,33 @@ body {
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 75%; /* aspect ratio */
+  padding-bottom: 75%;
   vertical-align: top;
   overflow: hidden;
+  border-radius : .25rem;
 }
+
 .svg-content-responsive {
   display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
 }
-.svg-container2 {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 87.5%; /* aspect ratio */
-  vertical-align: top;
-  overflow: hidden;
+
+#heatmap-container {
+  border-radius : 0 0 .25rem .25rem;
 }
+
+#edge-importance-container{
+  padding-bottom: 55%;
+}
+
+#arthitecture-designer-container{
+  padding-bottom: 87.5%;
+}
+
+
+
 
 .idc {
   font-weight: bold;
@@ -49,10 +58,6 @@ button {
   font-size: 10px;
 }
 
-.btn-purple {
-  color: #6f42c1;
-  background-color: #6f42c1;
-}
 
 #recommend-accuracy {
   text-align: center;

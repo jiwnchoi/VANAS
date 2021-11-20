@@ -18,8 +18,6 @@ export function drawBarChartFromData(data){
         .domain(data.map(d => d.name))
         .rangeRound([height-margin.bottom, margin.top])
         .padding(0.2);
-
-    // sharpleyvalue.attr("width", width).attr("height", height);
     
     const rects = sharpleyvalue.selectAll("rect.bar").data(data);
 
@@ -35,12 +33,6 @@ export function drawBarChartFromData(data){
         .attr("height", y.bandwidth())
         .attr("fill", d => {
             return colorScale(d.value);
-            if (d.value > 0){
-                return "#0d6efd";
-            }
-            else{
-                return "#dc3545";
-            }
         })
         .attr("x", d => x(Math.min(0, d.value)))
         .attr("y", d => y(d.name))

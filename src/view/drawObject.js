@@ -6,6 +6,7 @@ import * as nodeInteraction from "./interaction/nodeInteraction.js"
 import * as edgeInteraction from "./interaction/edgeInteraction.js"
 import { getNextNodeAccuracy } from "../data/recommendNextNode.js";
 import { getRecommendEdgeData, getRecommendNodeData } from "../data/recommendCellData.js";
+import { colorScheme } from "./designPreference.js";
 
 
 async function drawNextEdge(clickedNode) {
@@ -80,10 +81,10 @@ function drawEdge(target = 0) {
                 return 'black';
             }
             else if (d.sharpleyValue > 0) {
-                return "#0D6EFD";
+                return colorScheme.positive;
             }
             else if (d.sharpleyValue < 0) {
-                return "#dc3545";
+                return colorScheme.negative;
             }
             else {
                 return 'black';
@@ -108,22 +109,6 @@ function drawEdge(target = 0) {
             else return 1;
         });
 
-    // edgeGroup
-    //     .select("text")
-    //     .text(d => {
-    //         if (d.sharpleyValue == null) return "";
-    //         else return d.sharpleyValue;
-    //     })
-    //     .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
-    //     .attr("fill", d => {
-    //         if (d.sharpleyValue > 0) {
-    //             return "red";
-    //         }
-    //         else if (d.sharpleyValue < 0) {
-    //             return "blue";
-    //         }
-    //         else return "gray";
-    //     });
 
 
     //ENTER
@@ -147,10 +132,10 @@ function drawEdge(target = 0) {
                 return 'black';
             }
             else if (d.sharpleyValue > 0) {
-                return "#0D6EFD";
+                return colorScheme.positive;
             }
             else if (d.sharpleyValue < 0) {
-                return "#dc3545";
+                return colorScheme.negative;
             }
             else {
                 return 'black';
@@ -173,26 +158,6 @@ function drawEdge(target = 0) {
         .on("mouseover", edgeInteraction.edgeMouseOver)
         .on("mouseout", edgeInteraction.edgeMouseOut)
         .on("click", edgeInteraction.edgeClicked);
-
-    // edgeGroupEnter
-    //     .append("text")
-    //     .text(d => {
-    //         if (d.sharpleyValue == null) return "";
-    //         else return d.sharpleyValue;
-    //     })
-    //     .attr("fill", d => {
-    //         if (d.sharpleyValue > 0) {
-    //             return "red";
-    //         }
-    //         else if (d.sharpleyValue < 0) {
-    //             return "blue";
-    //         }
-    //         else return "gray";
-    //     })
-    //     .attr("font-weight", "bold")
-    //     .attr("text-anchor", "middle")
-    //     .attr("transform", d => "translate(" + [(d.source.x + d.target.x) / 2, (d.source.y + d.target.y) / 2] + ")")
-    //     .attr("font-size", 14);
 
 
     //EXIT
@@ -229,16 +194,16 @@ function drawNode(target = 0) {
         })
         .attr("fill", (d) => {
             if (d.type == "input" || d.type == "output") {
-                return "#6C757D";
+                return colorScheme.gray;
             }
             else if (d.type == "conv1x1-bn-relu") {
-                return "#6f42c1";
+                return colorScheme.conv11;
             }
             else if (d.type == "conv3x3-bn-relu") {
-                return "#ffc107";
+                return colorScheme.conv33;
             }
             else if (d.type == "maxpool3x3") {
-                return "#198754";
+                return colorScheme.pool33;
             }
         })
         .style("filter", (d) => {
@@ -277,16 +242,16 @@ function drawNode(target = 0) {
         })
         .attr("fill", (d) => {
             if (d.type == "input" || d.type == "output") {
-                return "#6C757D";
+                return colorScheme.gray;
             }
             else if (d.type == "conv1x1-bn-relu") {
-                return "#6f42c1";
+                return colorScheme.conv11;
             }
             else if (d.type == "conv3x3-bn-relu") {
-                return "#ffc107";
+                return colorScheme.conv33;
             }
             else if (d.type == "maxpool3x3") {
-                return "#198754";
+                return colorScheme.pool33;
             }
         })
         .style("filter", (d) => {

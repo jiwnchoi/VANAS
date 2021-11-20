@@ -196,7 +196,6 @@ let drawHeatmap = function () {
             .on("click", click);
 
 
-        // accuracy color legend
         let legendWidth = 400, legendCells = 10;
         graph.append("g")
             .attr("class", "accuracyLegend")

@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import "../public/styles.css";
-import { drawDeleteBox, svgInit } from "./view/svgInit";
+import { drawButton, svgInit } from "./view/designPreference";
 import drawObject from "./view/drawObject.js";
 import { makeNode } from "./view/makeObject.js"
 import { drawBarChartFromData } from "./view/drawBarChart";
@@ -10,16 +10,28 @@ import getSharpleyValue from "./service/getSharpleyValue";
 import printResult from "./view/printResult";
 import printRecommendation from "./view/printRecommendation";
 import printPreset from "./view/printPreset";
+import { colorScheme } from "./view/designPreference";
+
 
 export let fullDataset = null;
-export let unstructuredDataset = null; //0: matrix 1:? 2: time 3: parameter 6: accuracy
+export let unstructuredDataset = null; 
 const heatmap = d3.select("#heatmap");
 const tooltip = d3.select("#tooltip");
 const architecture = d3.select("#architecture");
 const sharpleyvalue = d3.select("#sharpleyvalue");
 
+
+function buttonMouseOver() {
+    d3.select(this).attr("opacity", 0.5);
+}
+
+function buttonMouseOut() {
+    d3.select(this).attr("opacity", 1);
+}
+
+
 svgInit(architecture);
-drawDeleteBox(architecture);
+drawButton(architecture);
 svgInit(sharpleyvalue);
 drawObject();
 
@@ -35,18 +47,38 @@ fullDatasetPromise.then((json) => {
 });
 
 
-d3.selectAll(".append-button").on("click", makeNode);
-d3.select("#init-cell").on("click", () => {
-    initCell();
-    printResult();
-    printRecommendation();
-});
+
+d3.selectAll(".conv1x1-bn-relu")
+    .attr("fill", colorScheme.conv11)
+    .style("background-color", colorScheme.conv11)
+
+d3.selectAll(".conv3x3-bn-relu")
+    .attr("fill", colorScheme.conv33)
+    .style("background-color", colorScheme.conv33)
+
+d3.selectAll(".maxpool3x3")
+    .attr("fill", colorScheme.pool33)
+    .style("background-color", colorScheme.pool33)
+
+d3.selectAll(".gray")
+    .attr("fill", colorScheme.gray)
+    .style("background-color", colorScheme.gray)
+
+d3.selectAll(".append-button")
+    .on("click", makeNode)
+    .on("mouseover", buttonMouseOver)
+    .on("mouseout", buttonMouseOut);
+
+d3.select("#init")
+    .on("click", () => {
+        initCell();
+        printResult();
+        printRecommendation();
+    })
+    .on("mouseover", buttonMouseOver)
+    .on("mouseout", buttonMouseOut);
 
 d3.selectAll("#optionX, #optionY").on("change", () => {
-    heatmap.select("svg").remove();
-    generateHeatmap(unstructuredDataset);
-});
-d3.select("#generateButton").on("click", () => {
     heatmap.select("svg").remove();
     generateHeatmap(unstructuredDataset);
 });
