@@ -28,11 +28,16 @@ body {
 }
 
 #arthitecture-designer-container{
-  padding-bottom: 87.5%;
+  padding-bottom: 83%;
 }
 
+.performance-result {
+  opacity: 0.5;
+}
 
-
+.recommend-accuracy{
+  font-size : 9px;
+}
 
 .idc {
   font-weight: bold;

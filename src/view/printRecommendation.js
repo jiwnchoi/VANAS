@@ -39,12 +39,12 @@ export default function printRecommendation() {
 
     recommendCellEnter
         .append("div")
-        .attr("class", "border bg-light svg-container mb-1 ")
+        .attr("class", "border bg-light svg-container mb-1 recommend-cell-svg")
         .append("svg")
         .attr("id", (_, i) => "recommend" + (i + 1))
         .attr("viewBox", "0 0 800 600")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("class", "svg-content-responsive recommend-cell-svg");
+        .attr("class",  "svg-content-responsive");
 
     recommendCellEnter
         .append('div')

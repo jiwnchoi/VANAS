@@ -2,8 +2,8 @@ import * as d3 from 'd3';
 
 
 export const colorScheme = {
-    conv11: d3.schemeTableau10[0],
-    conv33: d3.schemeTableau10[3],
+    conv11: d3.schemeTableau10[3],
+    conv33: d3.schemeTableau10[0],
     pool33: d3.schemeTableau10[5],
     gray: d3.schemeSet1[8],
     positive: d3.interpolateRdYlGn(0.9),
@@ -17,10 +17,11 @@ export function drawButton(svg){
     const rectHeight = 50;
     const appendWidth = (800 - rectMargin * 5) / 4;
     const buttonFontSize = 20;
+    const svgHeight = 664;
 
 
     const appendconv11 = svg.append("g")
-        .attr("transform", "translate(" + [rectMargin, 700 - rectMargin - rectHeight] + ")")
+        .attr("transform", "translate(" + [rectMargin, svgHeight - rectMargin - rectHeight] + ")")
         .attr("id", "conv1x1-bn-relu")
         .attr("class", "append-button conv1x1-bn-relu");
 
@@ -37,7 +38,7 @@ export function drawButton(svg){
         .attr("font-size", buttonFontSize);
 
     const appendconv33 = svg.append("g")
-        .attr("transform", "translate(" + [rectMargin * 2 + appendWidth, 700 - rectMargin - rectHeight] + ")")
+        .attr("transform", "translate(" + [rectMargin * 2 + appendWidth, svgHeight - rectMargin - rectHeight] + ")")
         .attr("id", "conv3x3-bn-relu")
         .attr("class", "append-button conv3x3-bn-relu");;
 
@@ -54,7 +55,7 @@ export function drawButton(svg){
         .attr("font-size", buttonFontSize);
 
     const appendpool33 = svg.append("g")
-        .attr("transform", "translate(" + [rectMargin * 3 + appendWidth*2, 700 - rectMargin - rectHeight] + ")")
+        .attr("transform", "translate(" + [rectMargin * 3 + appendWidth*2, svgHeight - rectMargin - rectHeight] + ")")
         .attr("id", "maxpool3x3")
         .attr("class", "append-button maxpool3x3");;
 
@@ -71,7 +72,7 @@ export function drawButton(svg){
         .attr("font-size", buttonFontSize);
 
     const reset = svg.append("g")
-        .attr("transform", "translate(" + [rectMargin * 4 + appendWidth * 3, 700 - rectMargin - rectHeight] + ")")
+        .attr("transform", "translate(" + [rectMargin * 4 + appendWidth * 3, svgHeight - rectMargin - rectHeight] + ")")
         .attr("id", "init");
 
     reset.append("rect")
@@ -89,7 +90,7 @@ export function drawButton(svg){
 
 
     const deleteBox = svg.append("g")
-        .attr("transform", "translate("+[rectMargin, 700-rectMargin-rectHeight]+")" )
+        .attr("transform", "translate("+[rectMargin, svgHeight-rectMargin-rectHeight]+")" )
         .attr("id", "deleteBox").attr("visibility","hidden")
         .attr("width",800-rectMargin*2).attr("height",rectHeight)
         .attr("rx","5").attr("ry","5");
@@ -109,12 +110,7 @@ export function drawButton(svg){
 }
 
 export function svgInit(svg){
-    
-
-    
     const defs = svg.append("defs");
-
-
 
     const filterStart = defs.append("filter")
         .attr("id", "drop-shadow-start")
