@@ -23,11 +23,13 @@ async function makeNode(){
 function makeEdge(sourceNode, targetNode, target=0){
     addEdge(sourceNode, targetNode, target);
     printResult();
+    printRecommendation();
 }
 
 function removeEdge(edge){
     deleteEdge(edge);
     printResult();
+    printRecommendation();
 }
 
 export {makeNode, makeEdge, removeEdge}

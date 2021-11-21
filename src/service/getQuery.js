@@ -11,7 +11,8 @@ const codedOperation = {
 
 
 
-function matchGraph(nodeData, edgeData, dataEdges, dataOps){
+export function matchGraph(nodeData, edgeData, dataEdges, dataOps){
+
     const dataMapper = {
         2 : [],
         3 : [],

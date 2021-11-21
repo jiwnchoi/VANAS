@@ -22,7 +22,7 @@ export default function printRecommendation() {
         })
 
     recommendCell
-        .select("#recommend-accuracy")
+        .select(".recommend-accuracy")
         .text((d) => "Accuracy: " + Math.round(d[0] * 10000) / 10000);
 
 
@@ -30,7 +30,7 @@ export default function printRecommendation() {
     const recommendCellEnter = recommendCell
         .enter()
         .append("li")
-        .attr("class", "row g-0 recommend-cell list-group-item")
+        .attr("class", "row g-0 px-4 recommend-cell list-group-item")
         .on("click", (_, d) => {
             const i = data.indexOf(d);
             copyCelltoMain(i);
@@ -48,8 +48,7 @@ export default function printRecommendation() {
 
     recommendCellEnter
         .append('div')
-        .attr('id', 'recommend-accuracy')
-        .attr("class", "row g-0 d-flex justify-content-center align-middle")
+        .attr("class", "row g-0 justify-content-center align-middle recommend-accuracy")
         .text((d) => "Accuracy : " + Math.round(d[0] * 10000) / 10000);
 
 
