@@ -23,7 +23,7 @@ export default function printRecommendation() {
 
     recommendCell
         .select(".recommend-accuracy")
-        .text((d) => "Accuracy: " + Math.round(d[0] * 10000) / 10000);
+        .text((d) => "Accuracy : " + d3.format(".2%")(d[0]));
 
 
     //enter
@@ -44,12 +44,12 @@ export default function printRecommendation() {
         .attr("id", (_, i) => "recommend" + (i + 1))
         .attr("viewBox", "0 0 800 600")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("class",  "svg-content-responsive");
+        .attr("class", "svg-content-responsive");
 
     recommendCellEnter
         .append('div')
         .attr("class", "row g-0 justify-content-center align-middle recommend-accuracy")
-        .text((d) => "Accuracy : " + Math.round(d[0] * 10000) / 10000);
+        .text((d) => "Accuracy : " + d3.format(".2%")(d[0]));
 
 
 

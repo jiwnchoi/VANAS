@@ -23,15 +23,15 @@ function performanceCalculator(item, k = 0) {
 
 function getPreset() {
     let results = [];
-    let inception, highestAccuracy = unstructuredDataset[0], highestPerformance = unstructuredDataset[0];
+    let inception, bestAccuracy = unstructuredDataset[0], bestThroughput = unstructuredDataset[0];
     unstructuredDataset.forEach((item) => {
         if (item[2] === 1156 && item[3] === 2694282) inception = item;
-        if (highestAccuracy[6] < item[6]) highestAccuracy = item;
-        if (performanceCalculator(highestPerformance) < performanceCalculator(item, 0)) highestPerformance = item;
+        if (bestAccuracy[6] < item[6]) bestAccuracy = item;
+        if (performanceCalculator(bestThroughput) < performanceCalculator(item, 0)) bestThroughput = item;
     });
     results.push(convertItem(inception));
-    results.push(convertItem(highestPerformance));
-    results.push(convertItem(highestAccuracy));
+    results.push(convertItem(bestAccuracy));
+    results.push(convertItem(bestThroughput));
     return results;
 }
 
