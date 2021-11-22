@@ -5,10 +5,10 @@
 
 VANAS is a novel visual analytics system for neural architecture search(NAS). You can visually analysis  [Google Research's NAS-Bench-101 dataset](https://github.com/google-research/nasbench) with VANAS. 
 
-# Live Demo
+## Live Demo
 [Web Demo](https://jason-choi-skku.github.io/VANAS/)
 
-# Reference
+## Reference
 
 J. Choi, G, Hong and J. Jo "VANAS: A Visual Analytics System for Neural Architecture Search" 2022
 - KR Paper PDF
@@ -16,7 +16,7 @@ J. Choi, G, Hong and J. Jo "VANAS: A Visual Analytics System for Neural Architec
 
 Will Appear Soon!
 
-# Development
+## Development
 Install node.js and npm from https://nodejs.org/en/download/
 
 Clone this repository:
@@ -28,4 +28,9 @@ cd VANAS
 Instal the dependencies:
 ```bash
 npm install
+```
+
+Run with webpack dev server:
+```bash
+npm start
 ```
