@@ -6,7 +6,7 @@ import { makeNode } from "./view/makeObject.js"
 import { drawBarChartFromData } from "./view/drawBarChart";
 import { initCell } from "./controller/cellController";
 import { drawHeatmap } from "./view/drawHeatmap";
-import getSharpleyValue from "./service/getSharpleyValue";
+import getEdgeSignificance from "./service/getEdgeSignificance";
 import printResult from "./view/printResult";
 import printRecommendation from "./view/printRecommendation";
 import printPreset from "./view/printPreset";
@@ -35,7 +35,7 @@ drawButton(architecture);
 svgInit(sharpleyvalue);
 drawObject();
 
-const fullDatasetPromise = d3.json('/nasbench_minified_numberkey.json');
+const fullDatasetPromise = d3.json('./nasbench101_minified.json');
 fullDatasetPromise.then((json) => {
     fullDataset = json;
     unstructuredDataset = Object.values(fullDataset).reduce((acc, cur) => acc.concat(cur));
@@ -84,7 +84,7 @@ d3.selectAll("#optionX, #optionY").on("change", () => {
 });
 
 
-const data = getSharpleyValue();
+const data = getEdgeSignificance();
 data.then(json => drawBarChartFromData(json.children));
 
 function generateHeatmap(heatmapData) {

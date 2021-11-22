@@ -1,14 +1,21 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
+
 module.exports = {
   entry: {
     index : './src/index.js',
   },
-
+  devServer : {
+    static : path.resolve(__dirname),
+    client : {
+      overlay: false
+    }
+    
+  },
   output: {
     filename: "[name].bundle.js",
-    path: path.resolve(__dirname + "/build")
+    path: path.resolve(__dirname + "/build"),
   },
   mode: "none",
   module: {
@@ -31,6 +38,6 @@ module.exports = {
 			template: './public/index.html', 
     }),
   ],
-  watch: true
+  
 };
 
