@@ -6,7 +6,7 @@
 VANAS is a novel visual analytics system for neural architecture search(NAS). You can visually analysis  [Google Research's NAS-Bench-101 dataset](https://github.com/google-research/nasbench) with VANAS. 
 
 ## Live Demo
-[Web Demo](https://jason-choi-skku.github.io/VANAS/)
+[Web Demo](https://va-nas.github.io/VANAS/)
 
 ## Reference
 
