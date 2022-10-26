@@ -10,12 +10,11 @@ VANAS is a novel visual analytics system for neural architecture search(NAS). Yo
 
 ## Reference
 
-Jiwon Choi, Gwon Hong, and Jaemin Jo "VANAS: A Visual Analytics System for Neural Architecture Search" Proceedings of HCI KOREA 2022 Accepted 
+Jiwon Choi, Gwon Hong, and Jaemin Jo "VANAS: A Visual Analytics System for Neural Architecture Search" Proceedings of HCI KOREA 2022 
 - [KR Paper PDF](https://github.com/Jason-Choi-SKKU/VANAS/files/7750682/VANAS.pdf)
 - [KR Presentation](https://www.youtube.com/watch?v=XYCcoi4L1oU)
 - [Demo Video](https://www.youtube.com/watch?v=RCJoIZSVb2A)
 
-Will Appear Soon!
 
 ## Development
 Install node.js and npm from https://nodejs.org/en/download/
